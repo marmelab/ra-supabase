@@ -20,7 +20,7 @@
     },
     "devDependencies": {
         "@supabase/supabase-js": "^1.21.0",
-        "ra-core": "^3.17.0"
+        "ra-core": "^3.17.3"
     },
     "scripts": {
         "build": "yarn run build-cjs && yarn run build-esm",

@@ -23,12 +23,12 @@
         "@material-ui/styles": "^4.11.2",
         "@supabase/supabase-js": "^1.21.0",
         "final-form": "^4.20.2",
-        "ra-core": "^3.17.0",
-        "ra-ui-materialui": "^3.17.0",
+        "ra-core": "^3.17.3",
+        "ra-ui-materialui": "^3.17.3",
         "react": "^17.0.0",
         "react-dom": "^17.0.0",
         "react-final-form": "^6.5.2",
-        "react-router": "^5.1.0"
+        "react-router": "^5.2.0"
     },
     "peerDependencies": {
         "@material-ui/core": "^4.11.2",

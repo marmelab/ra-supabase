@@ -37,8 +37,12 @@
     },
     "scripts": {
         "build": "lerna run build",
+        "build-demo": "cd packages/demo && yarn build",
+        "run-demo": "cd packages/demo && yarn start",
+        "test-unit": "lerna run test-unit",
         "watch": "lerna run --parallel watch",
-        "lint": "eslint --fix --ext .js,.ts,.tsx \"./packages/**/src/**/*.{js,ts,tsx}\""
+        "lint": "eslint --fix --ext .js,.ts,.tsx \"./packages/**/src/**/*.{js,ts,tsx}\"",
+        "prettier": "prettier --write \"./packages/**/src/**/*.{js,ts,tsx}\""
     },
     "workspaces": [
         "packages/*"
