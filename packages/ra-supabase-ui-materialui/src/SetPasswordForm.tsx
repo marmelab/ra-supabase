@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useTranslate } from 'ra-core';
+import { OnFailure, OnSuccess, useTranslate } from 'ra-core';
 import { Field, Form } from 'react-final-form';
 import { Button, CardActions, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,7 +11,8 @@ export const SetPasswordForm = (props: SetPasswordFormProps) => {
     const classes = useStyles(props);
     const translate = useTranslate();
     const access_token = useSupabaseAccessToken();
-    const setPassword = useSetPassword();
+    const { onSuccess, onFailure } = props;
+    const setPassword = useSetPassword({ onSuccess, onFailure });
 
     const validate = (values: FormData) => {
         const errors: FormData = { email: undefined, password: undefined };
@@ -95,6 +96,8 @@ export const SetPasswordForm = (props: SetPasswordFormProps) => {
 
 export type SetPasswordFormProps = {
     classes?: ClassesOverride<typeof useStyles>;
+    onSuccess?: OnSuccess;
+    onFailure?: OnFailure;
 };
 
 interface FormData {

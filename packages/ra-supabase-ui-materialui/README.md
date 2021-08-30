@@ -93,6 +93,10 @@ This page allows invited users to set their password. It displays the `<SetPassw
 ### `<SetPasswordForm>`
 
 This is the form that actually allows users to set their password. It is exported for you to reuse in a custom set password page when needed. It leverages the `useSetPassword` hook from `ra-supabase-core`.
+It accepts an `onSuccess` and `onFailure` props just like the hook:
+
+-   `onSuccess`: A function called when the set password operation succeeds. By default, it redirects users to the home page.
+-   `onFailure`: A function called when the set password operation fails. By default, it display an error notification.
 
 ## Roadmap
 
