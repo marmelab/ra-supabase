@@ -31,11 +31,15 @@ build-ra-supabase-language-french:
 	@echo "Transpiling ra-supabase-language-french files...";
 	@cd ./packages/ra-supabase-language-french && yarn -s build
 
+build-ra-supabase-ui-materialui:
+	@echo "Transpiling ra-supabase-ui-materialui files...";
+	@cd ./packages/ra-supabase-ui-materialui && yarn -s build
+
 build-ra-supabase:
 	@echo "Transpiling ra-supabase files...";
 	@cd ./packages/ra-supabase && yarn -s build
 
-build: build-ra-supabase-core build-ra-supabase-language-english build-ra-supabase-language-french build-ra-supabase ## compile ES6 files to JS
+build: build-ra-supabase-core build-ra-supabase-language-english build-ra-supabase-language-french build-ra-supabase-ui-materialui build-ra-supabase ## compile ES6 files to JS
 
 lint: ## lint the code and check coding conventions
 	@echo "Running linter..."
