@@ -1,10 +1,10 @@
 # ra-supabase
 
-This package provide a dataProvider, an authProvider, hooks and components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
+This package provides a dataProvider, an authProvider, hooks and components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
 
 It leverages [ra-supabase-core](https://github.com/marmelab/ra-supabase-core) and [ra-supabase-ui-materialui](https://github.com/marmelab/ra-supabase-ui-materialui).
 
-In particular, this package provide components around Supabase authentication with the following workflow:
+In particular, this package provides components around Supabase authentication with the following workflow:
 
 1. You invite users from the Supabase Admin page.
 2. Users can use the invite link they received by email.
@@ -82,9 +82,9 @@ export const MyAdmin = () => (
 )
 ```
 
-## Internationalization support
+## Internationalization Support
 
-We provide two languages packages:
+We provide two language packages:
 
 -   [ra-supabase-language-english](https://github.com/marmelab/ra-supabase-language-english)
 -   [ra-supabase-language-french](https://github.com/marmelab/ra-supabase-language-french)
@@ -134,7 +134,7 @@ export const MyAdmin = () => (
 );
 ```
 
-## Full text search support
+## Full Text Search Support
 
 When using react-admin [SearchInput](https://marmelab.com/react-admin/List.html#full-text-search), you might not want the filter to apply on all the resource fields but only some of them. You can configure this in the `dataProvider`.
 
@@ -165,4 +165,4 @@ export const dataProvider = supabaseDataProvider(supabase, resources);
 ## Roadmap
 
 -   Add support for magic link authentication
--   Add support for third parties authentication
+-   Add support for third party authentication

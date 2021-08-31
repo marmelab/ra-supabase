@@ -4,6 +4,13 @@ import { useHistory } from 'react-router';
 
 /**
  * This hook redirect the user to the provided path (/ by default) if they are authenticated.
+ *
+ * @example
+ * import { useRedirectIfAuthenticated } from 'react-admin';
+ * const MyLoginPage = () => {
+ *     useRedirectIfAuthenticated();
+ *     // UI and logic for authentication
+ * }
  **/
 export const useRedirectIfAuthenticated = (
     redirectTo: UseRedirectIfAuthenticatedOptions = '/'

@@ -1,8 +1,8 @@
 # ra-supabase-ui-materialui
 
-This package provide components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
+This package provides components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
 
-In particular, this package provide components around Supabase authentication with the following workflow:
+In particular, this package provides components around Supabase authentication with the following workflow:
 
 1. You invite users from the Supabase Admin page.
 2. Users use the invite link they received by email.
@@ -76,15 +76,15 @@ export const MyAdmin = () => (
 
 ### `<AuthLayout>`
 
-This component is very similar to the react-admin `<LoginPage>` except it does not check the user authentication status nor does it contain the `<LoginForm>`. It is used by both the `<LoginPage>` and `<SetPasswordPage>` provided by `ra-supabase-ui-materialui`.
+This component provides a layout for authentication pages very similar to the one used in the default React Admin `<LoginPage>`. However, it does not check the user authentication status. It is used by both the `<LoginPage>` and `<SetPasswordPage>` provided by `ra-supabase-ui-materialui`.
 
 ### `<LoginPage>`
 
-This is `ra-supabase-ui-materialui` of the `<LoginPage>` that redirects users to the admin home page if they are already logged in and display the `<LoginForm>` otherwise. You may provide your own form by passing it as the `<LoginPage>` child.
+This is `ra-supabase-ui-materialui` version of the `<LoginPage>` that redirects users to the admin home page if they are already logged in and displays the `<LoginForm>` otherwise. You may provide your own form by passing it as the `<LoginPage>` child.
 
 ### `<LoginForm>`
 
-This is `ra-supabase-ui-materialui` of the `<LoginForm>` that contains an email and password fields. It is exported for you to reuse in a custom login page when needed.
+This is `ra-supabase-ui-materialui` version of the `<LoginForm>` that contains an email and password fields. It is exported for you to reuse in a custom login page when needed.
 
 ### `<SetPasswordPage>`
 
@@ -98,7 +98,42 @@ It accepts an `onSuccess` and `onFailure` props just like the hook:
 -   `onSuccess`: A function called when the set password operation succeeds. By default, it redirects users to the home page.
 -   `onFailure`: A function called when the set password operation fails. By default, it display an error notification.
 
+```jsx
+import { useLogout, useNotify, useRedirect } from 'react-admin';
+import { SetPasswordPage, SetPasswordForm } from 'ra-supabase-ui-materialui';
+
+const MySetPasswordPage = () => {
+    const logout = useLogout();
+    const notify = useNotify();
+    const redirect = useRedirect();
+
+    const handleSuccess = () => {
+        notify(
+            'Your password is set. Please sign in using those new credentials'
+        );
+        // Log out users so they are forced to use their new credentials
+        logout();
+    };
+
+    const handleFailure = () => {
+        notify(
+            'An error occurred while setting the password. Please ask the person who invited you to send a new link.'
+        );
+        redirect('/login');
+    };
+
+    return (
+        <SetPasswordPage>
+            <SetPasswordForm
+                onSuccess={handleSuccess}
+                onFailure={handleFailure}
+            />
+        </SetPasswordPage>
+    );
+};
+```
+
 ## Roadmap
 
 -   Add support for magic link authentication
--   Add support for third parties authentication
+-   Add support for third party authentication

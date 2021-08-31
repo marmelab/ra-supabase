@@ -90,8 +90,9 @@ export const supabaseAuthProvider = (
     },
 });
 
+export type GetIdentity = (user: User) => Promise<UserIdentity>;
 export type SupabaseAuthProviderOptions = {
-    getIdentity?: (user: User) => Promise<UserIdentity>;
+    getIdentity?: GetIdentity;
 };
 
 export interface SupabaseAuthProvider extends AuthProvider {
