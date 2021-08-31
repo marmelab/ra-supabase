@@ -19,14 +19,22 @@
         "ra-core": "^3.17.0"
     },
     "devDependencies": {
+        "@testing-library/react": "^12.0.0",
         "@supabase/supabase-js": "^1.21.0",
-        "ra-core": "^3.17.3"
+        "ra-core": "^3.17.3",
+        "ra-test": "^3.17.3",
+        "react": "^17.0.0",
+        "react-dom": "^17.0.0"
     },
     "scripts": {
         "build": "yarn run build-cjs && yarn run build-esm",
         "build-cjs": "rimraf ./lib && tsc",
         "build-esm": "rimraf ./esm && tsc --outDir esm --module es2015",
         "watch": "tsc --outDir esm --module es2015 --watch",
-        "lint": "eslint --fix ./src"
+        "lint": "eslint --fix ./src",
+        "test-unit": "jest ./src"
+    },
+    "jest": {
+        "testEnvironment": "jsdom"
     }
 }

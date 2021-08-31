@@ -5,7 +5,9 @@ import { useHistory } from 'react-router';
 /**
  * This hook redirect the user to the provided path (/ by default) if they are authenticated.
  **/
-export const useRedirectIfAuthenticated = (redirectTo = '/') => {
+export const useRedirectIfAuthenticated = (
+    redirectTo: UseRedirectIfAuthenticatedOptions = '/'
+) => {
     const history = useHistory();
     const checkAuth = useCheckAuth();
 
@@ -13,10 +15,12 @@ export const useRedirectIfAuthenticated = (redirectTo = '/') => {
         checkAuth({}, false)
             .then(() => {
                 // already authenticated, redirect to the home page
-                history.push('/');
+                history.push(redirectTo);
             })
             .catch(() => {
                 // not authenticated, stay on the login page
             });
-    }, [checkAuth, history]);
+    }, [checkAuth, history, redirectTo]);
 };
+
+export type UseRedirectIfAuthenticatedOptions = string;

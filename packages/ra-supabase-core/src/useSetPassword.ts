@@ -10,7 +10,7 @@ import { SetPasswordParams, SupabaseAuthProvider } from './authProvider';
 /**
  * This hook returns a function to call in order to set a user password on Supabase.
  **/
-export const useSetPassword = (options: UseSetPasswordOptions) => {
+export const useSetPassword = (options?: UseSetPasswordOptions) => {
     const notify = useNotify();
     const redirect = useRedirect();
     const authProvider = useAuthProvider() as SupabaseAuthProvider;
@@ -18,7 +18,7 @@ export const useSetPassword = (options: UseSetPasswordOptions) => {
     const {
         onSuccess = () => redirect('/'),
         onFailure = error => notify(error.message, 'error'),
-    } = options;
+    } = options || {};
 
     return (params: SetPasswordParams) => {
         authProvider
@@ -37,6 +37,6 @@ export const useSetPassword = (options: UseSetPasswordOptions) => {
 };
 
 export type UseSetPasswordOptions = {
-    onSuccess: OnSuccess;
-    onFailure: OnFailure;
+    onSuccess?: OnSuccess;
+    onFailure?: OnFailure;
 };
