@@ -65,7 +65,7 @@ export const MyAdmin = () => (
 
 ## Authentication
 
-We currently only supports email/password authentication. The `supabaseAuthProvider` provides the `setPassword` method in addition of the `authProvider` methods required by `react-admin`. This method allows you to create UI for users to set their passwords after being invited for example. This could be done in a custom route.
+We currently only support email/password authentication. The `supabaseAuthProvider` provides the `setPassword` method in addition of the `authProvider` methods required by `react-admin`. This method allows you to create UI for users to set their passwords after being invited for example. This could be done in a custom route.
 
 To make this custom route easier to implement, this package also provide the following hooks:
 

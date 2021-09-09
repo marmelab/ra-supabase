@@ -35,13 +35,13 @@ export const supabaseAuthProvider = (
             throw error;
         }
     },
-    checkError() {
-        return Promise.resolve();
+    async checkError() {
+        return;
     },
-    checkAuth() {
+    async checkAuth() {
         // Users are on the set-password page, nothing to do
         if (window.location.pathname === '/set-password') {
-            return Promise.resolve();
+            return;
         }
 
         const urlSearchParams = new URLSearchParams(
@@ -53,26 +53,30 @@ export const supabaseAuthProvider = (
 
         // Users have reset their password and must set a new one
         if (access_token && type === 'recovery') {
-            return Promise.reject({
-                redirectTo: `set-password?access_token=${access_token}`,
-            });
+            // eslint-disable-next-line no-throw-literal
+            throw new CheckAuthError(
+                'Users have reset their password and must set a new one',
+                `set-password?access_token=${access_token}`
+            );
         }
 
         // Users have have been invited and must set their password
         if (access_token && type === 'invite') {
-            return Promise.reject({
-                redirectTo: `set-password?access_token=${access_token}`,
-            });
+            // eslint-disable-next-line no-throw-literal
+            throw new CheckAuthError(
+                'Users have have been invited and must set their password',
+                `set-password?access_token=${access_token}`
+            );
         }
 
         if (client.auth.session() == null) {
-            return Promise.reject();
+            throw new Error();
         }
 
         return Promise.resolve();
     },
-    getPermissions() {
-        return Promise.reject('Unknown method');
+    async getPermissions() {
+        return;
     },
     async getIdentity() {
         const user = client.auth.user();
@@ -89,6 +93,15 @@ export const supabaseAuthProvider = (
         return undefined;
     },
 });
+
+class CheckAuthError extends Error {
+    redirectTo: string;
+
+    constructor(message: string, redirectTo: string) {
+        super(message);
+        this.redirectTo = redirectTo;
+    }
+}
 
 export type GetIdentity = (user: User) => Promise<UserIdentity>;
 export type SupabaseAuthProviderOptions = {
