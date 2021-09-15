@@ -1,6 +1,6 @@
 # ra-supabase
 
-Supabase Data Provider for [react-admin](https://github.com/marmelab/react-admin), the frontend framework for building admin applications on top of REST/GraphQL services.
+Supabase Data and Auth providers for [react-admin](https://github.com/marmelab/react-admin), the frontend framework for building admin applications on top of REST/GraphQL services.
 
 ## Installation
 
