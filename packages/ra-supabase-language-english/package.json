@@ -1,0 +1,24 @@
+{
+    "name": "ra-supabase-language-english",
+    "version": "1.0.0",
+    "repository": "git@github.com:marmelab/ra-supabase.git",
+    "author": "Gildas Garcia <1122076+djhi@users.noreply.github.com>",
+    "license": "MIT",
+    "files": [
+        "*.md",
+        "lib",
+        "esm",
+        "src"
+    ],
+    "main": "lib/index",
+    "module": "esm/index.js",
+    "types": "esm/index.d.ts",
+    "sideEffects": false,
+    "scripts": {
+        "build": "yarn run build-cjs && yarn run build-esm",
+        "build-cjs": "rimraf ./lib && tsc",
+        "build-esm": "rimraf ./esm && tsc --outDir esm --module es2015",
+        "watch": "tsc --outDir esm --module es2015 --watch",
+        "lint": "eslint --fix ./src"
+    }
+}
