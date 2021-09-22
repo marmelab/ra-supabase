@@ -99,7 +99,7 @@ export const supabaseDataProvider = (
         const { data: records, error } = await client
             .from(resource)
             .delete()
-            .match({ id: ids });
+            .in('id', ids);
 
         if (error) {
             throw error;
