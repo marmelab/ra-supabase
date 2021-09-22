@@ -8723,21 +8723,7 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-ra-core@^3.17.3:
-  version "3.17.3"
-  resolved "https://registry.yarnpkg.com/ra-core/-/ra-core-3.17.3.tgz#d5b2381ab4fa62580d018baf3998090b349a70da"
-  integrity sha512-Sy7zaX/te/9Bm+Cyyh6Nct28RTSG6t5QA9yN7VKNJI/T46hZcDpi2aKXbetp53ZTtigoizYhiuhpNAzrIJTU/g==
-  dependencies:
-    classnames "~2.2.5"
-    date-fns "^1.29.0"
-    eventemitter3 "^3.0.0"
-    inflection "~1.12.0"
-    lodash "~4.17.5"
-    prop-types "^15.6.1"
-    query-string "^5.1.1"
-    reselect "~3.0.0"
-
-ra-core@^3.18.2:
+ra-core@^3.17.3, ra-core@^3.18.2:
   version "3.18.2"
   resolved "https://registry.yarnpkg.com/ra-core/-/ra-core-3.18.2.tgz#bdc15248d29ebaac579b0e2729c83c330c272602"
   integrity sha512-vSjtYAoyNSTpziUSIGi4+4TZnmZzUJgYLte/rTLCSHLyYuoTpkxKXMIEtvQvC/euCvXf1lkz2ebSegJNVL67Lg==
@@ -8775,25 +8761,7 @@ ra-test@^3.17.3:
     classnames "~2.2.5"
     lodash "~4.17.5"
 
-ra-ui-materialui@^3.17.3:
-  version "3.17.3"
-  resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-3.17.3.tgz#93acf32cef11fef0f711d2d67b6de65dc7c9b4f4"
-  integrity sha512-TVpTaE8TpFqmsbt4f9Ftc3iq5mXadm+wR4d5Y7KMAoZ1DMzlvzdn52ofqVnjtaSlu3JZMYQXvhRINN4hjzHRwg==
-  dependencies:
-    autosuggest-highlight "^3.1.1"
-    classnames "~2.2.5"
-    connected-react-router "^6.5.2"
-    css-mediaquery "^0.1.2"
-    downshift "3.2.7"
-    inflection "~1.12.0"
-    jsonexport "^2.4.1"
-    lodash "~4.17.5"
-    prop-types "^15.7.0"
-    query-string "^5.1.1"
-    react-dropzone "^10.1.7"
-    react-transition-group "^4.4.1"
-
-ra-ui-materialui@^3.18.2:
+ra-ui-materialui@^3.17.3, ra-ui-materialui@^3.18.2:
   version "3.18.2"
   resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-3.18.2.tgz#e00ee69acfb2d70fc3543aca07c421c0be026bde"
   integrity sha512-UjUjbP1iHxX/sq55Mb3eMuKPCNHNDgvxLa4lYeDiB4TPldltJYTRIQJc/nl+U8lyW3jc2KMGVsw52jjItR93ig==
@@ -8823,7 +8791,7 @@ raf@^3.1.0, raf@^3.4.1:
   dependencies:
     performance-now "^2.1.0"
 
-react-admin@^3.17.3:
+react-admin@^3.18.2:
   version "3.18.2"
   resolved "https://registry.yarnpkg.com/react-admin/-/react-admin-3.18.2.tgz#cb48884d111997131df1c442bd1b2e5a81a8ad93"
   integrity sha512-a+EBWJLRA19qpwkTiXbhv5ilvCHKecV5LDpoNEtcInFDMuwxK4nXLnL+sfyVW/mLyaHSPh6F/nz/ElJYeI6JVg==
