@@ -15,10 +15,7 @@ In particular, this package provides components around Supabase authentication w
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // in dataProvider.js
 import { supabaseDataProvider } from 'ra-supabase';
@@ -27,7 +24,7 @@ import { supabase } from './supabase';
 const resources = {
     posts: ['id', 'title', 'body', 'author_id', 'date'],
     authors: ['id', 'full_name'],
-}
+};
 
 export const dataProvider = supabaseDataProvider(supabase, resources);
 
@@ -36,7 +33,7 @@ import { supabaseAuthProvider } from 'ra-supabase';
 import { supabase } from './supabase';
 
 export const authProvider = supabaseAuthProvider(supabase, {
-    getIdentity: (user) => {
+    getIdentity: async user => {
         const { data, error } = await supabase
             .from('userProfiles')
             .select('id, first_name, last_name')
@@ -49,9 +46,9 @@ export const authProvider = supabaseAuthProvider(supabase, {
 
         return {
             id: data.id,
-            fullName: `${data.first_name} ${data.last_name}`
+            fullName: `${data.first_name} ${data.last_name}`,
         };
-    }
+    },
 });
 
 // in App.js
@@ -69,7 +66,7 @@ export const MyAdmin = () => (
         <Resource name="posts" list={ListGuesser} />
         <Resource name="authors" list={ListGuesser} />
     </Admin>
-)
+);
 ```
 
 ## API
