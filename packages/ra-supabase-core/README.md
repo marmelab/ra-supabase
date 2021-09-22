@@ -8,10 +8,7 @@ This package provide a dataProvider, an authProvider and hooks to integrate [Sup
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // in dataProvider.js
 import { supabaseDataProvider } from 'ra-supabase-core';
@@ -20,7 +17,7 @@ import { supabase } from './supabase';
 const resources = {
     posts: ['id', 'title', 'body', 'author_id', 'date'],
     authors: ['id', 'full_name'],
-}
+};
 
 export const dataProvider = supabaseDataProvider(supabase, resources);
 
@@ -29,7 +26,7 @@ import { supabaseAuthProvider } from 'ra-supabase-core';
 import { supabase } from './supabase';
 
 export const authProvider = supabaseAuthProvider(supabase, {
-    getIdentity: (user) => {
+    getIdentity: async user => {
         const { data, error } = await supabase
             .from('userProfiles')
             .select('id, first_name, last_name')
@@ -42,9 +39,9 @@ export const authProvider = supabaseAuthProvider(supabase, {
 
         return {
             id: data.id,
-            fullName: `${data.first_name} ${data.last_name}`
+            fullName: `${data.first_name} ${data.last_name}`,
         };
-    }
+    },
 });
 
 // in App.js
@@ -53,14 +50,11 @@ import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-    >
+    <Admin dataProvider={dataProvider} authProvider={authProvider}>
         <Resource name="posts" list={ListGuesser} />
         <Resource name="authors" list={ListGuesser} />
     </Admin>
-)
+);
 ```
 
 ## Authentication
@@ -130,7 +124,7 @@ import { supabaseAuthProvider } from 'ra-supabase-core';
 import { supabase } from './supabase';
 
 export const authProvider = supabaseAuthProvider(supabase, {
-    getIdentity: (user) => {
+    getIdentity: async user => {
         const { data, error } = await supabase
             .from('userProfiles')
             .select('id, first_name, last_name')
@@ -143,9 +137,9 @@ export const authProvider = supabaseAuthProvider(supabase, {
 
         return {
             id: data.id,
-            fullName: `${data.first_name} ${data.last_name}`
+            fullName: `${data.first_name} ${data.last_name}`,
         };
-    }
+    },
 });
 ```
 
