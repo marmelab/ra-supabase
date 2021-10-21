@@ -163,3 +163,4 @@ export const dataProvider = supabaseDataProvider(supabase, resources);
 
 -   Add support for magic link authentication
 -   Add support for third party authentication
+-   Add support for uploading files to Supabase storage
