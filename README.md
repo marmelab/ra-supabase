@@ -63,7 +63,7 @@ export const authProvider = supabaseAuthProvider(supabase, {
 
 // in App.js
 import { Admin, Resource, ListGuesser } from 'react-admin';
-import { authRoutes } from 'ra-supabase';
+import { authRoutes, LoginPage } from 'ra-supabase';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
@@ -72,6 +72,7 @@ export const MyAdmin = () => (
         dataProvider={dataProvider}
         authProvider={authProvider}
         customRoutes={authRoutes}
+        loginPage={LoginPage}
     >
         <Resource name="posts" list={ListGuesser} />
         <Resource name="authors" list={ListGuesser} />
