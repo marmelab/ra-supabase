@@ -1,6 +1,6 @@
 {
     "name": "ra-supabase-language-french",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "repository": "git@github.com:marmelab/ra-supabase.git",
     "author": "Gildas Garcia <1122076+djhi@users.noreply.github.com>",
     "license": "MIT",
