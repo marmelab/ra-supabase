@@ -1,6 +1,6 @@
 {
     "name": "react-admin-crm",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "private": true,
     "dependencies": {
         "@material-ui/core": "^4.12.1",
@@ -10,7 +10,7 @@
         "date-fns": "^2.19.0",
         "lodash": "~4.17.5",
         "prop-types": "^15.7.2",
-        "ra-supabase": "^1.2.0",
+        "ra-supabase": "^1.2.1",
         "react": "^17.0.0",
         "react-admin": "^3.18.2",
         "react-beautiful-dnd": "^13.0.0",
