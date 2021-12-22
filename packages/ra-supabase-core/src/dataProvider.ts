@@ -6,11 +6,11 @@ export const supabaseDataProvider = (
     resources: ResourcesOptions
 ): DataProvider => ({
     getList: async (resource, params) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
         return getList({ client, resource, resourceOptions, params });
     },
     getOne: async (resource, { id }) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
 
         const { data, error } = await client
             .from(resource)
@@ -29,7 +29,7 @@ export const supabaseDataProvider = (
         return { ...data, id: data[resourceOptions.primaryKey] };
     },
     getMany: async (resource, { ids }) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
 
         const { data, error } = await client
             .from(resource)
@@ -42,7 +42,7 @@ export const supabaseDataProvider = (
         return { data: data ?? [] };
     },
     getManyReference: async (resource, originalParams) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
         const { target, id } = originalParams;
         const params = {
             ...originalParams,
@@ -51,7 +51,7 @@ export const supabaseDataProvider = (
         return getList({ client, resource, resourceOptions, params });
     },
     create: async (resource, { data }) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
         const { data: record, error } = await client
             .from(resource)
             .insert(data)
@@ -68,7 +68,7 @@ export const supabaseDataProvider = (
         return { ...record, id: record[resourceOptions.primaryKey] };
     },
     update: async (resource, { id, data }) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
         const { data: record, error } = await client
             .from(resource)
             .update(data)
@@ -86,7 +86,7 @@ export const supabaseDataProvider = (
         return { ...record, id: record[resourceOptions.primaryKey] };
     },
     updateMany: async (resource, { ids, data }) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
         const { data: records, error } = await client
             .from(resource)
             .update(data)
@@ -100,7 +100,7 @@ export const supabaseDataProvider = (
         };
     },
     delete: async (resource, { id }) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
         const { data: record, error } = await client
             .from(resource)
             .delete()
@@ -118,7 +118,7 @@ export const supabaseDataProvider = (
         return { ...record, id: record[resourceOptions.primaryKey] };
     },
     deleteMany: async (resource, { ids }) => {
-        const resourceOptions = getResourceOptions(resources[resource]);
+        const resourceOptions = getResourceOptions(resource, resources);
         const { data: records, error } = await client
             .from(resource)
             .delete()
@@ -134,6 +134,7 @@ export const supabaseDataProvider = (
 });
 
 type ResourceOptionsWithFullTextSearch = {
+    table?: string;
     primaryKey?: string;
     fields: string[];
     fullTextSearchFields?: string[];
@@ -197,19 +198,25 @@ const getList = async ({
 };
 
 const getResourceOptions = (
-    options: ResourceOptions
+    resource: string,
+    options: ResourcesOptions
 ): InternalResourceOptions => {
-    if (Array.isArray(options)) {
+    const resourceOptions = options[resource];
+
+    if (Array.isArray(resourceOptions)) {
         return {
+            table: resource,
             primaryKey: 'id',
-            fields: options,
-            fullTextSearchFields: options,
+            fields: resourceOptions,
+            fullTextSearchFields: resourceOptions,
         };
     }
 
     return {
-        primaryKey: options.primaryKey ?? 'id',
-        fields: options.fields,
-        fullTextSearchFields: options.fullTextSearchFields ?? options.fields,
+        table: resourceOptions.table ?? resource,
+        primaryKey: resourceOptions.primaryKey ?? 'id',
+        fields: resourceOptions.fields,
+        fullTextSearchFields:
+            resourceOptions.fullTextSearchFields ?? resourceOptions.fields,
     };
 };
