@@ -13,7 +13,7 @@ export const supabaseDataProvider = (
         const resourceOptions = getResourceOptions(resource, resources);
 
         const { data, error } = await client
-            .from(resource)
+            .from(resourceOptions.table)
             .select(resourceOptions.fields.join(', '))
             .match({ id })
             .single();
@@ -32,7 +32,7 @@ export const supabaseDataProvider = (
         const resourceOptions = getResourceOptions(resource, resources);
 
         const { data, error } = await client
-            .from(resource)
+            .from(resourceOptions.table)
             .select(resourceOptions.fields.join(', '))
             .in('id', ids);
 
@@ -53,7 +53,7 @@ export const supabaseDataProvider = (
     create: async (resource, { data }) => {
         const resourceOptions = getResourceOptions(resource, resources);
         const { data: record, error } = await client
-            .from(resource)
+            .from(resourceOptions.table)
             .insert(data)
             .single();
 
@@ -70,7 +70,7 @@ export const supabaseDataProvider = (
     update: async (resource, { id, data }) => {
         const resourceOptions = getResourceOptions(resource, resources);
         const { data: record, error } = await client
-            .from(resource)
+            .from(resourceOptions.table)
             .update(data)
             .match({ id })
             .single();
@@ -88,7 +88,7 @@ export const supabaseDataProvider = (
     updateMany: async (resource, { ids, data }) => {
         const resourceOptions = getResourceOptions(resource, resources);
         const { data: records, error } = await client
-            .from(resource)
+            .from(resourceOptions.table)
             .update(data)
             .in('id', ids);
 
@@ -102,7 +102,7 @@ export const supabaseDataProvider = (
     delete: async (resource, { id }) => {
         const resourceOptions = getResourceOptions(resource, resources);
         const { data: record, error } = await client
-            .from(resource)
+            .from(resourceOptions.table)
             .delete()
             .match({ id })
             .single();
@@ -120,7 +120,7 @@ export const supabaseDataProvider = (
     deleteMany: async (resource, { ids }) => {
         const resourceOptions = getResourceOptions(resource, resources);
         const { data: records, error } = await client
-            .from(resource)
+            .from(resourceOptions.table)
             .delete()
             .in('id', ids);
 
@@ -166,18 +166,20 @@ const getList = async ({
     const rangeTo = rangeFrom + pagination.perPage;
 
     let query = client
-        .from(resource)
+        .from(resourceOptions.table)
         .select(resourceOptions.fields.join(', '), { count: 'exact' })
         .order(sort.field, { ascending: sort.order === 'ASC' })
         .match(filter)
         .range(rangeFrom, rangeTo);
 
     if (q) {
-        query = query.or(
-            resourceOptions.fullTextSearchFields
-                .map(field => `${field}.ilike.%${q}%`)
-                .join(',')
-        );
+        const fullTextSearchFields = Array.isArray(resourceOptions)
+            ? resourceOptions
+            : resourceOptions.fullTextSearchFields;
+
+        fullTextSearchFields.forEach(field => {
+            query = query.ilike(field, `%${q}%`);
+        });
     }
 
     const { data, error, count } = await query;
