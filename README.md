@@ -2,7 +2,7 @@
 
 This package provides a dataProvider, an authProvider, hooks and components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
 
-It leverages [ra-supabase-core](https://github.com/marmelab/ra-supabase-core) and [ra-supabase-ui-materialui](https://github.com/marmelab/ra-supabase-ui-materialui).
+It leverages [ra-supabase-core](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-core) and [ra-supabase-ui-materialui](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-ui-materialui).
 
 In particular, this package provides components around Supabase authentication with the following workflow:
 
@@ -84,8 +84,8 @@ export const MyAdmin = () => (
 
 We provide two language packages:
 
--   [ra-supabase-language-english](https://github.com/marmelab/ra-supabase-language-english)
--   [ra-supabase-language-french](https://github.com/marmelab/ra-supabase-language-french)
+-   [ra-supabase-language-english](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-english)
+-   [ra-supabase-language-french](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-french)
 
 `ra-supabase` already re-export `ra-supabase-language-english` but you must set up the i18nProvider yourself:
 

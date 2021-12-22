@@ -10,7 +10,7 @@ import React, {
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Card, Avatar } from '@material-ui/core';
-import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import { createTheme, makeStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import LockIcon from '@material-ui/icons/Lock';
 import { StaticContext } from 'react-router';
@@ -50,7 +50,7 @@ export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
     } = props;
     const containerRef = useRef<HTMLDivElement>(null);
     const classes = useStyles(props);
-    const muiTheme = useMemo(() => createMuiTheme(theme), [theme]);
+    const muiTheme = useMemo(() => createTheme(theme), [theme]);
     let backgroundImageLoaded = false;
 
     const updateBackgroundImage = () => {
