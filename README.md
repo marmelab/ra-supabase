@@ -87,6 +87,9 @@ We provide two language packages:
 -   [ra-supabase-language-english](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-english)
 -   [ra-supabase-language-french](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-french)
 
+And there are also community supported language packages:
+-   [ra-supabase-language-spanish](https://github.com/dreinon/ra-supabase-language-spanish)
+
 `ra-supabase` already re-export `ra-supabase-language-english` but you must set up the i18nProvider yourself:
 
 ```js
