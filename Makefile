@@ -52,9 +52,27 @@ prettier: ## prettify the source code using prettier
 test: build test-unit lint ## launch all tests
 
 test-unit: ## launch unit tests
-	echo "Running unit tests...";
-	yarn -s test-unit;
+	@echo "Running unit tests...";
+	@yarn -s test-unit;
 
 test-unit-watch: ## launch unit tests and watch for changes
-	echo "Running unit tests..."; \
-	yarn -s test-unit --watch; \
+	@echo "Running unit tests..."; \
+	@yarn -s test-unit --watch; \
+
+supabase-start: ## start the supabase server
+	@echo "Starting supabase server..."
+	@yarn supabase start
+
+supabase-Stop: ## stop the supabase server
+	@echo "Stoping supabase server..."
+	@yarn supabase Stop
+
+db-migrate: ## migrate the database
+	@echo "Apply migrations on the database..."
+	@yarn -s db-migrate
+
+db-seed: ## seed the database
+	@echo "Seeding the database..."
+	@yarn -s db-seed
+
+db-setup: db-migrate db-seed ## setup the database

@@ -1,12 +1,12 @@
-import { Record, Identifier } from 'react-admin';
+import { RaRecord, Identifier } from 'react-admin';
 
-export interface Sale extends Record {
+export interface Sale extends RaRecord {
     first_name: string;
     last_name: string;
     email: string;
 }
 
-export interface Company extends Record {
+export interface Company extends RaRecord {
     name: string;
     logo: string;
     sector: string;
@@ -18,13 +18,11 @@ export interface Company extends Record {
     zipcode: string;
     city: string;
     stateAbbr: string;
-    nb_contacts: number;
-    nb_deals: number;
     sales_id: Identifier;
     created_at: string;
 }
 
-export interface Contact extends Record {
+export interface Contact extends RaRecord {
     first_name: string;
     last_name: string;
     title: string;
@@ -37,10 +35,9 @@ export interface Contact extends Record {
     tags: Identifier[];
     gender: string;
     sales_id: Identifier;
-    nb_notes: number;
 }
 
-export interface ContactNote extends Record {
+export interface ContactNote extends RaRecord {
     contact_id: Identifier;
     type: string;
     text: string;
@@ -49,7 +46,7 @@ export interface ContactNote extends Record {
     status: string;
 }
 
-export interface Deal extends Record {
+export interface Deal extends RaRecord {
     name: string;
     company_id: Identifier;
     contact_ids: Identifier[];
@@ -61,5 +58,9 @@ export interface Deal extends Record {
     updated_at: string;
     sales_id: Identifier;
     index: number;
-    nb_notes: number;
+}
+
+export interface Tag extends RaRecord {
+    name: string;
+    color: string;
 }

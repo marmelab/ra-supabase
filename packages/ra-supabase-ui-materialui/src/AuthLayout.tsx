@@ -8,15 +8,18 @@ import React, {
     useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import { Card, Avatar } from '@material-ui/core';
-import { createTheme, makeStyles } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
-import LockIcon from '@material-ui/icons/Lock';
-import { StaticContext } from 'react-router';
+import {
+    Card,
+    Avatar,
+    ThemeProvider,
+    createTheme,
+    Box,
+    styled,
+} from '@mui/material';
+import LockIcon from '@mui/icons-material/Lock';
 
 import { TitleComponent } from 'ra-core';
-import { defaultTheme, Notification } from 'ra-ui-materialui';
+import { defaultTheme, LayoutClasses, Notification } from 'ra-ui-materialui';
 
 /**
  * A standalone login page, to serve as authentication gate to the admin
@@ -44,12 +47,10 @@ export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
         className,
         children,
         notification,
-        staticContext,
         backgroundImage,
         ...rest
     } = props;
     const containerRef = useRef<HTMLDivElement>(null);
-    const classes = useStyles(props);
     const muiTheme = useMemo(() => createTheme(theme), [theme]);
     let backgroundImageLoaded = false;
 
@@ -77,21 +78,17 @@ export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
 
     return (
         <ThemeProvider theme={muiTheme}>
-            <div
-                className={classnames(classes.main, className)}
-                {...rest}
-                ref={containerRef}
-            >
-                <Card className={classes.card}>
-                    <div className={classes.avatar}>
-                        <Avatar className={classes.icon}>
+            <Root {...rest} ref={containerRef}>
+                <Card className={AuthLayoutClasses.card}>
+                    <div className={AuthLayoutClasses.avatar}>
+                        <Avatar className={AuthLayoutClasses.icon}>
                             <LockIcon />
                         </Avatar>
                     </div>
                     {children}
                 </Card>
                 {notification ? createElement(notification) : null}
-            </div>
+            </Root>
         </ThemeProvider>
     );
 };
@@ -102,7 +99,6 @@ AuthLayout.propTypes = {
     classes: PropTypes.object,
     className: PropTypes.string,
     theme: PropTypes.object,
-    staticContext: PropTypes.object,
 };
 
 AuthLayout.defaultProps = {
@@ -117,34 +113,42 @@ export interface LoginProps
     classes?: object;
     className?: string;
     notification?: ComponentType;
-    staticContext?: StaticContext;
     theme?: object;
     title?: TitleComponent;
 }
 
-const useStyles = makeStyles(theme => ({
-    main: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        height: '1px',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundImage:
-            'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
-    },
-    card: {
+const PREFIX = 'RaAuthLayout';
+
+export const AuthLayoutClasses = {
+    card: `${PREFIX}-card`,
+    avatar: `${PREFIX}-avatar`,
+    icon: `${PREFIX}-icon`,
+};
+
+const Root = styled('div', {
+    name: PREFIX,
+    overridesResolver: (props, styles) => styles.root,
+})(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
+    height: '1px',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundImage:
+        'radial-gradient(circle at 50% 14em, #313264 0%, #00023b 60%, #00023b 100%)',
+    [`& .${AuthLayoutClasses.card}`]: {
         minWidth: 300,
         marginTop: '6em',
     },
-    avatar: {
+    [`& .${AuthLayoutClasses.avatar}`]: {
         margin: '1em',
         display: 'flex',
         justifyContent: 'center',
     },
-    icon: {
+    [`& .${AuthLayoutClasses.icon}`]: {
         backgroundColor: theme.palette.grey[500],
     },
 }));

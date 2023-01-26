@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { renderWithRedux } from 'ra-test';
-import { waitFor } from '@testing-library/react';
-import { Router } from 'react-router';
+import { render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { CoreAdminContext } from 'ra-core';
 import {
     useSupabaseAccessToken,
     UseSupabaseAccessTokenOptions,
@@ -25,10 +24,10 @@ describe('useSupabaseAccessToken', () => {
             initialEntries: ['/set-password'],
         });
 
-        const { queryByText } = renderWithRedux(
-            <Router history={history}>
+        const { queryByText } = render(
+            <CoreAdminContext history={history}>
                 <UseSupabaseAccessToken />
-            </Router>
+            </CoreAdminContext>
         );
 
         await waitFor(() => {
@@ -46,10 +45,10 @@ describe('useSupabaseAccessToken', () => {
             initialEntries: ['/set-password'],
         });
 
-        const { queryByText } = renderWithRedux(
-            <Router history={history}>
+        const { queryByText } = render(
+            <CoreAdminContext history={history}>
                 <UseSupabaseAccessToken parameterName="my_token" />
-            </Router>
+            </CoreAdminContext>
         );
 
         await waitFor(() => {
@@ -63,10 +62,10 @@ describe('useSupabaseAccessToken', () => {
             initialEntries: ['/set-password'],
         });
 
-        renderWithRedux(
-            <Router history={history}>
+        render(
+            <CoreAdminContext history={history}>
                 <UseSupabaseAccessToken />
-            </Router>
+            </CoreAdminContext>
         );
 
         await waitFor(() => {
@@ -80,10 +79,10 @@ describe('useSupabaseAccessToken', () => {
             initialEntries: ['/set-password'],
         });
 
-        renderWithRedux(
-            <Router history={history}>
+        render(
+            <CoreAdminContext history={history}>
                 <UseSupabaseAccessToken redirectTo="/login" />
-            </Router>
+            </CoreAdminContext>
         );
 
         await waitFor(() => {
@@ -97,10 +96,10 @@ describe('useSupabaseAccessToken', () => {
             initialEntries: ['/set-password'],
         });
 
-        renderWithRedux(
-            <Router history={history}>
+        render(
+            <CoreAdminContext history={history}>
                 <UseSupabaseAccessToken redirectTo={false} />
-            </Router>
+            </CoreAdminContext>
         );
 
         await waitFor(() => {

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import {
     ShowBase,
-    ShowProps,
     TextField,
     ReferenceField,
     ReferenceManyField,
     useShowContext,
 } from 'react-admin';
-import { Box, Card, CardContent, Typography } from '@material-ui/core';
+import { Box, Card, CardContent, Typography } from '@mui/material';
 
 import { Avatar } from './Avatar';
 import { ContactAside } from './ContactAside';
@@ -15,22 +14,22 @@ import { LogoField } from '../companies/LogoField';
 import { NotesIterator } from '../notes';
 import { Contact } from '../types';
 
-export const ContactShow = (props: ShowProps) => (
-    <ShowBase {...props}>
+export const ContactShow = () => (
+    <ShowBase>
         <ContactShowContent />
     </ShowBase>
 );
 
 const ContactShowContent = () => {
-    const { record, loaded } = useShowContext<Contact>();
-    if (!loaded || !record) return null;
+    const { record, isLoading } = useShowContext<Contact>();
+    if (isLoading || !record) return null;
     return (
         <Box mt={2} display="flex">
             <Box flex="1">
                 <Card>
                     <CardContent>
                         <Box display="flex">
-                            <Avatar record={record} />
+                            <Avatar />
                             <Box ml={2} flex="1">
                                 <Typography variant="h5">
                                     {record.first_name} {record.last_name}
@@ -66,7 +65,7 @@ const ContactShowContent = () => {
                     </CardContent>
                 </Card>
             </Box>
-            <ContactAside record={record} />
+            <ContactAside />
         </Box>
     );
 };

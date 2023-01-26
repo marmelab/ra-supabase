@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { OnFailure, OnSuccess, useTranslate } from 'ra-core';
-import { Field, Form } from 'react-final-form';
-import { Button, CardActions, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { ClassesOverride } from 'ra-ui-materialui';
+import { Form, onError as OnError, OnSuccess, useTranslate } from 'ra-core';
+import { CardActions, styled } from '@mui/material';
 import { useSetPassword, useSupabaseAccessToken } from 'ra-supabase-core';
-import { Input } from './Input';
+import { PasswordInput, SaveButton } from 'ra-ui-materialui';
 
 export const SetPasswordForm = (props: SetPasswordFormProps) => {
-    const classes = useStyles(props);
     const translate = useTranslate();
     const access_token = useSupabaseAccessToken();
     const { onSuccess, onFailure } = props;
@@ -37,67 +33,41 @@ export const SetPasswordForm = (props: SetPasswordFormProps) => {
     };
 
     return (
-        <Form
-            onSubmit={submit}
-            validate={validate}
-            render={({ handleSubmit, submitting }) => (
-                <>
-                    <form onSubmit={handleSubmit} noValidate>
-                        <div className={classes.form}>
-                            <div>
-                                <Field
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    component={Input}
-                                    label={translate('ra.auth.password')}
-                                    disabled={submitting}
-                                    autoComplete="current-password"
-                                />
-                            </div>
-                            <div>
-                                <Field
-                                    id="confirm_password"
-                                    name="confirm_password"
-                                    type="password"
-                                    component={Input}
-                                    label={translate(
-                                        'ra-supabase.auth.confirm_password',
-                                        { _: 'Confirm password' }
-                                    )}
-                                    disabled={submitting}
-                                />
-                            </div>
-                        </div>
-                        <CardActions>
-                            <Button
-                                variant="contained"
-                                type="submit"
-                                color="primary"
-                                disabled={submitting}
-                                className={classes.button}
-                            >
-                                {submitting && (
-                                    <CircularProgress
-                                        className={classes.icon}
-                                        size={18}
-                                        thickness={2}
-                                    />
-                                )}
-                                {translate('ra.auth.sign_in')}
-                            </Button>
-                        </CardActions>
-                    </form>
-                </>
-            )}
-        />
+        <Root onSubmit={submit} validate={validate}>
+            <div className={SupabaseSetPasswordFormClasses.container}>
+                <div>
+                    <PasswordInput
+                        source="password"
+                        type="password"
+                        label={translate('ra.auth.password')}
+                        autoComplete="current-password"
+                    />
+                </div>
+                <div>
+                    <PasswordInput
+                        source="confirm_password"
+                        type="password"
+                        label={translate('ra-supabase.auth.confirm_password', {
+                            _: 'Confirm password',
+                        })}
+                    />
+                </div>
+            </div>
+            <CardActions>
+                <SaveButton
+                    type="submit"
+                    color="primary"
+                    className={SupabaseSetPasswordFormClasses.button}
+                    label={translate('ra.auth.sign_in')}
+                />
+            </CardActions>
+        </Root>
     );
 };
 
 export type SetPasswordFormProps = {
-    classes?: ClassesOverride<typeof useStyles>;
     onSuccess?: OnSuccess;
-    onFailure?: OnFailure;
+    onFailure?: OnError;
 };
 
 interface FormData {
@@ -106,22 +76,26 @@ interface FormData {
     confirm_password?: string;
 }
 
-const useStyles = makeStyles(
-    theme => ({
-        form: {
-            padding: '0 1em 1em 1em',
-        },
-        input: {
-            marginTop: '1em',
-        },
-        button: {
-            width: '100%',
-        },
-        icon: {
-            marginRight: theme.spacing(1),
-        },
-    }),
-    {
-        name: 'RaSupabaseSetPasswordForm',
-    }
-);
+const PREFIX = 'RaSupabaseSetPasswordForm';
+
+export const SupabaseSetPasswordFormClasses = {
+    container: `${PREFIX}-container`,
+    input: `${PREFIX}-input`,
+    button: `${PREFIX}-button`,
+    icon: `${PREFIX}-icon`,
+};
+
+const Root = styled(Form)(({ theme }) => ({
+    [`& .${SupabaseSetPasswordFormClasses.container}`]: {
+        padding: '0 1em 1em 1em',
+    },
+    [`& .${SupabaseSetPasswordFormClasses.input}`]: {
+        marginTop: '1em',
+    },
+    [`& .${SupabaseSetPasswordFormClasses.button}`]: {
+        width: '100%',
+    },
+    [`& .${SupabaseSetPasswordFormClasses.icon}`]: {
+        marginRight: theme.spacing(1),
+    },
+}));

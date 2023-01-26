@@ -6,7 +6,10 @@ export const supabaseAuthProvider = (
     { getIdentity }: SupabaseAuthProviderOptions
 ): SupabaseAuthProvider => ({
     async login({ email, password }: { email: string; password: string }) {
-        const { error } = await client.auth.signIn({ email, password });
+        const { error } = await client.auth.signInWithPassword({
+            email,
+            password,
+        });
 
         if (error) {
             throw error;
@@ -20,7 +23,7 @@ export const supabaseAuthProvider = (
         access_token: string;
         password: string;
     }) {
-        const { error } = await client.auth.api.updateUser(access_token, {
+        const { error } = await client.auth.updateUser({
             password,
         });
 
@@ -35,8 +38,12 @@ export const supabaseAuthProvider = (
             throw error;
         }
     },
-    async checkError() {
-        return;
+    async checkError(error) {
+        if (error.status === 401 || error.status === 403) {
+            return Promise.reject();
+        }
+
+        return Promise.resolve();
     },
     async checkAuth() {
         // Users are on the set-password page, nothing to do
@@ -69,8 +76,9 @@ export const supabaseAuthProvider = (
             );
         }
 
-        if (client.auth.session() == null) {
-            throw new Error();
+        const { data } = await client.auth.getSession();
+        if (data.session == null) {
+            return Promise.reject();
         }
 
         return Promise.resolve();
@@ -79,14 +87,14 @@ export const supabaseAuthProvider = (
         return;
     },
     async getIdentity() {
-        const user = client.auth.user();
+        const { data } = await client.auth.getUser();
 
-        if (!user) {
+        if (data.user == null) {
             throw new Error();
         }
 
         if (typeof getIdentity === 'function') {
-            const identity = await getIdentity(user);
+            const identity = await getIdentity(data.user);
             return identity;
         }
 

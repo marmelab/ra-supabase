@@ -1,22 +1,79 @@
-import { DataProvider, GetListParams } from 'ra-core';
+import { DataProvider, GetListParams, RaRecord } from 'ra-core';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 export const supabaseDataProvider = (
     client: SupabaseClient,
     resources: ResourcesOptions
 ): DataProvider => ({
-    getList: async (resource, params) => {
+    getList: async <RecordType>(resource, params) => {
         const resourceOptions = getResourceOptions(resource, resources);
-        return getList({ client, resource, resourceOptions, params });
+        return getList<RecordType>({
+            client,
+            resource,
+            resourceOptions,
+            params,
+        });
     },
-    getOne: async (resource, { id }) => {
+    getOne: async <RecordType>(resource, { id }) => {
         const resourceOptions = getResourceOptions(resource, resources);
 
         const { data, error } = await client
             .from(resourceOptions.table)
             .select(resourceOptions.fields.join(', '))
             .match({ id })
-            .single();
+            .maybeSingle();
+
+        if (error) {
+            throw error;
+        }
+
+        // There is a bug in supabase-js
+        // See https://github.com/supabase/supabase-js/issues/551
+        const record = data as unknown as RecordType;
+        if (resourceOptions.primaryKey === 'id') {
+            return { data: record };
+        }
+
+        return { data: { ...record, id: data[resourceOptions.primaryKey] } };
+    },
+    getMany: async <RecordType>(resource, { ids }) => {
+        const resourceOptions = getResourceOptions(resource, resources);
+
+        const { data, error } = await client
+            .from(resourceOptions.table)
+            .select(resourceOptions.fields.join(', '))
+            .in('id', ids);
+
+        if (error) {
+            throw error;
+        }
+
+        // There is a bug in supabase-js
+        // See https://github.com/supabase/supabase-js/issues/551
+        const records = data as unknown as RecordType[];
+        return { data: records ?? [] };
+    },
+    getManyReference: async <RecordType>(resource, originalParams) => {
+        const resourceOptions = getResourceOptions(resource, resources);
+        const { target, id } = originalParams;
+        const params = {
+            ...originalParams,
+            filter: { ...originalParams.filter, [target]: id },
+        };
+        return getList<RecordType>({
+            client,
+            resource,
+            resourceOptions,
+            params,
+        });
+    },
+    create: async (resource, { data }) => {
+        const resourceOptions = getResourceOptions(resource, resources);
+        const { data: record, error } = await client
+            .from(resourceOptions.table)
+            .insert(data)
+            .select()
+            .maybeSingle();
 
         if (error) {
             throw error;
@@ -26,46 +83,7 @@ export const supabaseDataProvider = (
             return { data };
         }
 
-        return { ...data, id: data[resourceOptions.primaryKey] };
-    },
-    getMany: async (resource, { ids }) => {
-        const resourceOptions = getResourceOptions(resource, resources);
-
-        const { data, error } = await client
-            .from(resourceOptions.table)
-            .select(resourceOptions.fields.join(', '))
-            .in('id', ids);
-
-        if (error) {
-            throw error;
-        }
-        return { data: data ?? [] };
-    },
-    getManyReference: async (resource, originalParams) => {
-        const resourceOptions = getResourceOptions(resource, resources);
-        const { target, id } = originalParams;
-        const params = {
-            ...originalParams,
-            filter: { ...originalParams.filter, [target]: id },
-        };
-        return getList({ client, resource, resourceOptions, params });
-    },
-    create: async (resource, { data }) => {
-        const resourceOptions = getResourceOptions(resource, resources);
-        const { data: record, error } = await client
-            .from(resourceOptions.table)
-            .insert(data)
-            .single();
-
-        if (error) {
-            throw error;
-        }
-
-        if (resourceOptions.primaryKey === 'id') {
-            return { data: record };
-        }
-
-        return { ...record, id: record[resourceOptions.primaryKey] };
+        return { data: { ...record, id: record[resourceOptions.primaryKey] } };
     },
     update: async (resource, { id, data }) => {
         const resourceOptions = getResourceOptions(resource, resources);
@@ -73,7 +91,8 @@ export const supabaseDataProvider = (
             .from(resourceOptions.table)
             .update(data)
             .match({ id })
-            .single();
+            .select()
+            .maybeSingle();
 
         if (error) {
             throw error;
@@ -83,14 +102,15 @@ export const supabaseDataProvider = (
             return { data: record };
         }
 
-        return { ...record, id: record[resourceOptions.primaryKey] };
+        return { data: { ...record, id: record[resourceOptions.primaryKey] } };
     },
     updateMany: async (resource, { ids, data }) => {
         const resourceOptions = getResourceOptions(resource, resources);
         const { data: records, error } = await client
             .from(resourceOptions.table)
             .update(data)
-            .in('id', ids);
+            .in('id', ids)
+            .select();
 
         if (error) {
             throw error;
@@ -99,27 +119,22 @@ export const supabaseDataProvider = (
             data: records?.map(record => record[resourceOptions.primaryKey]),
         };
     },
-    delete: async (resource, { id }) => {
+    delete: async (resource, { id, previousData }) => {
         const resourceOptions = getResourceOptions(resource, resources);
-        const { data: record, error } = await client
+        const { error } = await client
             .from(resourceOptions.table)
             .delete()
-            .match({ id })
-            .single();
+            .match({ id });
 
         if (error) {
             throw error;
         }
 
-        if (resourceOptions.primaryKey === 'id') {
-            return { data: record };
-        }
-
-        return { ...record, id: record[resourceOptions.primaryKey] };
+        return { data: previousData };
     },
     deleteMany: async (resource, { ids }) => {
         const resourceOptions = getResourceOptions(resource, resources);
-        const { data: records, error } = await client
+        const { error } = await client
             .from(resourceOptions.table)
             .delete()
             .in('id', ids);
@@ -128,7 +143,7 @@ export const supabaseDataProvider = (
             throw error;
         }
         return {
-            data: records?.map(record => record[resourceOptions.primaryKey]),
+            data: ids,
         };
     },
 });
@@ -145,7 +160,7 @@ type InternalResourceOptions = Required<ResourceOptionsWithFullTextSearch>;
 export type ResourceOptions = string[] | ResourceOptionsWithFullTextSearch;
 export type ResourcesOptions = Record<string, ResourceOptions>;
 
-const getList = async ({
+const getList = async <RecordType>({
     client,
     resource,
     resourceOptions,
@@ -183,15 +198,17 @@ const getList = async ({
     }
 
     const { data, error, count } = await query;
-
+    // There is a bug in supabase-js
+    // See https://github.com/supabase/supabase-js/issues/551
+    const records = data as unknown as RecordType[];
     if (error) {
         throw error;
     }
     return {
         data:
             resourceOptions.primaryKey === 'id'
-                ? data
-                : data.map(item => ({
+                ? records
+                : records.map(item => ({
                       ...item,
                       id: item[resourceOptions.primaryKey],
                   })) ?? [],

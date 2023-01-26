@@ -15,10 +15,9 @@ const resources: ResourcesOptions = {
             'zipcode',
             'city',
             'stateAbbr',
-            'nb_contacts',
-            'nb_deals',
             'sales_id',
             'created_at',
+            'logo'
         ],
         fullTextSearchFields: [
             'name',
@@ -60,7 +59,7 @@ const resources: ResourcesOptions = {
             'status',
             'tags',
             'sales_id',
-            'nb_notes',
+            'avatar',
         ],
         fullTextSearchFields: [
             'first_name',
@@ -92,7 +91,6 @@ const resources: ResourcesOptions = {
             'start_at',
             'sales_id',
             'index',
-            'nb_notes',
         ],
         fullTextSearchFields: ['name', 'type', 'stage', 'description'],
     },

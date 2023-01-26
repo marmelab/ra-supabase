@@ -62,21 +62,26 @@ export const authProvider = supabaseAuthProvider(supabase, {
 });
 
 // in App.js
-import { Admin, Resource, ListGuesser } from 'react-admin';
-import { authRoutes, LoginPage } from 'ra-supabase';
+import { Admin, Resource, ListGuesser, CustomRoutes } from 'react-admin';
+import { LoginPage } from 'ra-supabase';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        customRoutes={authRoutes}
-        loginPage={LoginPage}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <CustomRoutes noLayout>
+                <Route path="/set-password" element={<SetPasswordPage />} />
+            </CustomRoutes>
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
 );
 ```
 
@@ -165,3 +170,11 @@ export const dataProvider = supabaseDataProvider(supabase, resources);
 -   Add support for magic link authentication
 -   Add support for third party authentication
 -   Add support for uploading files to Supabase storage
+
+## Local Development
+
+This project uses a local instance of Supabase. To set up your environment, run the following command:
+
+```sh
+make install supabase-start db-setup run
+```
