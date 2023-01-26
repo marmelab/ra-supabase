@@ -17,7 +17,7 @@ const resources: ResourcesOptions = {
             'stateAbbr',
             'sales_id',
             'created_at',
-            'logo'
+            'logo',
         ],
         fullTextSearchFields: [
             'name',

@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Admin, Resource, ListGuesser, defaultTheme, CustomRoutes } from 'react-admin';
+import {
+    Admin,
+    Resource,
+    ListGuesser,
+    defaultTheme,
+    CustomRoutes,
+} from 'react-admin';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { LoginPage, SetPasswordPage } from 'ra-supabase';
 import { QueryClient } from 'react-query';
