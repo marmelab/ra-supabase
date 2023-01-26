@@ -56,8 +56,8 @@ test-unit: ## launch unit tests
 	@yarn -s test-unit;
 
 test-unit-watch: ## launch unit tests and watch for changes
-	@echo "Running unit tests..."; \
-	@yarn -s test-unit --watch; \
+	@echo "Running unit tests..."; 
+	@yarn -s test-unit --watch;
 
 supabase-start: ## start the supabase server
 	@echo "Starting supabase server..."

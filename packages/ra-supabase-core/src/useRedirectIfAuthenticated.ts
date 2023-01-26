@@ -19,7 +19,7 @@ export const useRedirectIfAuthenticated = (
     const checkAuth = useCheckAuth();
 
     useEffect(() => {
-        checkAuth({}, false, false, true)
+        checkAuth({}, false, undefined, true)
             .then(() => {
                 // already authenticated, redirect to the home page
                 navigate(redirectTo);

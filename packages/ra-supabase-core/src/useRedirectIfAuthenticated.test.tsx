@@ -64,7 +64,15 @@ describe('useRedirectIfAuthenticated', () => {
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith('/');
+            expect(push).toHaveBeenCalledWith(
+                {
+                    hash: '',
+                    pathname: '/',
+                    search: '',
+                },
+                undefined,
+                {}
+            );
         });
     });
 
@@ -88,7 +96,11 @@ describe('useRedirectIfAuthenticated', () => {
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith('/dashboard');
+            expect(push).toHaveBeenCalledWith(
+                { hash: '', pathname: '/dashboard', search: '' },
+                undefined,
+                {}
+            );
         });
     });
 });
