@@ -63,9 +63,9 @@ supabase-start: ## start the supabase server
 	@echo "Starting supabase server..."
 	@yarn supabase start
 
-supabase-Stop: ## stop the supabase server
-	@echo "Stoping supabase server..."
-	@yarn supabase Stop
+supabase-stop: ## stop the supabase server
+	@echo "Stopping supabase server..."
+	@yarn supabase stop
 
 db-migrate: ## migrate the database
 	@echo "Apply migrations on the database..."

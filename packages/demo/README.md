@@ -8,7 +8,7 @@ React-admin usually requires a REST/GraphQL server to provide data. In this demo
 
 To explore the source code, start with [src/App.tsx](https://github.com/marmelab/react-admin/blob/master/examples/crm/src/App.tsx).
 
-**Note**: This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+**Note**: This project was bootstrapped with [Vite](https://vitejs.dev/).
 
 ## How to run
 
