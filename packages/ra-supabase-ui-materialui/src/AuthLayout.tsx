@@ -13,13 +13,12 @@ import {
     Avatar,
     ThemeProvider,
     createTheme,
-    Box,
     styled,
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 
 import { TitleComponent } from 'ra-core';
-import { defaultTheme, LayoutClasses, Notification } from 'ra-ui-materialui';
+import { defaultTheme, Notification } from 'ra-ui-materialui';
 
 /**
  * A standalone login page, to serve as authentication gate to the admin

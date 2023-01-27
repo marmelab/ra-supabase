@@ -1,4 +1,4 @@
-import { DataProvider, GetListParams, RaRecord } from 'ra-core';
+import { DataProvider, GetListParams } from 'ra-core';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 export const supabaseDataProvider = (

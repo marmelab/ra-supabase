@@ -27,7 +27,7 @@ export const useRedirectIfAuthenticated = (
             .catch(() => {
                 // not authenticated, stay on the login page
             });
-    }, [redirectTo]);
+    }, [checkAuth, navigate, redirectTo]);
 };
 
 export type UseRedirectIfAuthenticatedOptions = string;
