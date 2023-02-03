@@ -21,7 +21,9 @@ const maxContacts = {
     500: 50,
 };
 
-export const generateContacts = (db: Db): Contact[] => {
+export const generateContacts = (
+    db: Pick<Db, 'companies' | 'tags'>
+): Contact[] => {
     const nbAvailblePictures = 223;
     let numberOfContacts = 0;
 

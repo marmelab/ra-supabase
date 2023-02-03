@@ -39,12 +39,6 @@ export default defineConfig({
     resolve: {
         preserveSymlinks: true,
         alias: [
-            // allow profiling in production
-            { find: 'react-dom', replacement: 'react-dom/profiling' },
-            {
-                find: 'scheduler/tracing',
-                replacement: 'scheduler/tracing-profiling',
-            },
             // we need to manually follow the symlinks for local packages to allow deep HMR
             ...Object.keys(aliases).map(packageName => ({
                 find: packageName,

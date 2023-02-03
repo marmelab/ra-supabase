@@ -7,7 +7,9 @@ import { randomDate } from './utils';
 const type = ['Email', 'Call', 'Call', 'Call', 'Call', 'Meeting', 'Reminder'];
 const status = ['cold', 'cold', 'cold', 'warm', 'warm', 'hot', 'in-contract'];
 
-export const generateContactNotes = (db: Db): ContactNote[] => {
+export const generateContactNotes = (
+    db: Pick<Db, 'contacts'>
+): ContactNote[] => {
     return Array.from(Array(1200).keys()).map(id => {
         const contact = random.arrayElement(db.contacts);
         const date = randomDate(new Date(contact.first_seen)).toISOString();

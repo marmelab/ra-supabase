@@ -22,7 +22,9 @@ const stages = [
 ];
 //const tags = ["new deal", "upsell", "SAV"];
 
-export const generateDeals = (db: Db): Deal[] => {
+export const generateDeals = (
+    db: Pick<Db, 'companies' | 'contacts'>
+): Deal[] => {
     const deals = Array.from(Array(50).keys()).map(id => {
         const company = random.arrayElement(db.companies);
         company.nb_deals++;

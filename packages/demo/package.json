@@ -5,8 +5,8 @@
     "dependencies": {
         "@mui/icons-material": "^5.0.1",
         "@mui/material": "^5.0.2",
-        "@nivo/bar": "^0.67.0",
-        "@nivo/core": "^0.67.0",
+        "@nivo/bar": "^0.80.0",
+        "@nivo/core": "^0.80.0",
         "@vitejs/plugin-react": "^2.2.0",
         "clsx": "^1.1.1",
         "date-fns": "^2.19.0",
@@ -31,10 +31,9 @@
         "@types/faker": "^5.1.7",
         "@types/jest": "^26.0.19",
         "@types/lodash": "~4.14.168",
-        "@types/react": "^17.0.20",
+        "@types/react": "^18.0.0",
         "@types/react-beautiful-dnd": "^13.0.0",
-        "@types/react-dom": "^17.0.9",
-        "rewire": "^5.0.0",
+        "@types/react-dom": "^18.0.0",
         "source-map-explorer": "^2.0.0",
         "tsx": "^3.12.2",
         "typescript": "^4.4.0",
@@ -45,7 +44,7 @@
         "build": "vite build",
         "test": "vite test",
         "lint": "eslint --fix ./src",
-        "db-seed": "node db-seed.mjs"
+        "db-seed": "tsx db-seed.ts"
     },
     "homepage": ".",
     "browserslist": {

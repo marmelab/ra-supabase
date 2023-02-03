@@ -5,17 +5,20 @@ import { randomDate } from './utils';
 
 const type = ['Email', 'Call', 'Call', 'Call', 'Call', 'Meeting', 'Reminder'];
 
-export const generateDealNotes = (db: Db) => {
+export const generateDealNotes = (db: Pick<Db, 'companies' | 'deals'>) => {
     return Array.from(Array(300).keys()).map(id => {
         const deal = random.arrayElement(db.deals);
-        deal.nb_notes++;
         return {
             id,
             deal_id: deal.id,
             type: random.arrayElement(type),
             text: lorem.paragraphs(random.number({ min: 1, max: 4 })),
             date: randomDate(
-                new Date(db.companies[deal.company_id as number].created_at)
+                new Date(
+                    db.companies.find(
+                        company => company.id == deal.company_id
+                    ).created_at
+                )
             ).toISOString(),
             sales_id: deal.sales_id,
         };

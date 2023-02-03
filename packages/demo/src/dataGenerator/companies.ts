@@ -22,7 +22,7 @@ const sizes = [1, 10, 50, 250, 500];
 
 const regex = /\W+/;
 
-export const generateCompanies = (db: Db): Company[] => {
+export const generateCompanies = (db: Pick<Db, 'sales'>): Company[] => {
     return Array.from(Array(55).keys()).map(id => {
         const name = company.companyName();
         return {
@@ -44,7 +44,7 @@ export const generateCompanies = (db: Db): Company[] => {
             nb_deals: 0,
             // at least 1/3rd of companies for Jane Doe
             sales_id:
-                random.number(2) === 0 ? 0 : random.arrayElement(db.sales).id,
+                random.number(2) === 0 ? 1 : random.arrayElement(db.sales).id,
             created_at: randomDate().toISOString(),
         };
     });
