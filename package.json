@@ -45,6 +45,7 @@
         "build": "lerna run build",
         "build-demo": "cd packages/demo && yarn build",
         "run-demo": "cd packages/demo && yarn start",
+        "run-demo-prod": "cd packages/demo && yarn serve",
         "test-unit": "lerna run test-unit",
         "watch": "lerna run --parallel watch",
         "lint": "eslint --fix --ext .js,.ts,.tsx \"./packages/**/src/**/*.{js,ts,tsx}\"",

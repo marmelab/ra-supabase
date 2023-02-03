@@ -53,4 +53,4 @@ jobs:
         - name: Cypress run
           uses: cypress-io/github-action@v5.0.7
           with:
-            start: make run
+            start: make run-prod

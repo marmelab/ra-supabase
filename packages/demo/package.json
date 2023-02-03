@@ -40,7 +40,8 @@
         "web-vitals": "^1.0.1"
     },
     "scripts": {
-        "start": "vite",
+        "start": "vite --port 8000",
+        "serve": "vite preview --port 8000",
         "build": "vite build",
         "test": "vite test",
         "lint": "eslint --fix ./src",

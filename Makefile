@@ -16,6 +16,9 @@ install: package.json ## install dependencies
 run: ## run the demo
 	@yarn -s run-demo
 
+run-prod: ## run the demo in prod
+	@yarn -s run-demo-prod
+
 build-demo: ## compile the demo to static js
 	@yarn -s build-demo
 
