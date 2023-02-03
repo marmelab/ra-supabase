@@ -45,7 +45,7 @@ jobs:
           run: cp -n ./packages/demo/.env.local-example ./packages/demo/.env
         - name: Build
           run: make build build-demo
-        - uses: supabase/setup-cli@v1
+        - uses: supabase/setup-cli@v1.1.5
         - name: Start Supabase local development setup
           run: supabase start
         - name: Setup database
