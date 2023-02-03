@@ -11,7 +11,7 @@ install: package.json ## install dependencies
 	@if [ "$(CI)" = "true" ]; then \
 		echo "Frozen install..."; \
 		yarn --frozen-lockfile; \
-	fi
+	cp -n ./packages/demo/.env.local-example ./packages/demo/.env
 
 run: ## run the demo
 	@yarn -s run-demo
