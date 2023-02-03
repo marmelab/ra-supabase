@@ -25,18 +25,17 @@ npm install ra-supabase
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
 
 // in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase';
-import { supabase } from './supabase';
+import { supabaseDataProvider } from 'ra-supabase-core';
+import { supabaseClient } from './supabase';
 
-const resources = {
-    posts: ['id', 'title', 'body', 'author_id', 'date'],
-    authors: ['id', 'full_name'],
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
+export const dataProvider = supabaseDataProvider({
+    instanceUrl: 'YOUR_SUPABASE_URL',
+    apiKey: 'YOUR_SUPABASE_ANON_KEY',
+    supabaseClient
+});
 
 // in authProvider.js
 import { supabaseAuthProvider } from 'ra-supabase';
@@ -130,35 +129,6 @@ export const MyAdmin = () => (
     </Admin>
 );
 ```
-
-## Full Text Search Support
-
-When using react-admin [SearchInput](https://marmelab.com/react-admin/List.html#full-text-search), you might not want the filter to apply on all the resource fields but only some of them. You can configure this in the `dataProvider`.
-
-Instead of passing an array of fields for each resource, you can pass an object with two properties:
-
--   `fields`: An array of fields to return for all requests
--   `fullTextSearchFields`: An array of fields on which to apply full text filters
-
-```js
-// in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase';
-import { supabase } from './supabase';
-
-const resources = {
-    posts: {
-        fields: ['id', 'title', 'body', 'author_id', 'date'],
-        fullTextSearchFields: ['title', 'body'],
-    },
-    authors: {
-        fields: ['id', 'full_name'],
-        fullTextSearchFields: ['full_name'],
-    },
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
-```
-
 ## Roadmap
 
 -   Add support for magic link authentication
