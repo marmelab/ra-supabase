@@ -9,4 +9,5 @@
     },
     "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.spec.js"],
     "include": ["src"],
+    "types": ["cypress", "@testing-library/cypress"]
 }
