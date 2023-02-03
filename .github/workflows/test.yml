@@ -47,6 +47,6 @@ jobs:
         - name: Setup database
           run: make db-migrate db-seed
         - name: Cypress run
-          uses: cypress-io/github-action@v5.x.x # use the explicit version number
+          uses: cypress-io/github-action@v5.0.7
           with:
             start: make run
