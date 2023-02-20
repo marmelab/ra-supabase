@@ -25,6 +25,7 @@ export const ContactListFilter = () => {
     return (
         <Box width="13em" minWidth="13em" order={-1} mr={2} mt={7}>
             <FilterLiveSearch
+                source="fts@fts"
                 sx={{
                     display: 'block',
                     '& .MuiFilledInput-root': { width: '100%' },
