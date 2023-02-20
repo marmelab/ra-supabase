@@ -5,7 +5,7 @@
         "rootDir": "src",
         "declaration": true,
         "declarationMap": true,
-        "allowJs": false
-    },
-    "types": ["cypress", "@testing-library/cypress"]
+        "allowJs": false,
+        "types": ["cypress", "@testing-library/cypress"]
+    }
 }

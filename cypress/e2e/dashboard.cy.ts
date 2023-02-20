@@ -1,4 +1,4 @@
-describe('template spec', () => {
+describe('Dashboard spec', () => {
     it('passes', () => {
         cy.visit('/');
         cy.findByLabelText('Email *').type('janedoe@atomic.dev');
