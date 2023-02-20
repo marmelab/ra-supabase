@@ -52,12 +52,14 @@ export const DealsPipeline = () => {
                     color="textSecondary"
                     component={RouterLink}
                     to="/deals"
+                    id="deals-pipeline"
                 >
                     Deals Pipeline
                 </Link>
             </Box>
             <Card>
                 <SimpleList<Deal>
+                    aria-describedby="deals-pipeline"
                     resource="deals"
                     linkType="show"
                     data={getOrderedDeals(data)}

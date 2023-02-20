@@ -58,17 +58,22 @@ export const LatestNotes = () => {
                 <Box ml={2} mr={2} display="flex">
                     <NoteIcon color="disabled" fontSize="large" />
                 </Box>
-                <Typography variant="h5" color="textSecondary">
+                <Typography
+                    variant="h5"
+                    color="textSecondary"
+                    id="latest-notes"
+                >
                     My Latest Notes
                 </Typography>
             </Box>
             <Card>
-                <CardContent>
+                <CardContent role="list" aria-describedby="latest-notes">
                     {allNotes.map(note => (
                         <Box
                             id={`${note.type}_${note.id}`}
                             key={`${note.type}_${note.id}`}
                             sx={{ marginBottom: 2 }}
+                            role="listitem"
                         >
                             <Typography variant="body2" color="textSecondary">
                                 on{' '}

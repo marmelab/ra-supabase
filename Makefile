@@ -12,9 +12,13 @@ install: package.json ## install dependencies
 		echo "Frozen install..."; \
 		yarn --frozen-lockfile; \
 	fi
+	cp -n ./packages/demo/.env.local-example ./packages/demo/.env
 
 run: ## run the demo
 	@yarn -s run-demo
+
+run-prod: ## run the demo in prod
+	@yarn -s run-demo-prod
 
 build-demo: ## compile the demo to static js
 	@yarn -s build-demo
@@ -58,6 +62,14 @@ test-unit: ## launch unit tests
 test-unit-watch: ## launch unit tests and watch for changes
 	@echo "Running unit tests..."; 
 	@yarn -s test-unit --watch;
+
+test-e2e: ## launch e2e tests
+	@echo "Running e2e tests...";
+	@yarn -s test-e2e;
+
+test-e2e-local: ## launch e2e tests
+	@echo "Running e2e tests...";
+	@yarn -s test-e2e-local;
 
 supabase-start: ## start the supabase server
 	@echo "Starting supabase server..."

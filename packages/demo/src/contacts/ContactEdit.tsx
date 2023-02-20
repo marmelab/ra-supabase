@@ -8,7 +8,9 @@ import { ContactAside } from './ContactAside';
 import { Contact } from '../types';
 
 export const ContactEdit = () => (
-    <EditBase redirect="show">
+    // Remove the fts (full text search) column as it is a generated one
+    // see https://www.postgresql.org/docs/current/ddl-generated-columns.html
+    <EditBase redirect="show" transform={({ fts, ...record }) => record}>
         <ContactEditContent />
     </EditBase>
 );
