@@ -1,9 +1,9 @@
+import { login } from './login';
+
 describe('Dashboard spec', () => {
     it('passes', () => {
         cy.visit('/');
-        cy.findByLabelText('Email *').type('janedoe@atomic.dev');
-        cy.findByLabelText('Password *').type('password');
-        cy.findByText('Sign in').click();
+        login();
         cy.findByText('Upcoming Deal Revenue').should('exist');
         cy.findByRole('list', { description: 'My Latest Notes' }).within(() => {
             cy.findAllByRole('listitem').should('have.length.gt', 0);
