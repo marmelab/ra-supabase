@@ -46,6 +46,8 @@ jobs:
         - name: Build
           run: make build build-demo
         - uses: supabase/setup-cli@v1.1.5
+          with:
+            version: 1.36.6
         - name: Start Supabase local development setup
           run: supabase start
         - name: Setup database
