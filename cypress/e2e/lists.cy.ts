@@ -69,11 +69,11 @@ describe('Lists', () => {
             const page = parseInt(el.text().split('-')[0].trim());
             cy.findByLabelText('Go to page 4').click();
 
-            let page6 = 0;
+            let page4 = 0;
             // Use should here to allow built-in retry as it may take a few ms for the list to update
             getPaginationText().should(el => {
-                page6 = parseInt(el.text().split('-')[0].trim());
-                expect(page6).to.be.greaterThan(page);
+                page4 = parseInt(el.text().split('-')[0].trim());
+                expect(page4).to.be.greaterThan(page);
             });
 
             cy.findByLabelText('Go to page 2').click();
@@ -82,7 +82,7 @@ describe('Lists', () => {
             getPaginationText().should(el => {
                 const page2 = parseInt(el.text().split('-')[0].trim());
                 expect(page2).to.be.greaterThan(page);
-                expect(page2).to.be.lessThan(page6);
+                expect(page2).to.be.lessThan(page4);
             });
         });
     });
