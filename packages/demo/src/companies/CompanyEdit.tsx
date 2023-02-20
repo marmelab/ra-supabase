@@ -13,6 +13,9 @@ export const CompanyEdit = () => {
             aside={<CompanyAside link="show" />}
             actions={false}
             redirect="show"
+            // Remove the fts (full text search) column as it is a generated one
+            // see https://www.postgresql.org/docs/current/ddl-generated-columns.html
+            transform={({ fts, ...record }) => record}
         >
             <Form>
                 <CardContent>
