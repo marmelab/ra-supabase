@@ -47,6 +47,8 @@
         "run-demo": "cd packages/demo && yarn start",
         "run-demo-prod": "cd packages/demo && yarn serve",
         "test-unit": "lerna run test-unit",
+        "test-e2e": "cypress run",
+        "test-e2e-local": "cypress open",
         "watch": "lerna run --parallel watch",
         "lint": "eslint --fix --ext .js,.ts,.tsx \"./packages/**/src/**/*.{js,ts,tsx}\"",
         "prettier": "prettier --write \"./packages/**/src/**/*.{js,ts,tsx}\"",

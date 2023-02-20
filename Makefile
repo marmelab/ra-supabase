@@ -62,6 +62,14 @@ test-unit-watch: ## launch unit tests and watch for changes
 	@echo "Running unit tests..."; 
 	@yarn -s test-unit --watch;
 
+test-e2e: ## launch e2e tests
+	@echo "Running e2e tests...";
+	@yarn -s test-e2e;
+
+test-e2e-local: ## launch e2e tests
+	@echo "Running e2e tests...";
+	@yarn -s test-e2e-local;
+
 supabase-start: ## start the supabase server
 	@echo "Starting supabase server..."
 	@yarn supabase start
