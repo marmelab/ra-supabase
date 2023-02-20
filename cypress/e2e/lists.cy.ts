@@ -67,7 +67,7 @@ describe('Lists', () => {
         cy.findByText('Contacts').click();
         getPaginationText().then(el => {
             const page = parseInt(el.text().split('-')[0].trim());
-            cy.findByLabelText('Go to page 6').click();
+            cy.findByLabelText('Go to page 4').click();
 
             let page6 = 0;
             // Use should here to allow built-in retry as it may take a few ms for the list to update
