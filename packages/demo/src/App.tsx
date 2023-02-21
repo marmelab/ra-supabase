@@ -10,11 +10,7 @@ import {
 import polyglotI18nProvider from 'ra-i18n-polyglot';
 import englishMessages from 'ra-language-english';
 import { BrowserRouter, Route } from 'react-router-dom';
-import {
-    LoginPage,
-    SetPasswordPage,
-    raSupabaseEnglishMessages,
-} from 'ra-supabase';
+import { LoginPage, raSupabaseEnglishMessages } from 'ra-supabase';
 import { QueryClient } from 'react-query';
 import { authProvider } from './authProvider';
 import Layout from './Layout';
@@ -49,9 +45,6 @@ const App = () => (
                 },
             }}
         >
-            <CustomRoutes noLayout>
-                <Route path="/set-password" element={<SetPasswordPage />} />
-            </CustomRoutes>
             <Resource name="deals" {...deals} />
             <Resource name="contacts" {...contacts} />
             <Resource name="companies" {...companies} />
