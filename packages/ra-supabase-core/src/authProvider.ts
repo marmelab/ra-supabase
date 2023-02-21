@@ -24,7 +24,7 @@ export const supabaseAuthProvider = (
             // we return a rejected promise that is handled by the default OAuth login buttons
             return Promise.reject();
         }
-        return undefined;
+        return Promise.reject(new Error('Invalid login parameters'));
     },
     async setPassword({
         access_token,
