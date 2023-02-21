@@ -4,12 +4,11 @@ import {
     Resource,
     ListGuesser,
     defaultTheme,
-    CustomRoutes,
     mergeTranslations,
 } from 'react-admin';
 import polyglotI18nProvider from 'ra-i18n-polyglot';
 import englishMessages from 'ra-language-english';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { LoginPage, raSupabaseEnglishMessages } from 'ra-supabase';
 import { QueryClient } from 'react-query';
 import { authProvider } from './authProvider';
