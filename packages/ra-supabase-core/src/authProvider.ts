@@ -15,6 +15,8 @@ export const supabaseAuthProvider = (
             if (error) {
                 throw error;
             }
+
+            return;
         }
 
         const oauthParams = params as LoginWithOAuthParams;
