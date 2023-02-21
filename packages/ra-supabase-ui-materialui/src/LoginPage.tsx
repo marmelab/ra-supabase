@@ -13,6 +13,7 @@ import {
     DiscordButton,
     FacebookButton,
     GithubButton,
+    GitlabButton,
     GoogleButton,
     KeycloakButton,
     LinkedInButton,
@@ -53,7 +54,7 @@ export const LoginPage = (props: LoginPageProps) => {
                                     <FacebookButton />
                                 ) : null}
                                 {providers.includes('gitlab') ? (
-                                    <GithubButton />
+                                    <GitlabButton />
                                 ) : null}
                                 {providers.includes('github') ? (
                                     <GithubButton />
