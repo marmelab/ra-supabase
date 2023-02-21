@@ -18,7 +18,6 @@ import companies from './companies';
 import deals from './deals';
 import { Dashboard } from './dashboard/Dashboard';
 import { dataProvider } from './dataProvider';
-import { supabase } from './supabase';
 
 const queryClient = new QueryClient();
 const i18nProvider = polyglotI18nProvider(() => {
@@ -33,7 +32,7 @@ const App = () => (
             i18nProvider={i18nProvider}
             layout={Layout}
             dashboard={Dashboard}
-            loginPage={<LoginPage supabaseClient={supabase} />}
+            loginPage={LoginPage}
             queryClient={queryClient}
             theme={{
                 ...defaultTheme,
