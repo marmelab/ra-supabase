@@ -3,6 +3,7 @@ export const raSupabaseEnglishMessages = {
         auth: {
             email: 'Email',
             confirm_password: 'Confirm password',
+            sign_in_with: 'Sign in with %{provider}',
         },
     },
 };
