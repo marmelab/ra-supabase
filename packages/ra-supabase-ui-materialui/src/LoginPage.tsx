@@ -27,16 +27,18 @@ import {
 
 export const LoginPage = (props: LoginPageProps) => {
     useRedirectIfAuthenticated();
-    const { children, providers = [] } = props;
+    const { children, disableEmailPassword = false, providers = [] } = props;
 
     return (
         <AuthLayout>
             {children ?? (
                 <>
-                    <LoginForm />
+                    {disableEmailPassword ? null : <LoginForm />}
+                    {disableEmailPassword || providers.length === 0 ? null : (
+                        <Divider />
+                    )}
                     {providers && providers.length > 0 ? (
                         <>
-                            <Divider />
                             <Stack gap={1} padding={1}>
                                 {providers.includes('apple') ? (
                                     <AppleButton />
@@ -97,5 +99,6 @@ export const LoginPage = (props: LoginPageProps) => {
 
 export type LoginPageProps = {
     children?: ReactNode;
+    disableEmailPassword?: boolean;
     providers?: Provider[];
 };
