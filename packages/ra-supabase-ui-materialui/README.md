@@ -2,12 +2,13 @@
 
 This package provides components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
 
-In particular, this package provides components around Supabase authentication with the following workflow:
+## Installation
 
-1. You invite users from the Supabase Admin page.
-2. Users use the invite link they received by email.
-3. They arrive on a page where they can set their password.
-4. They can now login using their email and password.
+```sh
+yarn add ra-supabase-ui-materialui
+# or
+npm install ra-supabase-ui-materialui
+```
 
 ## Usage
 
@@ -15,21 +16,20 @@ In particular, this package provides components around Supabase authentication w
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
 
 // in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase';
-import { supabase } from './supabase';
+import { supabaseDataProvider } from 'ra-supabase-core';
+import { supabaseClient } from './supabase';
 
-const resources = {
-    posts: ['id', 'title', 'body', 'author_id', 'date'],
-    authors: ['id', 'full_name'],
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
+export const dataProvider = supabaseDataProvider({
+    instanceUrl: 'YOUR_SUPABASE_URL',
+    apiKey: 'YOUR_SUPABASE_ANON_KEY',
+    supabaseClient
+});
 
 // in authProvider.js
-import { supabaseAuthProvider } from 'ra-supabase';
+import { supabaseAuthProvider } from 'ra-supabase-core';
 import { supabase } from './supabase';
 
 export const authProvider = supabaseAuthProvider(supabase, {
@@ -53,7 +53,7 @@ export const authProvider = supabaseAuthProvider(supabase, {
 
 // in App.js
 import { Admin, Resource, ListGuesser } from 'react-admin';
-import { authRoutes } from 'ra-supabase';
+import { LoginPage } from 'ra-supabase-ui-materialui';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
@@ -61,7 +61,7 @@ export const MyAdmin = () => (
     <Admin
         dataProvider={dataProvider}
         authProvider={authProvider}
-        customRoutes={authRoutes}
+        loginPage={LoginPage}
     >
         <Resource name="posts" list={ListGuesser} />
         <Resource name="authors" list={ListGuesser} />
@@ -69,68 +69,103 @@ export const MyAdmin = () => (
 );
 ```
 
+
 ## API
 
 ### `<AuthLayout>`
 
-This component provides a layout for authentication pages very similar to the one used in the default React Admin `<LoginPage>`. However, it does not check the user authentication status. It is used by both the `<LoginPage>` and `<SetPasswordPage>` provided by `ra-supabase-ui-materialui`.
+This component provides a layout for authentication pages very similar to the one used in the default React Admin `<LoginPage>`. However, it does not check the user authentication status. It is used by both the `<LoginPage>` component.
 
 ### `<LoginPage>`
 
 This is `ra-supabase-ui-materialui` version of the `<LoginPage>` that redirects users to the admin home page if they are already logged in and displays the `<LoginForm>` otherwise. You may provide your own form by passing it as the `<LoginPage>` child.
 
+It supports OAuth authentication. Specify the available OAuth providers using the `providers` prop:
+
+```jsx
+import { Admin, Resource, ListGuesser } from 'react-admin';
+import { LoginPage } from 'ra-supabase';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <Admin
+        dataProvider={dataProvider}
+        authProvider={authProvider}
+        loginPage={<LoginPage providers={['github', 'twitter']} />}
+    >
+        <Resource name="posts" list={ListGuesser} />
+        <Resource name="authors" list={ListGuesser} />
+    </Admin>
+);
+```
+
+You can disable email/password authentication by setting the `disableEmailPassword` prop:
+
+```jsx
+import { Admin, Resource, ListGuesser } from 'react-admin';
+import { LoginPage } from 'ra-supabase';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <Admin
+        dataProvider={dataProvider}
+        authProvider={authProvider}
+        loginPage={<LoginPage disableEmailPassword providers={['github', 'twitter']} />}
+    >
+        <Resource name="posts" list={ListGuesser} />
+        <Resource name="authors" list={ListGuesser} />
+    </Admin>
+);
+```
+
 ### `<LoginForm>`
 
 This is `ra-supabase-ui-materialui` version of the `<LoginForm>` that contains an email and password fields. It is exported for you to reuse in a custom login page when needed.
 
-### `<SetPasswordPage>`
+### `<SocialAuthButton>`
 
-This page allows invited users to set their password. It displays the `<SetPasswordForm>` by default but you may provide your own form by passing it as the `<SetPasswordPage>` child.
-
-### `<SetPasswordForm>`
-
-This is the form that actually allows users to set their password. It is exported for you to reuse in a custom set password page when needed. It leverages the `useSetPassword` hook from `ra-supabase-core`.
-It accepts an `onSuccess` and `onFailure` props just like the hook:
-
--   `onSuccess`: A function called when the set password operation succeeds. By default, it redirects users to the home page.
--   `onFailure`: A function called when the set password operation fails. By default, it display an error notification.
+A button allowing to login using an OAuth provider. Even though we provide buttons for each currently supported provider (`<AppleButton>`, etc.), you can add new ones before we update the package with this button:
 
 ```jsx
-import { useLogout, useNotify, useRedirect } from 'react-admin';
-import { SetPasswordPage, SetPasswordForm } from 'ra-supabase-ui-materialui';
+import { useTranslate } from 'react-admin';
+import { SocialAuthButton } from 'ra-supabase-ui-materialui';
+import WonderfulNewServiceIcon from './WonderfulNewServiceIcon';
 
-const MySetPasswordPage = () => {
-    const logout = useLogout();
-    const notify = useNotify();
-    const redirect = useRedirect();
-
-    const handleSuccess = () => {
-        notify(
-            'Your password is set. Please sign in using those new credentials'
-        );
-        // Log out users so they are forced to use their new credentials
-        logout();
-    };
-
-    const handleFailure = () => {
-        notify(
-            'An error occurred while setting the password. Please ask the person who invited you to send a new link.'
-        );
-        redirect('/login');
-    };
+export const WonderfulNewServiceButton = (props) => {
+    const translate = useTranslate();
+    const label = translate('ra-supabase.auth.sign_in_with', {
+        provider: 'Wonderful New Service',
+    });
 
     return (
-        <SetPasswordPage>
-            <SetPasswordForm
-                onSuccess={handleSuccess}
-                onFailure={handleFailure}
-            />
-        </SetPasswordPage>
+        <SocialAuthButton startIcon={<WonderfulNewServiceIcon />} provider="wonderfulnewservice" {...props}>
+            {label}
+        </SocialAuthButton>
     );
 };
 ```
 
+We provide the following OAuth buttons:
+- `<AppleButton>`
+-  `<AzureButton>`
+- `<BitbucketButton>`
+- `<DiscordButton>`
+- `<FacebookButton>`
+- `<GitlabButton>`
+- `<GithubButton>`
+- `<GoogleButton>`
+- `<KeycloakButton>`
+- `<LinkedInButton>`
+- `<NotionButton>`
+- `<SlackButton>`
+- `<SpotifyButton>`
+- `<TwitchButton>`
+- `<TwitterButton>`
+- `<WorkosButton>`
+
 ## Roadmap
 
 -   Add support for magic link authentication
--   Add support for third party authentication
+-   Add support for password setup and reset
