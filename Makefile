@@ -3,7 +3,10 @@
 help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-install: package.json ## install dependencies
+setup-env: ## setup the environment
+	cp -n ./packages/demo/.env.local-example ./packages/demo/.env
+
+install: setup-env package.json ## install dependencies
 	@if [ "$(CI)" != "true" ]; then \
 		echo "Full install..."; \
 		yarn; \
@@ -12,7 +15,6 @@ install: package.json ## install dependencies
 		echo "Frozen install..."; \
 		yarn --frozen-lockfile; \
 	fi
-	cp -n ./packages/demo/.env.local-example ./packages/demo/.env
 
 run: ## run the demo
 	@yarn -s run-demo
