@@ -249,3 +249,64 @@ You can then start the application in `development` mode with:
 ```sh
 make run
 ```
+
+To test OAuth providers, you must configure the Supabase local instance. This is done by editing the `./supabase/config.toml` file as described in the [Supabase CLi documentation](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled).
+
+For instance, to add support for Github authentication, you have to:
+
+1. Create a GitHub Oauth App
+
+Go to the GitHub Developer Settings page:
+- Click on your profile photo at the top right
+- Click Settings near the bottom of the menu
+- In the left sidebar, click Developer settings (near the bottom)
+- In the left sidebar, click OAuth Apps
+- Click Register a new application. If you've created an app before, click New OAuth App here.
+- In Application name, type the name of your app.
+- In Homepage URL, type the full URL to your app's website: `http://localhost:8000`
+- In Authorization callback URL, type the callback URL of your app: `http://localhost:54321/auth/v1/callback`
+- Click Save Changes at the bottom right.
+- Click Register Application
+- Copy and save your Client ID.
+- Click Generate a new client secret.
+- Copy and save your Client secret
+
+2. Update the `./supabase/config` file
+
+```toml
+[auth.external.github]
+enabled = true
+client_id = "YOUR_GITHUB_CLIENT_ID"
+secret = "YOUR_GITHUB_CLIENT_SECRET"
+```
+
+3. Restart the supabase instance
+
+```sh
+make supabase-stop supabase-start db-setup
+```
+
+4. Update the demo login page configuration:
+
+Open the `./packages/demo/src/App.tsx` file and update it.
+
+```diff
+<Admin
+    dataProvider={dataProvider}
+    authProvider={authProvider}
+    i18nProvider={i18nProvider}
+    layout={Layout}
+    dashboard={Dashboard}
+-    loginPage={LoginPage}
++    loginPage={<LoginPage providers={['github]} />}
+    queryClient={queryClient}
+    theme={{
+        ...defaultTheme,
+        palette: {
+            background: {
+                default: '#fafafb',
+            },
+        },
+    }}
+>
+```
