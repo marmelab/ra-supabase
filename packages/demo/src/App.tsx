@@ -32,11 +32,7 @@ const App = () => (
             i18nProvider={i18nProvider}
             layout={Layout}
             dashboard={Dashboard}
-            loginPage={
-                <LoginPage
-                    providers={['google', 'github', 'twitter', 'discord']}
-                />
-            }
+            loginPage={LoginPage}
             queryClient={queryClient}
             theme={{
                 ...defaultTheme,
