@@ -149,7 +149,7 @@ export const WonderfulNewServiceButton = (props) => {
 
 We provide the following OAuth buttons:
 - `<AppleButton>`
--  `<AzureButton>`
+- `<AzureButton>`
 - `<BitbucketButton>`
 - `<DiscordButton>`
 - `<FacebookButton>`

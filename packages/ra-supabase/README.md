@@ -21,7 +21,7 @@ import { createClient } from '@supabase/supabase-js';
 export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
 
 // in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase-core';
+import { supabaseDataProvider } from 'ra-supabase';
 import { supabaseClient } from './supabase';
 
 export const dataProvider = supabaseDataProvider({
@@ -31,7 +31,7 @@ export const dataProvider = supabaseDataProvider({
 });
 
 // in authProvider.js
-import { supabaseAuthProvider } from 'ra-supabase-core';
+import { supabaseAuthProvider } from 'ra-supabase';
 import { supabase } from './supabase';
 
 export const authProvider = supabaseAuthProvider(supabase, {
@@ -204,7 +204,7 @@ export const i18nProvider = polyglotI18nProvider(
 
 // in App.js
 import { Admin, Resource, ListGuesser } from 'react-admin';
-import { authRoutes } from 'ra-supabase';
+import { LoginPage } from 'ra-supabase';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 import { i18nProvider } from './i18nProvider';
@@ -214,7 +214,7 @@ export const MyAdmin = () => (
         dataProvider={dataProvider}
         authProvider={authProvider}
         i18nProvider={i18nProvider}
-        customRoutes={authRoutes}
+        loginPage={LoginPage}
     >
         <Resource name="posts" list={ListGuesser} />
         <Resource name="authors" list={ListGuesser} />

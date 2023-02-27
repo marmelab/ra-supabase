@@ -21,7 +21,7 @@ import { createClient } from '@supabase/supabase-js';
 export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
 
 // in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase-core';
+import { supabaseDataProvider } from 'ra-supabase';
 import { supabaseClient } from './supabase';
 
 export const dataProvider = supabaseDataProvider({
@@ -31,7 +31,7 @@ export const dataProvider = supabaseDataProvider({
 });
 
 // in authProvider.js
-import { supabaseAuthProvider } from 'ra-supabase-core';
+import { supabaseAuthProvider } from 'ra-supabase';
 import { supabase } from './supabase';
 
 export const authProvider = supabaseAuthProvider(supabase, {
@@ -240,7 +240,7 @@ make install supabase-start db-setup
 This will:
 - install dependencies
 - initialize an `.env` file with environment variables to target the supabase instance
-- starts the supabase instance
+- start the supabase instance
 - apply the database migration
 - seed the database with data
 
@@ -257,7 +257,7 @@ For instance, to add support for Github authentication, you have to:
 1. Create a GitHub Oauth App
 
 Go to the GitHub Developer Settings page:
-- Click on your profile photo at the top right
+- Click on your profile picture at the top right
 - Click Settings near the bottom of the menu
 - In the left sidebar, click Developer settings (near the bottom)
 - In the left sidebar, click OAuth Apps
@@ -298,7 +298,7 @@ Open the `./packages/demo/src/App.tsx` file and update it.
     layout={Layout}
     dashboard={Dashboard}
 -    loginPage={LoginPage}
-+    loginPage={<LoginPage providers={['github]} />}
++    loginPage={<LoginPage providers={['github']} />}
     queryClient={queryClient}
     theme={{
         ...defaultTheme,
