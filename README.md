@@ -13,8 +13,6 @@ This package provides a dataProvider, an authProvider, hooks and components to i
 ## Roadmap
 
 -   Add support for magic link authentication
--   Add support for invitation handling
--   Add support for password reset
 -   Add support for uploading files to Supabase storage
 
 ## Local Development
