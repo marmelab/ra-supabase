@@ -78,7 +78,6 @@ const SupabaseLoginFormClasses = {
     container: `${PREFIX}-container`,
     input: `${PREFIX}-input`,
     button: `${PREFIX}-button`,
-    icon: `${PREFIX}-icon`,
 };
 
 const Root = styled(Form, {
@@ -93,8 +92,5 @@ const Root = styled(Form, {
     },
     [`& .${SupabaseLoginFormClasses.button}`]: {
         width: '100%',
-    },
-    [`& .${SupabaseLoginFormClasses.icon}`]: {
-        marginRight: theme.spacing(1),
     },
 }));

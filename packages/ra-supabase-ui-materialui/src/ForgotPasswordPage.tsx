@@ -4,8 +4,7 @@ import { AuthLayout } from './AuthLayout';
 import { ForgotPasswordForm } from './ForgotPasswordForm';
 
 /**
- * A component that renders a page for setting the current user password through Supabase.
- * Can be used for the first login after a user has been invited or to reset the password.
+ * A component that renders a page for resetting the current user password through Supabase.
  * @param props
  * @param props.children The content of the page. If not set, it will render a ForgotPasswordForm.
  *

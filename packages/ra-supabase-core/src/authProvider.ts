@@ -95,22 +95,21 @@ export const supabaseAuthProvider = (
             const refresh_token = urlSearchParams.get('refresh_token');
             const type = urlSearchParams.get('type');
 
-            // Users have reset their password and must set a new one
-            if (access_token && refresh_token && type === 'recovery') {
-                // eslint-disable-next-line no-throw-literal
-                throw {
-                    redirectTo: `set-password?access_token=${access_token}&refresh_token=${refresh_token}`,
-                    message: false,
-                };
-            }
+            // Users have reset their password or have just been invited and must set a new password
+            if (type === 'recovery' || type === 'invite') {
+                if (access_token && refresh_token) {
+                    // eslint-disable-next-line no-throw-literal
+                    throw {
+                        redirectTo: `set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        message: false,
+                    };
+                }
 
-            // Users have have been invited and must set their password
-            if (access_token && type === 'invite') {
-                // eslint-disable-next-line no-throw-literal
-                throw {
-                    redirectTo: `set-password?access_token=${access_token}&refresh_token=${refresh_token}`,
-                    message: false,
-                };
+                if (process.env.NODE_ENV === 'development') {
+                    console.error(
+                        'Missing access_token or refresh_token for an invite or recovery'
+                    );
+                }
             }
 
             const { data } = await client.auth.getSession();
