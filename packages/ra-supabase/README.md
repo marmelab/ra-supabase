@@ -143,6 +143,74 @@ export const MyAdmin = () => (
 );
 ```
 
+### Invitation Handling
+
+`ra-supabase` supports the invitation workflow. If a user is invited to use the application (by sending an invitation through Supabase dashboard for instance), you can configure the `/set-password` custom route to allow them to set their password:
+
+```jsx
+// in App.js
+import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
+import { LoginPage, SetPasswordPage } from 'ra-supabase';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+            </CustomRoutes>
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
+);
+```
+
+### Password Reset When Forgotten
+
+If users forgot their password, they can request for a reset if you add the `/forgot-password` custom route. You should also set up the [`/set-password` custom route](#invitation-handling) to allow them to choose their new password.
+
+```jsx
+// in App.js
+import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
+import { LoginPage, SetPasswordPage, ForgotPasswordPage } from 'ra-supabase';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+                <Route
+                    path={ForgotPasswordPage.path}
+                    element={<ForgotPasswordPage />}
+                />
+            </CustomRoutes>
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
+);
+```
+
 #### OAuth Authentication
 
 To setup OAuth authentication, you can pass a `LoginPage` element:
