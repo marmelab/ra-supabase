@@ -18,8 +18,8 @@
         "ra-supabase-core": "^2.0.0"
     },
     "devDependencies": {
-        "@mui/material": "^5.11.6",
         "@mui/icons-material": "^5.11.0",
+        "@mui/material": "^5.11.6",
         "@supabase/supabase-js": "^2.4.1",
         "ra-core": "^4.7.0",
         "ra-ui-materialui": "^4.7.1",
@@ -28,8 +28,8 @@
         "react-router": "^6.7.0"
     },
     "peerDependencies": {
-        "@mui/material": "^5.0.0",
         "@mui/icons-material": "^5.0.0",
+        "@mui/material": "^5.0.0",
         "@supabase/supabase-js": "^2.0.0",
         "ra-core": "^4.7.0",
         "ra-ui-materialui": "^4.7.1",
