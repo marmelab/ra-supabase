@@ -39,17 +39,20 @@ describe('useSetPassword', () => {
             </CoreAdminContext>
         );
 
-        expect(authProvider.setPassword).toHaveBeenCalledWith({
-            access_token: 'token',
-            refresh_token: 'refresh',
-            password: 'bazinga',
+        await waitFor(() => {
+            expect(authProvider.setPassword).toHaveBeenCalledWith({
+                access_token: 'token',
+                refresh_token: 'refresh',
+                password: 'bazinga',
+            });
         });
+
         await waitFor(() => {
             expect(myOnSuccess).toHaveBeenCalledTimes(1);
         });
     });
 
-    test('should accept a custom onFailure function', async () => {
+    test('should accept a custom onError function', async () => {
         const error = new Error('boo');
         const authProvider = {
             login: jest.fn(),
@@ -59,21 +62,31 @@ describe('useSetPassword', () => {
             getPermissions: jest.fn(),
             setPassword: jest.fn().mockRejectedValue(error),
         };
-        const myOnFailure = jest.fn();
+        const myOnError = jest.fn();
 
         render(
             <CoreAdminContext authProvider={authProvider}>
-                <UseSetPassword onError={myOnFailure} />
+                <UseSetPassword onError={myOnError} />
             </CoreAdminContext>
         );
 
-        expect(authProvider.setPassword).toHaveBeenCalledWith({
-            access_token: 'token',
-            refresh_token: 'refresh',
-            password: 'bazinga',
+        await waitFor(() => {
+            expect(authProvider.setPassword).toHaveBeenCalledWith({
+                access_token: 'token',
+                refresh_token: 'refresh',
+                password: 'bazinga',
+            });
         });
         await waitFor(() => {
-            expect(myOnFailure).toHaveBeenCalledWith(error);
+            expect(myOnError).toHaveBeenCalledWith(
+                error,
+                {
+                    access_token: 'token',
+                    refresh_token: 'refresh',
+                    password: 'bazinga',
+                },
+                undefined
+            );
         });
     });
 });
