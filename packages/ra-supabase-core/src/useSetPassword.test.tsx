@@ -5,17 +5,18 @@ import { render, waitFor } from '@testing-library/react';
 import { useSetPassword, UseSetPasswordOptions } from './useSetPassword';
 
 describe('useSetPassword', () => {
-    const UseSetPassword = ({
-        onSuccess,
-        onFailure,
-    }: UseSetPasswordOptions) => {
-        const setPassword = useSetPassword({
+    const UseSetPassword = ({ onSuccess, onError }: UseSetPasswordOptions) => {
+        const [setPassword] = useSetPassword({
             onSuccess,
-            onFailure,
+            onError,
         });
 
         useEffect(() => {
-            setPassword({ access_token: 'token', password: 'bazinga' });
+            setPassword({
+                access_token: 'token',
+                refresh_token: 'refresh',
+                password: 'bazinga',
+            });
         }, [setPassword]);
 
         return null;
@@ -40,6 +41,7 @@ describe('useSetPassword', () => {
 
         expect(authProvider.setPassword).toHaveBeenCalledWith({
             access_token: 'token',
+            refresh_token: 'refresh',
             password: 'bazinga',
         });
         await waitFor(() => {
@@ -61,12 +63,13 @@ describe('useSetPassword', () => {
 
         render(
             <CoreAdminContext authProvider={authProvider}>
-                <UseSetPassword onFailure={myOnFailure} />
+                <UseSetPassword onError={myOnFailure} />
             </CoreAdminContext>
         );
 
         expect(authProvider.setPassword).toHaveBeenCalledWith({
             access_token: 'token',
+            refresh_token: 'refresh',
             password: 'bazinga',
         });
         await waitFor(() => {

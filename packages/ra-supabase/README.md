@@ -54,22 +54,37 @@ export const authProvider = supabaseAuthProvider(supabase, {
 });
 
 // in App.js
-import { Admin, Resource, ListGuesser } from 'react-admin';
-import { LoginPage } from 'ra-supabase';
+import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
+import { LoginPage, SetPasswordPage, ForgotPasswordPage } from 'ra-supabase';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        loginPage={LoginPage}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+                <Route
+                    path={ForgotPasswordPage.path}
+                    element={<ForgotPasswordPage />}
+                />
+            </CustomRoutes>
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
 );
 ```
+
+You must wrap your `<Admin>` inside a `<BrowserRouter>` as supabase use hash parameters for passing authentication tokens.
 
 ## Features
 
@@ -115,14 +130,16 @@ import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        loginPage={LoginPage}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
 );
 ```
 
@@ -137,14 +154,16 @@ import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        loginPage={<LoginPage providers={['github', 'twitter']} />}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={<LoginPage providers={['github', 'twitter']} />}
+        >
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
 );
 ```
 
@@ -210,21 +229,21 @@ import { authProvider } from './authProvider';
 import { i18nProvider } from './i18nProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        i18nProvider={i18nProvider}
-        loginPage={LoginPage}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            i18nProvider={i18nProvider}
+            loginPage={LoginPage}
+        >
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
 );
 ```
 
 ## Roadmap
 
 -   Add support for magic link authentication
--   Add support for invitation handling
--   Add support for password reset
 -   Add support for uploading files to Supabase storage

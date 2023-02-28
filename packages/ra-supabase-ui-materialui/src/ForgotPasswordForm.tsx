@@ -1,23 +1,17 @@
 import * as React from 'react';
-import { ComponentProps } from 'react';
-import { Form, required, useLogin, useNotify, useTranslate } from 'ra-core';
+import { Form, required, useNotify, useTranslate } from 'ra-core';
 import { CardActions, styled } from '@mui/material';
-import { Link, PasswordInput, SaveButton, TextInput } from 'ra-ui-materialui';
-import { ForgotPasswordPage } from './ForgotPasswordPage';
+import { TextInput, SaveButton } from 'ra-ui-materialui';
+import { useResetPassword } from 'ra-supabase-core';
 
 /**
- * A component that renders a form to login to the application with an email and password.
+ * A component that renders a form for resetting the user password.
  */
-export const LoginForm = ({
-    disableForgotPassword,
-    ...props
-}: LoginFormProps) => {
-    const login = useLogin();
+export const ForgotPasswordForm = () => {
     const notify = useNotify();
     const translate = useTranslate();
-
-    const submit = (values: FormData) => {
-        return login(values).catch(error => {
+    const [resetPassword] = useResetPassword({
+        onError: error => {
             notify(
                 typeof error === 'string'
                     ? error
@@ -36,66 +30,49 @@ export const LoginForm = ({
                     },
                 }
             );
+        },
+    });
+
+    const submit = (values: FormData) => {
+        return resetPassword({
+            email: values.email,
         });
     };
 
     return (
-        <Root onSubmit={submit} {...props}>
+        <Root onSubmit={submit}>
             <div className={SupabaseLoginFormClasses.container}>
                 <div className={SupabaseLoginFormClasses.input}>
                     <TextInput
-                        autoFocus
                         source="email"
-                        type="email"
-                        label={translate('ra-supabase.auth.email', {
+                        label={translate('ra.auth.email', {
                             _: 'Email',
                         })}
-                        fullWidth
-                        validate={required()}
-                    />
-                </div>
-                <div>
-                    <PasswordInput
-                        source="password"
-                        label={translate('ra.auth.password', {
-                            _: 'Password',
-                        })}
-                        autoComplete="current-password"
+                        autoComplete="email"
                         fullWidth
                         validate={required()}
                     />
                 </div>
             </div>
-            <CardActions sx={{ flexDirection: 'column', gap: 1 }}>
+            <CardActions>
                 <SaveButton
                     variant="contained"
                     type="submit"
                     className={SupabaseLoginFormClasses.button}
-                    label={translate('ra.auth.sign_in')}
+                    label={translate('ra.action.reset_password', {
+                        _: 'Reset password',
+                    })}
                 />
-                {!disableForgotPassword ? (
-                    <Link to={ForgotPasswordPage.path}>
-                        {translate('ra-supabase.auth.forgot_password', {
-                            _: 'Forgot password?',
-                        })}
-                    </Link>
-                ) : null}
             </CardActions>
         </Root>
     );
 };
 
-export interface LoginFormProps
-    extends Omit<ComponentProps<typeof Root>, 'onSubmit' | 'children'> {
-    disableForgotPassword?: boolean;
-}
-
 interface FormData {
     email?: string;
-    password?: string;
 }
 
-const PREFIX = 'RaSupabaseLoginForm';
+const PREFIX = 'RaSupabaseForgotPasswordForm';
 
 const SupabaseLoginFormClasses = {
     container: `${PREFIX}-container`,

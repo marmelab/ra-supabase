@@ -5,11 +5,17 @@ import {
     ListGuesser,
     defaultTheme,
     mergeTranslations,
+    CustomRoutes,
 } from 'react-admin';
 import polyglotI18nProvider from 'ra-i18n-polyglot';
 import englishMessages from 'ra-language-english';
-import { BrowserRouter } from 'react-router-dom';
-import { LoginPage, raSupabaseEnglishMessages } from 'ra-supabase';
+import { BrowserRouter, Route } from 'react-router-dom';
+import {
+    LoginPage,
+    raSupabaseEnglishMessages,
+    SetPasswordPage,
+    ForgotPasswordPage,
+} from 'ra-supabase';
 import { QueryClient } from 'react-query';
 import { authProvider } from './authProvider';
 import Layout from './Layout';
@@ -43,6 +49,16 @@ const App = () => (
                 },
             }}
         >
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+                <Route
+                    path={ForgotPasswordPage.path}
+                    element={<ForgotPasswordPage />}
+                />
+            </CustomRoutes>
             <Resource name="deals" {...deals} />
             <Resource name="contacts" {...contacts} />
             <Resource name="companies" {...companies} />
