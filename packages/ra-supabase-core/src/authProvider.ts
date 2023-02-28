@@ -1,17 +1,32 @@
 import { AuthProvider, UserIdentity } from 'ra-core';
-import { SupabaseClient, User } from '@supabase/supabase-js';
+import { Provider, SupabaseClient, User } from '@supabase/supabase-js';
 
 export const supabaseAuthProvider = (
     client: SupabaseClient,
     { getIdentity }: SupabaseAuthProviderOptions
 ): SupabaseAuthProvider => ({
-    async login({ email, password }: { email: string; password: string }) {
-        const { error } = await client.auth.signIn({ email, password });
+    async login(params) {
+        const emailPasswordParams = params as LoginWithEmailPasswordParams;
+        if (emailPasswordParams.email && emailPasswordParams.password) {
+            const { error } = await client.auth.signInWithPassword(
+                emailPasswordParams
+            );
 
-        if (error) {
-            throw error;
+            if (error) {
+                throw error;
+            }
+
+            return;
         }
-        return undefined;
+
+        const oauthParams = params as LoginWithOAuthParams;
+        if (oauthParams.provider) {
+            client.auth.signInWithOAuth(oauthParams);
+            // To avoid react-admin to consider this as an immediate success,
+            // we return a rejected promise that is handled by the default OAuth login buttons
+            return Promise.reject();
+        }
+        return Promise.reject(new Error('Invalid login parameters'));
     },
     async setPassword({
         access_token,
@@ -20,7 +35,7 @@ export const supabaseAuthProvider = (
         access_token: string;
         password: string;
     }) {
-        const { error } = await client.auth.api.updateUser(access_token, {
+        const { error } = await client.auth.updateUser({
             password,
         });
 
@@ -35,8 +50,12 @@ export const supabaseAuthProvider = (
             throw error;
         }
     },
-    async checkError() {
-        return;
+    async checkError(error) {
+        if (error.status === 401 || error.status === 403) {
+            return Promise.reject();
+        }
+
+        return Promise.resolve();
     },
     async checkAuth() {
         // Users are on the set-password page, nothing to do
@@ -69,8 +88,9 @@ export const supabaseAuthProvider = (
             );
         }
 
-        if (client.auth.session() == null) {
-            throw new Error();
+        const { data } = await client.auth.getSession();
+        if (data.session == null) {
+            return Promise.reject();
         }
 
         return Promise.resolve();
@@ -79,14 +99,14 @@ export const supabaseAuthProvider = (
         return;
     },
     async getIdentity() {
-        const user = client.auth.user();
+        const { data } = await client.auth.getUser();
 
-        if (!user) {
+        if (data.user == null) {
             throw new Error();
         }
 
         if (typeof getIdentity === 'function') {
-            const identity = await getIdentity(user);
+            const identity = await getIdentity(data.user);
             return identity;
         }
 
@@ -108,7 +128,26 @@ export type SupabaseAuthProviderOptions = {
     getIdentity?: GetIdentity;
 };
 
+type LoginWithEmailPasswordParams = {
+    email: string;
+    password: string;
+};
+
+type LoginWithOAuthParams = {
+    provider: Provider;
+};
+
+type LoginWithMagicLink = {
+    email: string;
+};
+
 export interface SupabaseAuthProvider extends AuthProvider {
+    login: (
+        params:
+            | LoginWithEmailPasswordParams
+            | LoginWithMagicLink
+            | LoginWithOAuthParams
+    ) => ReturnType<AuthProvider['login']>;
     setPassword: (params: SetPasswordParams) => Promise<void>;
 }
 

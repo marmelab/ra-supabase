@@ -2,14 +2,7 @@
 
 This package provides a dataProvider, an authProvider, hooks and components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
 
-It leverages [ra-supabase-core](https://github.com/marmelab/ra-supabase-core) and [ra-supabase-ui-materialui](https://github.com/marmelab/ra-supabase-ui-materialui).
-
-In particular, this package provides components around Supabase authentication with the following workflow:
-
-1. You invite users from the Supabase Admin page.
-2. Users can use the invite link they received by email.
-3. They arrive on a page where they can set their password.
-4. They can now login using their email and password.
+It leverages [ra-supabase-core](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-core) and [ra-supabase-ui-materialui](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-ui-materialui).
 
 ## Installation
 
@@ -25,18 +18,17 @@ npm install ra-supabase
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
 
 // in dataProvider.js
 import { supabaseDataProvider } from 'ra-supabase';
-import { supabase } from './supabase';
+import { supabaseClient } from './supabase';
 
-const resources = {
-    posts: ['id', 'title', 'body', 'author_id', 'date'],
-    authors: ['id', 'full_name'],
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
+export const dataProvider = supabaseDataProvider({
+    instanceUrl: 'YOUR_SUPABASE_URL',
+    apiKey: 'YOUR_SUPABASE_ANON_KEY',
+    supabaseClient
+});
 
 // in authProvider.js
 import { supabaseAuthProvider } from 'ra-supabase';
@@ -63,7 +55,7 @@ export const authProvider = supabaseAuthProvider(supabase, {
 
 // in App.js
 import { Admin, Resource, ListGuesser } from 'react-admin';
-import { authRoutes } from 'ra-supabase';
+import { LoginPage } from 'ra-supabase';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
@@ -71,7 +63,108 @@ export const MyAdmin = () => (
     <Admin
         dataProvider={dataProvider}
         authProvider={authProvider}
-        customRoutes={authRoutes}
+        loginPage={LoginPage}
+    >
+        <Resource name="posts" list={ListGuesser} />
+        <Resource name="authors" list={ListGuesser} />
+    </Admin>
+);
+```
+
+## Features
+
+### DataProvider
+
+`ra-supabase` is built on [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0-alpha.0) that leverages [PostgREST](https://postgrest.org/en/stable/). As such, you have access the following features:
+
+#### Filters operators
+
+When specifying the `source` prop of filter inputs, you can either set it to the field name for simple equality checks or add an operator suffix for more control. For instance, the `gte` (Greater Than or Equal) or the `ilike` (Case insensitive like) operators:
+
+```jsx
+const postFilters = [
+    <TextInput label="Title" source="title@ilike" alwaysOn />,
+    <TextInput label="Views" source="views@gte" />,
+];
+
+export const PostList = () => (
+    <List filters={postFilters}>
+        ...
+    </List>
+);
+```
+
+See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#operators) for a list of supported operators.
+
+#### RLS
+
+As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended. 
+
+### Authentication
+
+`ra-supabase` supports email/password and OAuth authentication.
+
+#### Email & Password Authentication
+
+To setup only the email/password authentication, just pass the `LoginPage` to the `loginPage` prop of the `<Admin>` component:
+
+```jsx
+import { Admin, Resource, ListGuesser } from 'react-admin';
+import { LoginPage } from 'ra-supabase';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <Admin
+        dataProvider={dataProvider}
+        authProvider={authProvider}
+        loginPage={LoginPage}
+    >
+        <Resource name="posts" list={ListGuesser} />
+        <Resource name="authors" list={ListGuesser} />
+    </Admin>
+);
+```
+
+#### OAuth Authentication
+
+To setup OAuth authentication, you can pass a `LoginPage` element:
+
+```jsx
+import { Admin, Resource, ListGuesser } from 'react-admin';
+import { LoginPage } from 'ra-supabase';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <Admin
+        dataProvider={dataProvider}
+        authProvider={authProvider}
+        loginPage={<LoginPage providers={['github', 'twitter']} />}
+    >
+        <Resource name="posts" list={ListGuesser} />
+        <Resource name="authors" list={ListGuesser} />
+    </Admin>
+);
+```
+
+Make sure you enabled the specified providers in your Supabase instance:
+- [Hosted instance](https://supabase.com/docs/guides/auth/social-login)
+- [Local instance](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled)
+
+To disable email/password authentication, set the `disableEmailPassword` prop:
+
+```jsx
+import { Admin, Resource, ListGuesser } from 'react-admin';
+import { LoginPage } from 'ra-supabase';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <Admin
+        dataProvider={dataProvider}
+        authProvider={authProvider}
+        loginPage={<LoginPage disableEmailPassword providers={['github', 'twitter']} />}
     >
         <Resource name="posts" list={ListGuesser} />
         <Resource name="authors" list={ListGuesser} />
@@ -83,10 +176,8 @@ export const MyAdmin = () => (
 
 We provide two language packages:
 
--   [ra-supabase-language-english](https://github.com/marmelab/ra-supabase-language-english)
--   [ra-supabase-language-french](https://github.com/marmelab/ra-supabase-language-french)
-
-`ra-supabase` already re-export `ra-supabase-language-english` but you must set up the i18nProvider yourself:
+-   [ra-supabase-language-english](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-english)
+-   [ra-supabase-language-french](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-french)
 
 ```js
 // in i18nProvider.js
@@ -113,7 +204,7 @@ export const i18nProvider = polyglotI18nProvider(
 
 // in App.js
 import { Admin, Resource, ListGuesser } from 'react-admin';
-import { authRoutes } from 'ra-supabase';
+import { LoginPage } from 'ra-supabase';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 import { i18nProvider } from './i18nProvider';
@@ -123,7 +214,7 @@ export const MyAdmin = () => (
         dataProvider={dataProvider}
         authProvider={authProvider}
         i18nProvider={i18nProvider}
-        customRoutes={authRoutes}
+        loginPage={LoginPage}
     >
         <Resource name="posts" list={ListGuesser} />
         <Resource name="authors" list={ListGuesser} />
@@ -131,35 +222,9 @@ export const MyAdmin = () => (
 );
 ```
 
-## Full Text Search Support
-
-When using react-admin [SearchInput](https://marmelab.com/react-admin/List.html#full-text-search), you might not want the filter to apply on all the resource fields but only some of them. You can configure this in the `dataProvider`.
-
-Instead of passing an array of fields for each resource, you can pass an object with two properties:
-
--   `fields`: An array of fields to return for all requests
--   `fullTextSearchFields`: An array of fields on which to apply full text filters
-
-```js
-// in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase';
-import { supabase } from './supabase';
-
-const resources = {
-    posts: {
-        fields: ['id', 'title', 'body', 'author_id', 'date'],
-        fullTextSearchFields: ['title', 'body'],
-    },
-    authors: {
-        fields: ['id', 'full_name'],
-        fullTextSearchFields: ['full_name'],
-    },
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
-```
-
 ## Roadmap
 
 -   Add support for magic link authentication
--   Add support for third party authentication
+-   Add support for invitation handling
+-   Add support for password reset
+-   Add support for uploading files to Supabase storage

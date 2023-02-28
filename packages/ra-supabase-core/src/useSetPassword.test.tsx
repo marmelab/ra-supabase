@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { AuthContext } from 'ra-core';
-import { renderWithRedux } from 'ra-test';
-import { waitFor } from '@testing-library/react';
+import { CoreAdminContext } from 'ra-core';
+import { render, waitFor } from '@testing-library/react';
 import { useSetPassword, UseSetPasswordOptions } from './useSetPassword';
 
 describe('useSetPassword', () => {
@@ -33,10 +32,10 @@ describe('useSetPassword', () => {
         };
         const myOnSuccess = jest.fn();
 
-        renderWithRedux(
-            <AuthContext.Provider value={authProvider}>
+        render(
+            <CoreAdminContext authProvider={authProvider}>
                 <UseSetPassword onSuccess={myOnSuccess} />
-            </AuthContext.Provider>
+            </CoreAdminContext>
         );
 
         expect(authProvider.setPassword).toHaveBeenCalledWith({
@@ -60,10 +59,10 @@ describe('useSetPassword', () => {
         };
         const myOnFailure = jest.fn();
 
-        renderWithRedux(
-            <AuthContext.Provider value={authProvider}>
+        render(
+            <CoreAdminContext authProvider={authProvider}>
                 <UseSetPassword onFailure={myOnFailure} />
-            </AuthContext.Provider>
+            </CoreAdminContext>
         );
 
         expect(authProvider.setPassword).toHaveBeenCalledWith({

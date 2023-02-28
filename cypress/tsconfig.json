@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "lib",
+        "rootDir": ".",
+        "declaration": true,
+        "declarationMap": true,
+        "allowJs": false,
+        "types": ["cypress", "@testing-library/cypress"]
+    }
+}
