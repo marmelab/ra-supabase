@@ -52,20 +52,33 @@ export const authProvider = supabaseAuthProvider(supabase, {
 });
 
 // in App.js
-import { Admin, Resource, ListGuesser } from 'react-admin';
-import { LoginPage } from 'ra-supabase-ui-materialui';
+import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
+import { LoginPage, ResetPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        loginPage={LoginPage}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+                <Route
+                    path={ForgotPasswordPage.path}
+                    element={<ForgotPasswordPage />}
+                />
+            </CustomRoutes>
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
 );
 ```
 
@@ -89,14 +102,16 @@ import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        loginPage={<LoginPage providers={['github', 'twitter']} />}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={<LoginPage providers={['github', 'twitter']} />}
+        >
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
 );
 ```
 
@@ -109,20 +124,98 @@ import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
 export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        loginPage={<LoginPage disableEmailPassword providers={['github', 'twitter']} />}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={<LoginPage disableEmailPassword providers={['github', 'twitter']} />}
+        >
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
 );
 ```
 
 ### `<LoginForm>`
 
 This is `ra-supabase-ui-materialui` version of the `<LoginForm>` that contains an email and password fields. It is exported for you to reuse in a custom login page when needed.
+
+### `<ResetPasswordPage>`
+
+A page component to use in a custom route to allow users to reset their passwords.
+
+```jsx
+// in App.js
+import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
+import { LoginPage, ForgotPasswordPage, ResetPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+                <Route
+                    path={ForgotPasswordPage.path}
+                    element={<ForgotPasswordPage />}
+                />
+            </CustomRoutes>
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
+);
+```
+
+Users will be asked for an email and the component will send a reset password request to Supabase.
+
+You should also set up the [`<SetPasswordPage>`](#setpasswordpage) to allow users to actually set a new password.
+
+### `<SetPasswordPage>`
+
+A page component to use in a custom route to allow users to set their passwords. Can be used for users following an invitation link so that they can set their password for the first time or for [password reset](#resetpasswordpage).
+
+```jsx
+// in App.js
+import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
+import { LoginPage, ForgotPasswordPage, ResetPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+                <Route
+                    path={ForgotPasswordPage.path}
+                    element={<ForgotPasswordPage />}
+                />
+            </CustomRoutes>
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
+);
+```
+
+You should also set up the [`<ResetPasswordPage>`](#resetpasswordpage) to allow users to reset a new password in case they forgot it.
 
 ### `<SocialAuthButton>`
 
@@ -168,4 +261,3 @@ We provide the following OAuth buttons:
 ## Roadmap
 
 -   Add support for magic link authentication
--   Add support for password setup and reset

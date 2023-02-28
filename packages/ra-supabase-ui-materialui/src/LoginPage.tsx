@@ -25,15 +25,70 @@ import {
     WorkosButton,
 } from './SocialAuthButton';
 
+/**
+ * A component that renders a login page to login to the application through Supabase. It renders a LoginForm by default. It support social login providers.
+ * @param props
+ * @param props.children The content of the login page. If not set, it will render a LoginForm.
+ * @param props.disableEmailPassword If true, the email/password login form will not be rendered.
+ * @param props.providers The list of social login providers to render. Defaults to no providers.
+ * @example
+ * import { LoginPage } from 'ra-supabase-ui-materialui';
+ * import { Admin } from 'react-admin';
+ *
+ * const App = () => (
+ *    <Admin dataProvider={dataProvider} loginPage={LoginPage}>
+ *       ...
+ *   </Admin>
+ * );
+ *
+ * @example With social login providers
+ * import { LoginPage } from 'ra-supabase-ui-materialui';
+ * import { Admin } from 'react-admin';
+ *
+ * const App = () => (
+ *    <Admin dataProvider={dataProvider} loginPage={<LoginPage providers={['github', 'twitter']} />}>
+ *       ...
+ *   </Admin>
+ * );
+ *
+ * @example With social login providers
+ * import { LoginPage } from 'ra-supabase-ui-materialui';
+ * import { Admin } from 'react-admin';
+ *
+ * const App = () => (
+ *    <Admin dataProvider={dataProvider} loginPage={<LoginPage providers={['github', 'twitter']} />}>
+ *       ...
+ *   </Admin>
+ * );
+ *
+ * @example With social login providers and no email/password login form
+ * import { LoginPage } from 'ra-supabase-ui-materialui';
+ * import { Admin } from 'react-admin';
+ *
+ * const App = () => (
+ *    <Admin dataProvider={dataProvider} loginPage={<LoginPage disableEmailPassword providers={['github', 'twitter']} />}>
+ *       ...
+ *   </Admin>
+ * );
+ */
 export const LoginPage = (props: LoginPageProps) => {
     useRedirectIfAuthenticated();
-    const { children, disableEmailPassword = false, providers = [] } = props;
+    const {
+        children,
+        disableEmailPassword = false,
+        disableForgotPassword = false,
+        providers = [],
+    } = props;
 
     return (
         <AuthLayout>
             {children ?? (
                 <>
-                    {disableEmailPassword ? null : <LoginForm />}
+                    {disableEmailPassword ? null : (
+                        <LoginForm
+                            disableForgotPassword={disableForgotPassword}
+                        />
+                    )}
                     {disableEmailPassword || providers.length === 0 ? null : (
                         <Divider />
                     )}
@@ -100,5 +155,6 @@ export const LoginPage = (props: LoginPageProps) => {
 export type LoginPageProps = {
     children?: ReactNode;
     disableEmailPassword?: boolean;
+    disableForgotPassword?: boolean;
     providers?: Provider[];
 };
