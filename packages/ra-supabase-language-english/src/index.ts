@@ -9,5 +9,8 @@ export const raSupabaseEnglishMessages = {
             password_reset:
                 'Your password has been reset. You will receive an email containing a link to log in.',
         },
+        validation: {
+            password_mismatch: 'Passwords do not match',
+        },
     },
 };

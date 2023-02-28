@@ -9,5 +9,8 @@ export const raSupabaseEnglishMessages = {
             password_reset:
                 'Votre mot de passe a été réinitialisé. Vous recevrez un email contenant un lien pour vous connecter.',
         },
+        validation: {
+            password_mismatch: 'Les mots de passe ne correspondent pas',
+        },
     },
 };

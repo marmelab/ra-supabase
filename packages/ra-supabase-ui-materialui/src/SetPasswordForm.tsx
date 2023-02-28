@@ -38,6 +38,16 @@ export const SetPasswordForm = () => {
         },
     });
 
+    const validate = (values: FormData) => {
+        if (values.password !== values.confirmPassword) {
+            return {
+                password: 'ra-supabase.validation.password_mismatch',
+                confirmPassword: 'ra-supabase.validation.password_mismatch',
+            };
+        }
+        return undefined;
+    };
+
     const submit = (values: FormData) => {
         return setPassword({
             access_token,
@@ -47,7 +57,7 @@ export const SetPasswordForm = () => {
     };
 
     return (
-        <Root onSubmit={submit}>
+        <Root onSubmit={submit} validate={validate}>
             <div className={SupabaseLoginFormClasses.container}>
                 <div className={SupabaseLoginFormClasses.input}>
                     <PasswordInput
