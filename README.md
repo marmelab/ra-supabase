@@ -36,6 +36,16 @@ You can then start the application in `development` mode with:
 make run
 ```
 
+### Testing Invitations And Password Reset
+
+The current version of supabase CLI does not allow to customize the emails sent for invitation or password reset.
+
+When you invite a new user through the [Authentication dashboard](http://localhost:54323/project/default/auth/users), you can see the email sent in [Inbucket](http://localhost:54324/monitor). Instead of clicking the link, copy it and change the `redirect_to` parameter from `http://localhost:8000` to `http://localhost:8000/handle-callback`.
+
+Apply the same process for password reset emails.
+
+### Testing Third Party Authentication Providers
+
 To test OAuth providers, you must configure the Supabase local instance. This is done by editing the `./supabase/config.toml` file as described in the [Supabase CLi documentation](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled).
 
 For instance, to add support for Github authentication, you have to:

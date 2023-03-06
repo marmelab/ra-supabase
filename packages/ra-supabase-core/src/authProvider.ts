@@ -77,6 +77,31 @@ export const supabaseAuthProvider = (
 
             return Promise.resolve();
         },
+        async handleCallback() {
+            const urlSearchParams = new URLSearchParams(
+                window.location.hash.substring(1)
+            );
+
+            const access_token = urlSearchParams.get('access_token');
+            const refresh_token = urlSearchParams.get('refresh_token');
+            const type = urlSearchParams.get('type');
+
+            // Users have reset their password or have just been invited and must set a new password
+            if (type === 'recovery' || type === 'invite') {
+                if (access_token && refresh_token) {
+                    // eslint-disable-next-line no-throw-literal
+                    return {
+                        redirectTo: `set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                    };
+                }
+
+                if (process.env.NODE_ENV === 'development') {
+                    console.error(
+                        'Missing access_token or refresh_token for an invite or recovery'
+                    );
+                }
+            }
+        },
         async checkAuth() {
             // Users are on the set-password page, nothing to do
             if (window.location.pathname === '/set-password') {
