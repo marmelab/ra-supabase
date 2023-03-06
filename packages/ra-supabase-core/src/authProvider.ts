@@ -83,7 +83,6 @@ export const supabaseAuthProvider = (
             // Users have reset their password or have just been invited and must set a new password
             if (type === 'recovery' || type === 'invite') {
                 if (access_token && refresh_token) {
-                    // eslint-disable-next-line no-throw-literal
                     return {
                         redirectTo: `set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
                     };
