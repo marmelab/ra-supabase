@@ -78,13 +78,7 @@ export const supabaseAuthProvider = (
             return Promise.resolve();
         },
         async handleCallback() {
-            const urlSearchParams = new URLSearchParams(
-                window.location.hash.substring(1)
-            );
-
-            const access_token = urlSearchParams.get('access_token');
-            const refresh_token = urlSearchParams.get('refresh_token');
-            const type = urlSearchParams.get('type');
+            const { access_token, refresh_token, type } = getUrlParams();
 
             // Users have reset their password or have just been invited and must set a new password
             if (type === 'recovery' || type === 'invite') {
@@ -112,13 +106,7 @@ export const supabaseAuthProvider = (
                 return;
             }
 
-            const urlSearchParams = new URLSearchParams(
-                window.location.hash.substring(1)
-            );
-
-            const access_token = urlSearchParams.get('access_token');
-            const refresh_token = urlSearchParams.get('refresh_token');
-            const type = urlSearchParams.get('type');
+            const { access_token, refresh_token, type } = getUrlParams();
 
             // Users have reset their password or have just been invited and must set a new password
             if (type === 'recovery' || type === 'invite') {
@@ -203,4 +191,16 @@ export type ResetPasswordParams = {
     email: string;
     redirectTo?: string;
     captchaToken?: string;
+};
+
+const getUrlParams = () => {
+    const urlSearchParams = new URLSearchParams(
+        window.location.hash.substring(1)
+    );
+
+    const access_token = urlSearchParams.get('access_token');
+    const refresh_token = urlSearchParams.get('refresh_token');
+    const type = urlSearchParams.get('type');
+
+    return { access_token, refresh_token, type };
 };
