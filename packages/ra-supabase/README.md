@@ -145,7 +145,15 @@ export const MyAdmin = () => (
 
 ### Invitation Handling
 
-`ra-supabase` supports the invitation workflow. If a user is invited to use the application (by sending an invitation through Supabase dashboard for instance), you can configure the `/set-password` custom route to allow them to set their password:
+`ra-supabase` supports the invitation workflow. If a user is invited to use the application (by sending an invitation through Supabase dashboard for instance), you can configure the `/set-password` custom route to allow them to set their password.
+
+This requires you to configure your supabase instance:
+
+1. Go to your dashboard
+1. Set **Site URL** to your application URL
+1. Add your application URL in the **Redirect URLs** section
+
+You can now add the `/set-password` custom route:
 
 ```jsx
 // in App.js
@@ -178,6 +186,14 @@ export const MyAdmin = () => (
 ### Password Reset When Forgotten
 
 If users forgot their password, they can request for a reset if you add the `/forgot-password` custom route. You should also set up the [`/set-password` custom route](#invitation-handling) to allow them to choose their new password.
+
+This requires you to configure your supabase instance:
+
+1. Go to your dashboard
+1. Set **Site URL** to your application URL
+1. Add your application URL in the **Redirect URLs** section
+
+You can now add the `/forgot-password` and `/set-password` custom routes:
 
 ```jsx
 // in App.js
@@ -238,6 +254,12 @@ export const MyAdmin = () => (
 Make sure you enabled the specified providers in your Supabase instance:
 - [Hosted instance](https://supabase.com/docs/guides/auth/social-login)
 - [Local instance](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled)
+
+This also requires you to configure the redirect URLS on your supabase instance:
+
+1. Go to your dashboard
+1. Set **Site URL** to your application URL
+1. Add your application URL in the **Redirect URLs** section
 
 To disable email/password authentication, set the `disableEmailPassword` prop:
 
