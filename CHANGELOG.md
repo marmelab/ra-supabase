@@ -1,3 +1,7 @@
+# 2.0.1
+
+- Fix invitations and password reset handling
+
 # 2.0.0
 
 - Add compatibility with react-admin v4
