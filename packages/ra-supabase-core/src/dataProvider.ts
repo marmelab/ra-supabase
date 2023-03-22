@@ -39,14 +39,17 @@ export const supabaseHttpClient =
     }) =>
     async (url: string, options: any = {}) => {
         const { data } = await supabaseClient.auth.getSession();
+        if (!options.headers) options.headers = new Headers({});
+
+        if(supabaseClient['headers']) {
+            Object.entries(supabaseClient['headers']).forEach(([name, value]) => options.headers.set(name, value));
+        }
         if (data.session) {
             options.user = {
                 authenticated: true,
                 // This ensures that users are identified correctly and that RLS can be applied
                 token: `Bearer ${data.session.access_token}`,
             };
-
-            if (!options.headers) options.headers = new Headers({});
             // This ensures the app is authorized to access the supabase instance
             options.headers.set('apiKey', apiKey);
         }
