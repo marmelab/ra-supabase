@@ -1,6 +1,6 @@
 {
     "name": "ra-supabase-ui-materialui",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "repository": "git@github.com:marmelab/ra-supabase.git",
     "author": "Gildas Garcia <1122076+djhi@users.noreply.github.com>",
     "license": "MIT",
@@ -15,7 +15,7 @@
     "types": "esm/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "ra-supabase-core": "^2.0.2"
+        "ra-supabase-core": "^2.0.3"
     },
     "devDependencies": {
         "@mui/icons-material": "^5.11.0",

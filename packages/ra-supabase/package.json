@@ -1,6 +1,6 @@
 {
     "name": "ra-supabase",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "repository": "git@github.com:marmelab/ra-supabase.git",
     "author": "Gildas Garcia <1122076+djhi@users.noreply.github.com>",
     "license": "MIT",
@@ -15,9 +15,9 @@
     "types": "esm/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "ra-supabase-core": "^2.0.2",
-        "ra-supabase-language-english": "^2.0.0",
-        "ra-supabase-ui-materialui": "^2.0.2"
+        "ra-supabase-core": "^2.0.3",
+        "ra-supabase-language-english": "^2.0.3",
+        "ra-supabase-ui-materialui": "^2.0.3"
     },
     "scripts": {
         "build": "yarn run build-cjs && yarn run build-esm",
