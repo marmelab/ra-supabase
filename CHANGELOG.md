@@ -1,3 +1,7 @@
+# 2.0.2
+
+- Merge supabaseClient headers into postgREST requests ([#33](https://github.com/marmelab/ra-supabase/pull/33)) [milutinovici](https://github.com/milutinovici)
+
 # 2.0.1
 
 - Fix invitations and password reset handling
