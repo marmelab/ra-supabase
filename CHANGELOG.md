@@ -1,3 +1,7 @@
+# 2.0.3
+
+- Fix wrong build in 2.0.2
+
 # 2.0.2
 
 - Merge supabaseClient headers into postgREST requests ([#33](https://github.com/marmelab/ra-supabase/pull/33)) [milutinovici](https://github.com/milutinovici)
