@@ -16,7 +16,10 @@ npm install ra-supabase-core
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+export const supabase = createClient(
+    'YOUR_SUPABASE_URL',
+    'YOUR_SUPABASE_ANON_KEY'
+);
 
 // in dataProvider.js
 import { supabaseDataProvider } from 'ra-supabase-core';
@@ -25,7 +28,7 @@ import { supabaseClient } from './supabase';
 export const dataProvider = supabaseDataProvider({
     instanceUrl: 'YOUR_SUPABASE_URL',
     apiKey: 'YOUR_SUPABASE_ANON_KEY',
-    supabaseClient
+    supabaseClient,
 });
 
 // in authProvider.js
@@ -80,18 +83,14 @@ const postFilters = [
     <TextInput label="Views" source="views@gte" />,
 ];
 
-export const PostList = () => (
-    <List filters={postFilters}>
-        ...
-    </List>
-);
+export const PostList = () => <List filters={postFilters}>...</List>;
 ```
 
 See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#operators) for a list of supported operators.
 
 #### RLS
 
-As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended. 
+As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended.
 
 ### Authentication
 
@@ -108,12 +107,15 @@ const myLoginForm = () => {
     const login = useLogin();
     const redirectTo = window.location.toString();
 
-    const handleSubmit = (event) => {
-        login({
-            email: event.target.email.value,
-            password: event.target.password.value,
-        }, redirectTo);
-    }
+    const handleSubmit = event => {
+        login(
+            {
+                email: event.target.email.value,
+                password: event.target.password.value,
+            },
+            redirectTo
+        );
+    };
 
     return (
         <form onSubmit={handleSubmit}>
@@ -123,8 +125,8 @@ const myLoginForm = () => {
             <input id="password" name="password" type="password" />
             <button type="submit">Login</button>
         </form>
-    )
-}
+    );
+};
 ```
 
 #### OAuth Authentication
@@ -139,8 +141,12 @@ const myLoginForm = () => {
 
     const loginWith = (provider) => {
         const redirectTo = window.location.toString();
-    
-        login({ provider }, redirectTo).catch(
+
+        const options = {
+            redirectTo: redirectTo
+        }
+
+        login({ provider, options }).catch(
             error => {
                 // The authProvide always reject for OAuth login but there will be no error
                 // if the call actually succeeds. This is to avoid react-admin redirecting
@@ -163,8 +169,9 @@ const myLoginForm = () => {
 ```
 
 Make sure you enabled the specified providers in your Supabase instance:
-- [Hosted instance](https://supabase.com/docs/guides/auth/social-login)
-- [Local instance](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled)
+
+-   [Hosted instance](https://supabase.com/docs/guides/auth/social-login)
+-   [Local instance](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled)
 
 ## API
 
