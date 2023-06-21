@@ -140,11 +140,7 @@ const myLoginForm = () => {
     const loginWith = (provider) => {
         const redirectTo = window.location.toString();
 
-        const options = {
-            redirectTo: redirectTo
-        }
-        
-        login({ provider, options }).catch(
+        login({ provider, options: { redirectTo }).catch(
             error => {
                 // The authProvide always reject for OAuth login but there will be no error
                 // if the call actually succeeds. This is to avoid react-admin redirecting
