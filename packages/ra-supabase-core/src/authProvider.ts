@@ -3,7 +3,7 @@ import { Provider, SupabaseClient, User } from '@supabase/supabase-js';
 
 export const supabaseAuthProvider = (
     client: SupabaseClient,
-    { getIdentity }: SupabaseAuthProviderOptions
+    { getIdentity, redirectTo }: SupabaseAuthProviderOptions
 ): SupabaseAuthProvider => {
     return {
         async login(params) {
@@ -22,7 +22,7 @@ export const supabaseAuthProvider = (
 
             const oauthParams = params as LoginWithOAuthParams;
             if (oauthParams.provider) {
-                client.auth.signInWithOAuth(oauthParams);
+                client.auth.signInWithOAuth({ ...oauthParams, options: { redirectTo }});
                 // To avoid react-admin to consider this as an immediate success,
                 // we return a rejected promise that is handled by the default OAuth login buttons
                 return Promise.reject();
@@ -84,7 +84,7 @@ export const supabaseAuthProvider = (
             if (type === 'recovery' || type === 'invite') {
                 if (access_token && refresh_token) {
                     return {
-                        redirectTo: `set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        redirectTo: `${redirectTo}/set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
                     };
                 }
 
@@ -112,7 +112,7 @@ export const supabaseAuthProvider = (
                 if (access_token && refresh_token) {
                     // eslint-disable-next-line no-throw-literal
                     throw {
-                        redirectTo: `set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        redirectTo: `${redirectTo}/set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
                         message: false,
                     };
                 }
@@ -154,6 +154,7 @@ export const supabaseAuthProvider = (
 export type GetIdentity = (user: User) => Promise<UserIdentity>;
 export type SupabaseAuthProviderOptions = {
     getIdentity?: GetIdentity;
+    redirectTo?: string;
 };
 
 type LoginWithEmailPasswordParams = {
@@ -163,6 +164,7 @@ type LoginWithEmailPasswordParams = {
 
 type LoginWithOAuthParams = {
     provider: Provider;
+    redirectTo?: string; 
 };
 
 type LoginWithMagicLink = {
