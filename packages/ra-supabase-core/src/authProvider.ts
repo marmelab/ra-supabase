@@ -22,7 +22,10 @@ export const supabaseAuthProvider = (
 
             const oauthParams = params as LoginWithOAuthParams;
             if (oauthParams.provider) {
-                client.auth.signInWithOAuth({ ...oauthParams, options: { redirectTo }});
+                client.auth.signInWithOAuth({
+                    ...oauthParams,
+                    options: { redirectTo },
+                });
                 // To avoid react-admin to consider this as an immediate success,
                 // we return a rejected promise that is handled by the default OAuth login buttons
                 return Promise.reject();
@@ -84,7 +87,9 @@ export const supabaseAuthProvider = (
             if (type === 'recovery' || type === 'invite') {
                 if (access_token && refresh_token) {
                     return {
-                        redirectTo: `${redirectTo ? `${redirectTo}/` : ''}set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        redirectTo: `${
+                            redirectTo ? `${redirectTo}/` : ''
+                        }set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
                     };
                 }
 
@@ -112,7 +117,9 @@ export const supabaseAuthProvider = (
                 if (access_token && refresh_token) {
                     // eslint-disable-next-line no-throw-literal
                     throw {
-                        redirectTo: `${redirectTo ? `${redirectTo}/` : ''}set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        redirectTo: `${
+                            redirectTo ? `${redirectTo}/` : ''
+                        }set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
                         message: false,
                     };
                 }
