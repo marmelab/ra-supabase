@@ -84,7 +84,7 @@ export const supabaseAuthProvider = (
             if (type === 'recovery' || type === 'invite') {
                 if (access_token && refresh_token) {
                     return {
-                        redirectTo: `${redirectTo ?? ''}/set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        redirectTo: `${redirectTo ? `${redirectTo}/` : ''}set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
                     };
                 }
 
