@@ -112,7 +112,7 @@ export const supabaseAuthProvider = (
                 if (access_token && refresh_token) {
                     // eslint-disable-next-line no-throw-literal
                     throw {
-                        redirectTo: `${redirectTo ?? ''}/set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        redirectTo: `${redirectTo ? `${redirectTo}/` : ''}set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
                         message: false,
                     };
                 }
