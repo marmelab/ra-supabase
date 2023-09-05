@@ -164,7 +164,6 @@ type LoginWithEmailPasswordParams = {
 
 type LoginWithOAuthParams = {
     provider: Provider;
-    redirectTo?: string; 
 };
 
 type LoginWithMagicLink = {
