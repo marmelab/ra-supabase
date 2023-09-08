@@ -38,6 +38,7 @@ make run
 
 ### Testing Invitations And Password Reset
 
+
 The current version of supabase CLI does not allow to customize the emails sent for invitation or password reset.
 
 When you invite a new user through the [Authentication dashboard](http://localhost:54323/project/default/auth/users), you can see the email sent in [Inbucket](http://localhost:54324/monitor). Instead of clicking the link, copy it and change the `redirect_to` parameter from `http://localhost:8000` to `http://localhost:8000/handle-callback`.
@@ -105,4 +106,59 @@ Open the `./packages/demo/src/App.tsx` file and update it.
         },
     }}
 >
+```
+
+## Internationalization Support
+
+We provide two language packages:
+
+-   [ra-supabase-language-english](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-english)
+-   [ra-supabase-language-french](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-french)
+
+And there are also community supported language packages:
+-   [ra-supabase-language-spanish](https://github.com/dreinon/ra-supabase-language-spanish)
+
+`ra-supabase` already re-export `ra-supabase-language-english` but you must set up the i18nProvider yourself:
+
+```js
+// in i18nProvider.js
+import { mergeTranslations } from 'ra-core';
+import polyglotI18nProvider from 'ra-i18n-polyglot';
+import englishMessages from 'ra-language-english';
+import frenchMessages from 'ra-language-french';
+import { raSupabaseEnglishMessages } from 'ra-supabase-language-english';
+import { raSupabaseFrenchMessages } from 'ra-supabase-language-french';
+
+const allEnglishMessages = mergeTranslations(
+    englishMessages,
+    raSupabaseEnglishMessages
+);
+const allFrenchMessages = mergeTranslations(
+    frenchMessages,
+    raSupabaseFrenchMessages
+);
+
+export const i18nProvider = polyglotI18nProvider(
+    locale => (locale === 'fr' ? allFrenchMessages : allEnglishMessages),
+    'en'
+);
+
+// in App.js
+import { Admin, Resource, ListGuesser } from 'react-admin';
+import { authRoutes } from 'ra-supabase';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+import { i18nProvider } from './i18nProvider';
+
+export const MyAdmin = () => (
+    <Admin
+        dataProvider={dataProvider}
+        authProvider={authProvider}
+        i18nProvider={i18nProvider}
+        customRoutes={authRoutes}
+    >
+        <Resource name="posts" list={ListGuesser} />
+        <Resource name="authors" list={ListGuesser} />
+    </Admin>
+);
 ```
