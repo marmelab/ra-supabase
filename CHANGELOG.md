@@ -1,3 +1,8 @@
+# 2.0.4
+
+- Add support for `redirectTo` in `supabaseAuthProvider`
+- Document spanish translations
+
 # 2.0.3
 
 - Fix wrong build in 2.0.2
