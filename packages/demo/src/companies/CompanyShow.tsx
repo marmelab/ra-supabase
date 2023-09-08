@@ -2,13 +2,13 @@ import * as React from 'react';
 import { useState, ChangeEvent } from 'react';
 import {
     ShowBase,
-    ShowProps,
     TextField,
     ReferenceManyField,
     SelectField,
     useShowContext,
     useRecordContext,
     useListContext,
+    RecordContextProvider,
 } from 'react-admin';
 import {
     Box,
@@ -24,8 +24,8 @@ import {
     Tabs,
     Tab,
     Divider,
-} from '@material-ui/core';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+} from '@mui/material';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Link as RouterLink } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
 
@@ -38,26 +38,26 @@ import { CompanyAside } from './CompanyAside';
 import { Company, Deal, Contact } from '../types';
 import { stageNames } from '../deals/stages';
 
-export const CompanyShow = (props: ShowProps) => (
-    <ShowBase {...props}>
+export const CompanyShow = () => (
+    <ShowBase>
         <CompanyShowContent />
     </ShowBase>
 );
 
 const CompanyShowContent = () => {
-    const { record, loaded } = useShowContext<Company>();
-    const [value, setValue] = useState(0);
-    const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
-        setValue(newValue);
+    const { record, isLoading } = useShowContext<Company>();
+    const [tabValue, setTabValue] = useState(0);
+    const handleTabChange = (event: ChangeEvent<{}>, newValue: number) => {
+        setTabValue(newValue);
     };
-    if (!loaded || !record) return null;
+    if (isLoading || !record) return null;
     return (
         <Box mt={2} display="flex">
             <Box flex="1">
                 <Card>
                     <CardContent>
                         <Box display="flex" mb={1}>
-                            <LogoField record={record as any} />
+                            <LogoField />
                             <Box ml={2} flex="1">
                                 <Typography variant="h5">
                                     {record.name}
@@ -72,10 +72,10 @@ const CompanyShowContent = () => {
                             </Box>
                         </Box>
                         <Tabs
-                            value={value}
+                            value={tabValue}
                             indicatorColor="primary"
                             textColor="primary"
-                            onChange={handleChange}
+                            onChange={handleTabChange}
                         >
                             {record.nb_contacts && (
                                 <Tab
@@ -97,7 +97,7 @@ const CompanyShowContent = () => {
                             )}
                         </Tabs>
                         <Divider />
-                        <TabPanel value={value} index={0}>
+                        <TabPanel value={tabValue} index={0}>
                             <ReferenceManyField
                                 reference="contacts"
                                 target="company_id"
@@ -106,7 +106,7 @@ const CompanyShowContent = () => {
                                 <ContactsIterator />
                             </ReferenceManyField>
                         </TabPanel>
-                        <TabPanel value={value} index={1}>
+                        <TabPanel value={tabValue} index={1}>
                             <ReferenceManyField
                                 reference="deals"
                                 target="company_id"
@@ -118,7 +118,7 @@ const CompanyShowContent = () => {
                     </CardContent>
                 </Card>
             </Box>
-            <CompanyAside record={record} />
+            <CompanyAside />
         </Box>
     );
 };
@@ -146,32 +146,28 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const ContactsIterator = () => {
-    const { data, ids, loaded } = useListContext<Contact>();
-    const record = useRecordContext();
+    const { data: contacts, isLoading } = useListContext<Contact>();
+    if (isLoading) return null;
 
     const now = Date.now();
-    if (!loaded) return null;
     return (
         <Box>
             <List>
-                {ids.map(id => {
-                    const contact = data[id];
-                    return (
+                {contacts.map(contact => (
+                    <RecordContextProvider key={contact.id} value={contact}>
                         <ListItem
                             button
-                            key={id}
                             component={RouterLink}
-                            to={`/contacts/${id}/show`}
+                            to={`/contacts/${contact.id}/show`}
                         >
                             <ListItemAvatar>
-                                <Avatar record={contact} />
+                                <Avatar />
                             </ListItemAvatar>
                             <ListItemText
                                 primary={`${contact.first_name} ${contact.last_name}`}
                                 secondary={
                                     <>
-                                        {contact.title}{' '}
-                                        <TagsList record={contact} />
+                                        {contact.title} <TagsList />
                                     </>
                                 }
                             />
@@ -190,83 +186,78 @@ const ContactsIterator = () => {
                                 </Typography>
                             </ListItemSecondaryAction>
                         </ListItem>
-                    );
-                })}
+                    </RecordContextProvider>
+                ))}
             </List>
             <Box textAlign="center" mt={1}>
-                <CreateRelatedContactButton record={record} />
+                <CreateRelatedContactButton />
             </Box>
         </Box>
     );
 };
 
-const CreateRelatedContactButton = ({ record }: any) => (
-    <Button
-        component={RouterLink}
-        to={{
-            pathname: '/contacts/create',
-            state: { record: { company_id: record.id } },
-        }}
-        color="primary"
-        variant="contained"
-        size="small"
-        startIcon={<PersonAddIcon />}
-    >
-        Add contact
-    </Button>
-);
+const CreateRelatedContactButton = () => {
+    const company = useRecordContext<Company>();
+    return (
+        <Button
+            component={RouterLink}
+            to="/contacts/create"
+            state={{ record: { company_id: company.id } }}
+            color="primary"
+            variant="contained"
+            size="small"
+            startIcon={<PersonAddIcon />}
+        >
+            Add contact
+        </Button>
+    );
+};
 
 const DealsIterator = () => {
-    const { data, ids, loaded } = useListContext<Deal>();
+    const { data: deals, isLoading } = useListContext<Deal>();
+    if (isLoading) return null;
 
     const now = Date.now();
-    if (!loaded) return null;
     return (
         <Box>
             <List>
-                {ids.map(id => {
-                    const deal = data[id];
-                    return (
-                        <ListItem
-                            button
-                            key={id}
-                            component={RouterLink}
-                            to={`/deals/${id}/show`}
-                        >
-                            <ListItemText
-                                primary={deal.name}
-                                secondary={
-                                    <>
-                                        {/* @ts-ignore */}
-                                        {stageNames[deal.stage]},{' '}
-                                        {deal.amount.toLocaleString('en-US', {
-                                            notation: 'compact',
-                                            style: 'currency',
-                                            currency: 'USD',
-                                            currencyDisplay: 'narrowSymbol',
-                                            minimumSignificantDigits: 3,
-                                        })}
-                                        , {deal.type}
-                                    </>
-                                }
-                            />
-                            <ListItemSecondaryAction>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                    component="span"
-                                >
-                                    last activity{' '}
-                                    {formatDistance(
-                                        new Date(deal.updated_at),
-                                        now
-                                    )}{' '}
-                                    ago{' '}
-                                </Typography>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    );
-                })}
+                {deals.map(deal => (
+                    <ListItem
+                        button
+                        key={deal.id}
+                        component={RouterLink}
+                        to={`/deals/${deal.id}/show`}
+                    >
+                        <ListItemText
+                            primary={deal.name}
+                            secondary={
+                                <>
+                                    {/* @ts-ignore */}
+                                    {stageNames[deal.stage]},{' '}
+                                    {deal.amount.toLocaleString('en-US', {
+                                        notation: 'compact',
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        currencyDisplay: 'narrowSymbol',
+                                        minimumSignificantDigits: 3,
+                                    })}
+                                    , {deal.type}
+                                </>
+                            }
+                        />
+                        <ListItemSecondaryAction>
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                component="span"
+                            >
+                                last activity{' '}
+                                {formatDistance(new Date(deal.updated_at), now)}{' '}
+                                ago{' '}
+                            </Typography>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                ))}
             </List>
         </Box>
     );

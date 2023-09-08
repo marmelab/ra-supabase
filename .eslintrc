@@ -2,13 +2,9 @@
     "parser": "@typescript-eslint/parser",
     "extends": [
         "react-app",
-        "plugin:prettier/recommended",
-        "prettier/@typescript-eslint",
-        "prettier/babel",
-        "prettier/react"
+        "plugin:prettier/recommended"
     ],
     "plugins": [
-        "@typescript-eslint",
         "import",
         "jsx-a11y",
         "prettier",

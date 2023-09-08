@@ -2,82 +2,110 @@
 
 This package provides a dataProvider, an authProvider, hooks and components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
 
-It leverages [ra-supabase-core](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-core) and [ra-supabase-ui-materialui](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-ui-materialui).
+## Projects
 
-In particular, this package provides components around Supabase authentication with the following workflow:
+- [ra-supabase](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase): Umbrella project that re-export the others.
+- [ra-supabase-core](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-core): Provide the dataProvider, authProvider and some hooks
+- [ra-supabase-ui-materialui](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-ui-materialui): Provide the LoginPage and Social authentication buttons
+- [ra-supabase-language-english](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-english): Provide the english translations
+- [ra-supabase-language-french](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-language-french): Provide the french translations
 
-1. You invite users from the Supabase Admin page.
-2. Users can use the invite link they received by email.
-3. They arrive on a page where they can set their password.
-4. They can now login using their email and password.
+## Roadmap
 
-## Installation
+-   Add support for magic link authentication
+-   Add support for uploading files to Supabase storage
+
+## Local Development
+
+This project uses a [local instance of Supabase](https://supabase.com/docs/guides/cli/local-development). To set up your environment, run the following command:
 
 ```sh
-yarn add ra-supabase
-# or
-npm install ra-supabase
+make install supabase-start db-setup
 ```
 
-## Usage
+This will:
+- install dependencies
+- initialize an `.env` file with environment variables to target the supabase instance
+- start the supabase instance
+- apply the database migration
+- seed the database with data
 
-```jsx
-// in supabase.js
-import { createClient } from '@supabase/supabase-js';
+You can then start the application in `development` mode with:
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+```sh
+make run
+```
 
-// in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase';
-import { supabase } from './supabase';
+### Testing Invitations And Password Reset
 
-const resources = {
-    posts: ['id', 'title', 'body', 'author_id', 'date'],
-    authors: ['id', 'full_name'],
-};
 
-export const dataProvider = supabaseDataProvider(supabase, resources);
+The current version of supabase CLI does not allow to customize the emails sent for invitation or password reset.
 
-// in authProvider.js
-import { supabaseAuthProvider } from 'ra-supabase';
-import { supabase } from './supabase';
+When you invite a new user through the [Authentication dashboard](http://localhost:54323/project/default/auth/users), you can see the email sent in [Inbucket](http://localhost:54324/monitor). Instead of clicking the link, copy it and change the `redirect_to` parameter from `http://localhost:8000` to `http://localhost:8000/handle-callback`.
 
-export const authProvider = supabaseAuthProvider(supabase, {
-    getIdentity: async user => {
-        const { data, error } = await supabase
-            .from('userProfiles')
-            .select('id, first_name, last_name')
-            .match({ email: user.email })
-            .single();
+Apply the same process for password reset emails.
 
-        if (!data || error) {
-            throw new Error();
-        }
+### Testing Third Party Authentication Providers
 
-        return {
-            id: data.id,
-            fullName: `${data.first_name} ${data.last_name}`,
-        };
-    },
-});
+To test OAuth providers, you must configure the Supabase local instance. This is done by editing the `./supabase/config.toml` file as described in the [Supabase CLi documentation](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled).
 
-// in App.js
-import { Admin, Resource, ListGuesser } from 'react-admin';
-import { authRoutes, LoginPage } from 'ra-supabase';
-import { dataProvider } from './dataProvider';
-import { authProvider } from './authProvider';
+For instance, to add support for Github authentication, you have to:
 
-export const MyAdmin = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        customRoutes={authRoutes}
-        loginPage={LoginPage}
-    >
-        <Resource name="posts" list={ListGuesser} />
-        <Resource name="authors" list={ListGuesser} />
-    </Admin>
-);
+1. Create a GitHub Oauth App
+
+Go to the GitHub Developer Settings page:
+- Click on your profile picture at the top right
+- Click Settings near the bottom of the menu
+- In the left sidebar, click Developer settings (near the bottom)
+- In the left sidebar, click OAuth Apps
+- Click Register a new application. If you've created an app before, click New OAuth App here.
+- In Application name, type the name of your app.
+- In Homepage URL, type the full URL to your app's website: `http://localhost:8000`
+- In Authorization callback URL, type the callback URL of your app: `http://localhost:54321/auth/v1/callback`
+- Click Save Changes at the bottom right.
+- Click Register Application
+- Copy and save your Client ID.
+- Click Generate a new client secret.
+- Copy and save your Client secret
+
+2. Update the `./supabase/config` file
+
+```toml
+[auth.external.github]
+enabled = true
+client_id = "YOUR_GITHUB_CLIENT_ID"
+secret = "YOUR_GITHUB_CLIENT_SECRET"
+```
+
+3. Restart the supabase instance
+
+```sh
+make supabase-stop supabase-start db-setup
+```
+
+4. Update the demo login page configuration:
+
+Open the `./packages/demo/src/App.tsx` file and update it.
+
+```diff
+<Admin
+    dataProvider={dataProvider}
+    authProvider={authProvider}
+    i18nProvider={i18nProvider}
+    layout={Layout}
+    dashboard={Dashboard}
+-    loginPage={LoginPage}
++    loginPage={<LoginPage providers={['github']} />}
+    queryClient={queryClient}
+    theme={{
+        ...defaultTheme,
+        palette: {
+            background: {
+                default: '#fafafb',
+            },
+        },
+    }}
+>
 ```
 
 ## Internationalization Support
@@ -134,37 +162,3 @@ export const MyAdmin = () => (
     </Admin>
 );
 ```
-
-## Full Text Search Support
-
-When using react-admin [SearchInput](https://marmelab.com/react-admin/List.html#full-text-search), you might not want the filter to apply on all the resource fields but only some of them. You can configure this in the `dataProvider`.
-
-Instead of passing an array of fields for each resource, you can pass an object with two properties:
-
--   `fields`: An array of fields to return for all requests
--   `fullTextSearchFields`: An array of fields on which to apply full text filters
-
-```js
-// in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase';
-import { supabase } from './supabase';
-
-const resources = {
-    posts: {
-        fields: ['id', 'title', 'body', 'author_id', 'date'],
-        fullTextSearchFields: ['title', 'body'],
-    },
-    authors: {
-        fields: ['id', 'full_name'],
-        fullTextSearchFields: ['full_name'],
-    },
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
-```
-
-## Roadmap
-
--   Add support for magic link authentication
--   Add support for third party authentication
--   Add support for uploading files to Supabase storage

@@ -1,13 +1,12 @@
 import { supabaseAuthProvider } from 'ra-supabase';
-import { Record } from 'react-admin';
 import { supabase } from './supabase';
 
 export const authProvider = supabaseAuthProvider(supabase, {
     getIdentity: async user => {
         const { data, error } = await supabase
-            .from<Record>('sales')
+            .from('sales')
             .select('id, first_name, last_name')
-            .match({ email: user?.email })
+            .ilike('email', user.email as string)
             .single();
 
         if (!data || error) {

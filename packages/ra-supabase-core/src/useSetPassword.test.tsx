@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { AuthContext } from 'ra-core';
-import { renderWithRedux } from 'ra-test';
-import { waitFor } from '@testing-library/react';
+import { CoreAdminContext } from 'ra-core';
+import { render, waitFor } from '@testing-library/react';
 import { useSetPassword, UseSetPasswordOptions } from './useSetPassword';
 
 describe('useSetPassword', () => {
-    const UseSetPassword = ({
-        onSuccess,
-        onFailure,
-    }: UseSetPasswordOptions) => {
-        const setPassword = useSetPassword({
+    const UseSetPassword = ({ onSuccess, onError }: UseSetPasswordOptions) => {
+        const [setPassword] = useSetPassword({
             onSuccess,
-            onFailure,
+            onError,
         });
 
         useEffect(() => {
-            setPassword({ access_token: 'token', password: 'bazinga' });
+            setPassword({
+                access_token: 'token',
+                refresh_token: 'refresh',
+                password: 'bazinga',
+            });
         }, [setPassword]);
 
         return null;
@@ -33,22 +33,26 @@ describe('useSetPassword', () => {
         };
         const myOnSuccess = jest.fn();
 
-        renderWithRedux(
-            <AuthContext.Provider value={authProvider}>
+        render(
+            <CoreAdminContext authProvider={authProvider}>
                 <UseSetPassword onSuccess={myOnSuccess} />
-            </AuthContext.Provider>
+            </CoreAdminContext>
         );
 
-        expect(authProvider.setPassword).toHaveBeenCalledWith({
-            access_token: 'token',
-            password: 'bazinga',
+        await waitFor(() => {
+            expect(authProvider.setPassword).toHaveBeenCalledWith({
+                access_token: 'token',
+                refresh_token: 'refresh',
+                password: 'bazinga',
+            });
         });
+
         await waitFor(() => {
             expect(myOnSuccess).toHaveBeenCalledTimes(1);
         });
     });
 
-    test('should accept a custom onFailure function', async () => {
+    test('should accept a custom onError function', async () => {
         const error = new Error('boo');
         const authProvider = {
             login: jest.fn(),
@@ -58,20 +62,31 @@ describe('useSetPassword', () => {
             getPermissions: jest.fn(),
             setPassword: jest.fn().mockRejectedValue(error),
         };
-        const myOnFailure = jest.fn();
+        const myOnError = jest.fn();
 
-        renderWithRedux(
-            <AuthContext.Provider value={authProvider}>
-                <UseSetPassword onFailure={myOnFailure} />
-            </AuthContext.Provider>
+        render(
+            <CoreAdminContext authProvider={authProvider}>
+                <UseSetPassword onError={myOnError} />
+            </CoreAdminContext>
         );
 
-        expect(authProvider.setPassword).toHaveBeenCalledWith({
-            access_token: 'token',
-            password: 'bazinga',
+        await waitFor(() => {
+            expect(authProvider.setPassword).toHaveBeenCalledWith({
+                access_token: 'token',
+                refresh_token: 'refresh',
+                password: 'bazinga',
+            });
         });
         await waitFor(() => {
-            expect(myOnFailure).toHaveBeenCalledWith(error);
+            expect(myOnError).toHaveBeenCalledWith(
+                error,
+                {
+                    access_token: 'token',
+                    refresh_token: 'refresh',
+                    password: 'bazinga',
+                },
+                undefined
+            );
         });
     });
 });

@@ -1,127 +1,122 @@
 import * as React from 'react';
-import { OnFailure, OnSuccess, useTranslate } from 'ra-core';
-import { Field, Form } from 'react-final-form';
-import { Button, CardActions, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { ClassesOverride } from 'ra-ui-materialui';
+import { Form, required, useNotify, useTranslate } from 'ra-core';
+import { CardActions, styled } from '@mui/material';
+import { PasswordInput, SaveButton } from 'ra-ui-materialui';
 import { useSetPassword, useSupabaseAccessToken } from 'ra-supabase-core';
-import { Input } from './Input';
 
-export const SetPasswordForm = (props: SetPasswordFormProps) => {
-    const classes = useStyles(props);
-    const translate = useTranslate();
+/**
+ * A component that renders a form for setting the current user password through Supabase.
+ * Can be used for the first login after a user has been invited or to reset the password.
+ */
+export const SetPasswordForm = () => {
     const access_token = useSupabaseAccessToken();
-    const { onSuccess, onFailure } = props;
-    const setPassword = useSetPassword({ onSuccess, onFailure });
+    const refresh_token = useSupabaseAccessToken({
+        parameterName: 'refresh_token',
+    });
+    const notify = useNotify();
+    const translate = useTranslate();
+    const [setPassword] = useSetPassword({
+        onError: error => {
+            notify(
+                typeof error === 'string'
+                    ? error
+                    : typeof error === 'undefined' || !error.message
+                    ? 'ra.auth.sign_in_error'
+                    : error.message,
+                {
+                    type: 'warning',
+                    messageArgs: {
+                        _:
+                            typeof error === 'string'
+                                ? error
+                                : error && error.message
+                                ? error.message
+                                : undefined,
+                    },
+                }
+            );
+        },
+    });
 
     const validate = (values: FormData) => {
-        const errors: FormData = { email: undefined, password: undefined };
-
-        if (!values.password) {
-            errors.password = translate('ra.validation.required');
+        if (values.password !== values.confirmPassword) {
+            return {
+                password: 'ra-supabase.validation.password_mismatch',
+                confirmPassword: 'ra-supabase.validation.password_mismatch',
+            };
         }
-        if (
-            !values.confirm_password ||
-            values.confirm_password !== values.password
-        ) {
-            errors.password = 'Passwords do not match';
-        }
-        return errors;
+        return undefined;
     };
 
-    const submit = async (values: FormData) => {
-        await setPassword({
+    const submit = (values: FormData) => {
+        return setPassword({
             access_token,
+            refresh_token,
             password: values.password,
         });
     };
 
     return (
-        <Form
-            onSubmit={submit}
-            validate={validate}
-            render={({ handleSubmit, submitting }) => (
-                <>
-                    <form onSubmit={handleSubmit} noValidate>
-                        <div className={classes.form}>
-                            <div>
-                                <Field
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    component={Input}
-                                    label={translate('ra.auth.password')}
-                                    disabled={submitting}
-                                    autoComplete="current-password"
-                                />
-                            </div>
-                            <div>
-                                <Field
-                                    id="confirm_password"
-                                    name="confirm_password"
-                                    type="password"
-                                    component={Input}
-                                    label={translate(
-                                        'ra-supabase.auth.confirm_password',
-                                        { _: 'Confirm password' }
-                                    )}
-                                    disabled={submitting}
-                                />
-                            </div>
-                        </div>
-                        <CardActions>
-                            <Button
-                                variant="contained"
-                                type="submit"
-                                color="primary"
-                                disabled={submitting}
-                                className={classes.button}
-                            >
-                                {submitting && (
-                                    <CircularProgress
-                                        className={classes.icon}
-                                        size={18}
-                                        thickness={2}
-                                    />
-                                )}
-                                {translate('ra.auth.sign_in')}
-                            </Button>
-                        </CardActions>
-                    </form>
-                </>
-            )}
-        />
+        <Root onSubmit={submit} validate={validate}>
+            <div className={SupabaseLoginFormClasses.container}>
+                <div className={SupabaseLoginFormClasses.input}>
+                    <PasswordInput
+                        source="password"
+                        label={translate('ra.auth.password', {
+                            _: 'Password',
+                        })}
+                        autoComplete="new-password"
+                        fullWidth
+                        validate={required()}
+                    />
+                </div>
+                <div>
+                    <PasswordInput
+                        source="confirmPassword"
+                        label={translate('ra.auth.confirm_password', {
+                            _: 'Confirm password',
+                        })}
+                        fullWidth
+                        validate={required()}
+                    />
+                </div>
+            </div>
+            <CardActions>
+                <SaveButton
+                    variant="contained"
+                    type="submit"
+                    className={SupabaseLoginFormClasses.button}
+                    label={translate('ra.action.save')}
+                />
+            </CardActions>
+        </Root>
     );
 };
 
-export type SetPasswordFormProps = {
-    classes?: ClassesOverride<typeof useStyles>;
-    onSuccess?: OnSuccess;
-    onFailure?: OnFailure;
-};
-
 interface FormData {
-    email?: string;
     password?: string;
-    confirm_password?: string;
+    confirmPassword?: string;
 }
 
-const useStyles = makeStyles(
-    theme => ({
-        form: {
-            padding: '0 1em 1em 1em',
-        },
-        input: {
-            marginTop: '1em',
-        },
-        button: {
-            width: '100%',
-        },
-        icon: {
-            marginRight: theme.spacing(1),
-        },
-    }),
-    {
-        name: 'RaSupabaseSetPasswordForm',
-    }
-);
+const PREFIX = 'RaSupabaseSetPasswordForm';
+
+const SupabaseLoginFormClasses = {
+    container: `${PREFIX}-container`,
+    input: `${PREFIX}-input`,
+    button: `${PREFIX}-button`,
+};
+
+const Root = styled(Form, {
+    name: PREFIX,
+    overridesResolver: (props, styles) => styles.root,
+})(({ theme }) => ({
+    [`& .${SupabaseLoginFormClasses.container}`]: {
+        padding: '0 1em 1em 1em',
+    },
+    [`& .${SupabaseLoginFormClasses.input}`]: {
+        marginTop: '1em',
+    },
+    [`& .${SupabaseLoginFormClasses.button}`]: {
+        width: '100%',
+    },
+}));

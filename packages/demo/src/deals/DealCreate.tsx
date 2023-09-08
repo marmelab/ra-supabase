@@ -10,32 +10,24 @@ import {
     required,
     useRedirect,
     useDataProvider,
-    useGetIdentity,
 } from 'react-admin';
-import { Dialog } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Dialog } from '@mui/material';
 
 import { stageChoices } from './stages';
 import { typeChoices } from './types';
 import { Deal } from '../types';
 
-const useStyles = makeStyles({
-    root: {
-        width: 500,
-    },
-});
+const validateRequired = required();
 
 export const DealCreate = ({ open }: { open: boolean }) => {
-    const classes = useStyles();
     const redirect = useRedirect();
     const dataProvider = useDataProvider();
-    const { identity } = useGetIdentity();
 
     const handleClose = () => {
         redirect('/deals');
     };
 
-    const onSuccess = ({ data: deal }: { data: Deal }) => {
+    const onSuccess = (deal: Deal) => {
         redirect('/deals');
         // increase the index of all deals in the same stage as the new deal
         dataProvider
@@ -61,20 +53,17 @@ export const DealCreate = ({ open }: { open: boolean }) => {
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <Create
+            <Create<Deal>
                 resource="deals"
-                basePath="/deals"
-                className={classes.root}
-                onSuccess={onSuccess}
+                mutationOptions={{ onSuccess }}
+                sx={{ width: 500, '& .RaCreate-main': { mt: 0 } }}
             >
-                <SimpleForm
-                    initialValues={{ index: 0, sales_id: identity?.id }}
-                >
+                <SimpleForm defaultValues={{ index: 0 }}>
                     <TextInput
                         source="name"
                         label="Deal name"
                         fullWidth
-                        validate={[required()]}
+                        validate={validateRequired}
                     />
                     <TextInput
                         source="description"
@@ -82,19 +71,18 @@ export const DealCreate = ({ open }: { open: boolean }) => {
                         rows={3}
                         fullWidth
                     />
-                    <ReferenceInput
-                        source="company_id"
-                        reference="companies"
-                        fullWidth
-                        validate={[required()]}
-                    >
-                        <AutocompleteInput optionText="name" />
+                    <ReferenceInput source="company_id" reference="companies">
+                        <AutocompleteInput
+                            optionText="name"
+                            fullWidth
+                            validate={validateRequired}
+                        />
                     </ReferenceInput>
                     <SelectInput
                         source="stage"
                         choices={stageChoices}
                         fullWidth
-                        validate={[required()]}
+                        validate={validateRequired}
                         defaultValue="opportunity"
                     />
                     <SelectInput

@@ -3,7 +3,10 @@
 help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-install: package.json ## install dependencies
+setup-env: ## setup the environment
+	cp -n ./packages/demo/.env.local-example ./packages/demo/.env
+
+install: setup-env package.json ## install dependencies
 	@if [ "$(CI)" != "true" ]; then \
 		echo "Full install..."; \
 		yarn; \
@@ -15,6 +18,9 @@ install: package.json ## install dependencies
 
 run: ## run the demo
 	@yarn -s run-demo
+
+run-prod: ## run the demo in prod
+	@yarn -s run-demo-prod
 
 build-demo: ## compile the demo to static js
 	@yarn -s build-demo
@@ -52,9 +58,35 @@ prettier: ## prettify the source code using prettier
 test: build test-unit lint ## launch all tests
 
 test-unit: ## launch unit tests
-	echo "Running unit tests...";
-	yarn -s test-unit;
+	@echo "Running unit tests...";
+	@yarn -s test-unit;
 
 test-unit-watch: ## launch unit tests and watch for changes
-	echo "Running unit tests..."; \
-	yarn -s test-unit --watch; \
+	@echo "Running unit tests..."; 
+	@yarn -s test-unit --watch;
+
+test-e2e: ## launch e2e tests
+	@echo "Running e2e tests...";
+	@yarn -s test-e2e;
+
+test-e2e-local: ## launch e2e tests
+	@echo "Running e2e tests...";
+	@yarn -s test-e2e-local;
+
+supabase-start: ## start the supabase server
+	@echo "Starting supabase server..."
+	@yarn supabase start
+
+supabase-stop: ## stop the supabase server
+	@echo "Stopping supabase server..."
+	@yarn supabase stop
+
+db-migrate: ## migrate the database
+	@echo "Apply migrations on the database..."
+	@yarn -s db-migrate
+
+db-seed: ## seed the database
+	@echo "Seeding the database..."
+	@yarn -s db-seed
+
+db-setup: db-migrate db-seed ## setup the database

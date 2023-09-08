@@ -1,10 +1,11 @@
 import {
-    OnFailure,
+    onError,
     OnSuccess,
     useAuthProvider,
     useNotify,
     useRedirect,
 } from 'ra-core';
+import { useMutation, UseMutationResult } from 'react-query';
 import { SetPasswordParams, SupabaseAuthProvider } from './authProvider';
 
 /**
@@ -33,33 +34,32 @@ import { SetPasswordParams, SupabaseAuthProvider } from './authProvider';
  *     );
  * };
  **/
-export const useSetPassword = (options?: UseSetPasswordOptions) => {
+export const useSetPassword = (
+    options?: UseSetPasswordOptions
+): [
+    UseMutationResult<unknown, Error, SetPasswordParams>['mutate'],
+    UseMutationResult<unknown, Error, SetPasswordParams>
+] => {
     const notify = useNotify();
     const redirect = useRedirect();
-    const authProvider = useAuthProvider() as SupabaseAuthProvider;
+    const authProvider = useAuthProvider<SupabaseAuthProvider>();
 
     const {
         onSuccess = () => redirect('/'),
-        onFailure = error => notify(error.message, 'error'),
+        onError = error => notify(error.message, { type: 'error' }),
     } = options || {};
 
-    return (params: SetPasswordParams) => {
-        authProvider
-            .setPassword(params)
-            .then(() => {
-                if (onSuccess) {
-                    onSuccess();
-                }
-            })
-            .catch(error => {
-                if (onFailure) {
-                    onFailure(error);
-                }
-            });
-    };
+    const mutation = useMutation<unknown, Error, SetPasswordParams>(
+        params => {
+            return authProvider.setPassword(params);
+        },
+        { onSuccess, onError, retry: false }
+    );
+
+    return [mutation.mutate, mutation];
 };
 
 export type UseSetPasswordOptions = {
     onSuccess?: OnSuccess;
-    onFailure?: OnFailure;
+    onError?: onError;
 };

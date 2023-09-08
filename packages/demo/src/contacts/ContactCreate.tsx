@@ -1,111 +1,37 @@
 import * as React from 'react';
-import {
-    CreateBase,
-    CreateProps,
-    TextInput,
-    ReferenceInput,
-    AutocompleteInput,
-    BooleanInput,
-    FormWithRedirect,
-    Toolbar,
-    required,
-    useCreateContext,
-    useGetIdentity,
-} from 'react-admin';
-import { Card, CardContent, Divider, Box, Avatar } from '@material-ui/core';
+import { CreateBase, Form, Toolbar } from 'react-admin';
+import { Card, CardContent, Box, Avatar } from '@mui/material';
 
+import { ContactInputs } from './ContactInputs';
 import { Contact } from '../types';
 
-const Spacer = () => <Box width={20} component="span" />;
-
-export const ContactCreate = (props: CreateProps) => (
+export const ContactCreate = () => (
     <CreateBase
-        {...props}
+        redirect="show"
         transform={(data: Contact) => ({
             ...data,
             last_seen: new Date(),
             tags: [],
         })}
     >
-        <ContactCreateContent />
-    </CreateBase>
-);
-
-const ContactCreateContent = () => {
-    const { identity } = useGetIdentity();
-    const { save, record } = useCreateContext();
-    return (
         <Box mt={2} display="flex">
             <Box flex="1">
-                <FormWithRedirect
-                    redirect="show"
-                    record={record as any}
-                    save={save}
-                    initialValues={{ sales_id: identity?.id }}
-                    render={formProps => (
-                        <Card>
-                            <CardContent>
-                                <Box>
-                                    <Box display="flex">
-                                        <Box mr={2}>
-                                            <Avatar />
-                                        </Box>
-                                        <Box flex="1" mt={-1}>
-                                            <Box display="flex">
-                                                <TextInput
-                                                    source="first_name"
-                                                    validate={[required()]}
-                                                />
-                                                <Spacer />
-                                                <TextInput
-                                                    source="last_name"
-                                                    validate={[required()]}
-                                                />
-                                            </Box>
-                                            <Box display="flex">
-                                                <TextInput source="title" />
-                                                <Spacer />
-                                                <ReferenceInput
-                                                    source="company_id"
-                                                    reference="companies"
-                                                >
-                                                    <AutocompleteInput optionText="name" />
-                                                </ReferenceInput>
-                                            </Box>
-                                            <Divider />
-                                            <Box mt={2} width={430}>
-                                                <TextInput
-                                                    source="email"
-                                                    fullWidth
-                                                />
-                                            </Box>
-                                            <Box display="flex">
-                                                <TextInput source="phone_number1" />
-                                                <Spacer />
-                                                <TextInput source="phone_number2" />
-                                            </Box>
-                                            <Divider />
-                                            <Box mt={2} width={430}>
-                                                <TextInput
-                                                    source="background"
-                                                    multiline
-                                                    fullWidth
-                                                />
-                                                <TextInput
-                                                    source="avatar"
-                                                    fullWidth
-                                                />
-                                                <BooleanInput source="has_newsletter" />
-                                            </Box>
-                                        </Box>
+                <Form>
+                    <Card>
+                        <CardContent>
+                            <Box>
+                                <Box display="flex">
+                                    <Box mr={2}>
+                                        <Avatar />
                                     </Box>
+                                    <ContactInputs />
                                 </Box>
-                            </CardContent>
-                            <Toolbar {...formProps} />
-                        </Card>
-                    )}
-                />
+                            </Box>
+                        </CardContent>
+                        <Toolbar />
+                    </Card>
+                </Form>
             </Box>
         </Box>
-    );
-};
+    </CreateBase>
+);

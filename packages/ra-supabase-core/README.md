@@ -2,24 +2,31 @@
 
 This package provide a dataProvider, an authProvider and hooks to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin).
 
+## Installation
+
+```sh
+yarn add ra-supabase-core
+# or
+npm install ra-supabase-core
+```
+
 ## Usage
 
 ```jsx
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
 
 // in dataProvider.js
 import { supabaseDataProvider } from 'ra-supabase-core';
-import { supabase } from './supabase';
+import { supabaseClient } from './supabase';
 
-const resources = {
-    posts: ['id', 'title', 'body', 'author_id', 'date'],
-    authors: ['id', 'full_name'],
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
+export const dataProvider = supabaseDataProvider({
+    instanceUrl: 'YOUR_SUPABASE_URL',
+    apiKey: 'YOUR_SUPABASE_ANON_KEY',
+    supabaseClient
+});
 
 // in authProvider.js
 import { supabaseAuthProvider } from 'ra-supabase-core';
@@ -57,62 +64,113 @@ export const MyAdmin = () => (
 );
 ```
 
-## Authentication
+## Features
 
-We currently only support email/password authentication. The `supabaseAuthProvider` provides the `setPassword` method in addition of the `authProvider` methods required by `react-admin`. This method allows you to create UI for users to set their passwords after being invited for example. This could be done in a custom route.
+### DataProvider
 
-To make this custom route easier to implement, this package also provide the following hooks:
+`ra-supabase` is built on [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0-alpha.0) that leverages [PostgREST](https://postgrest.org/en/stable/). As such, you have access the following features:
 
--   [useRedirectIfAuthenticated](#useredirectifauthenticated): to be used inside a [custom Login page](https://marmelab.com/react-admin/Authentication.html#customizing-the-login-and-logout-components). Redirects users to the home page if they are signed in.
--   [useSupabaseAccessToken](#usesupabaseaccesstoken): to be used inside a custom route to which invited users are redirected. This route should allow them to set their password and this hook will take care of retrieving the supabase access token from the URL for you to use with `useSetPassword`.
--   [useSetPassword](#usesetpassword): to be used inside a custom route to which invited users are redirected. This route should allow them to set their password and this hook returns a function to do so. It needs the supabase access token.
+#### Filters operators
+
+When specifying the `source` prop of filter inputs, you can either set it to the field name for simple equality checks or add an operator suffix for more control. For instance, the `gte` (Greater Than or Equal) or the `ilike` (Case insensitive like) operators:
+
+```jsx
+const postFilters = [
+    <TextInput label="Title" source="title@ilike" alwaysOn />,
+    <TextInput label="Views" source="views@gte" />,
+];
+
+export const PostList = () => (
+    <List filters={postFilters}>
+        ...
+    </List>
+);
+```
+
+See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#operators) for a list of supported operators.
+
+#### RLS
+
+As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended. 
+
+### Authentication
+
+`ra-supabase` supports email/password and OAuth authentication.
+
+#### Email & Password Authentication
+
+To login users using their email and password, call the `login` method returned by the `useLogin` hook with the user credentials as an object:
+
+```jsx
+import { useLogin } from 'react-admin';
+
+const myLoginForm = () => {
+    const login = useLogin();
+    const redirectTo = window.location.toString();
+
+    const handleSubmit = (event) => {
+        login({
+            email: event.target.email.value,
+            password: event.target.password.value,
+        }, redirectTo);
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <label htmlFor="email">Email</label>
+            <input id="email" name="email" type="email" />
+            <label htmlFor="password">Password</label>
+            <input id="password" name="password" type="password" />
+            <button type="submit">Login</button>
+        </form>
+    )
+}
+```
+
+#### OAuth Authentication
+
+To login users using the OAuth providers enabled on your Supabase instance, call the `login` method returned by the `useLogin` hook with an object containing the provider name:
+
+```jsx
+import { useLogin } from 'react-admin';
+
+const myLoginForm = () => {
+    const login = useLogin();
+
+    const loginWith = (provider) => {
+        const redirectTo = window.location.toString();
+
+        login({ provider, options: { redirectTo }).catch(
+            error => {
+                // The authProvide always reject for OAuth login but there will be no error
+                // if the call actually succeeds. This is to avoid react-admin redirecting
+                // immediately to the provided redirect prop before users are redirected to
+                // the OAuth provider.
+                if (error) {
+                    notify((error as Error).message, { type: 'error' });
+                }
+            }
+        );
+    }
+
+    return (
+        <div>
+            <button onClick={() => loginWith('github')}>Login with Github</button>
+            <button onClick={() => loginWith('twitter')}>Login with Twitter</button>
+        </div>
+    )
+}
+```
+
+Make sure you enabled the specified providers in your Supabase instance:
+- [Hosted instance](https://supabase.com/docs/guides/auth/social-login)
+- [Local instance](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled)
 
 ## API
 
 ### The `supabaseDataProvider`
 
-The `supabaseDataProvider` must be initialized with your supabase client and an object describing the resources. This object should have a property for each resource containing an array of its fields.
-
-```jsx
-// in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase-core';
-import { supabase } from './supabase';
-
-const resources = {
-    posts: ['id', 'title', 'body', 'author_id', 'date'],
-    authors: ['id', 'full_name'],
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
-```
-
-#### Full Text Search Support
-
-When using react-admin [SearchInput](https://marmelab.com/react-admin/List.html#full-text-search), you might not want the filter to apply on all the resource fields but only some of them. You can configure this in the `dataProvider`.
-
-Instead of passing an array of fields for each resource, you can pass an object with two properties:
-
--   `fields`: An array of fields to return for all requests
--   `fullTextSearchFields`: An array of fields on which to apply full text filters
-
-```js
-// in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase';
-import { supabase } from './supabase';
-
-const resources = {
-    posts: {
-        fields: ['id', 'title', 'body', 'author_id', 'date'],
-        fullTextSearchFields: ['title', 'body'],
-    },
-    authors: {
-        fields: ['id', 'full_name'],
-        fullTextSearchFields: ['full_name'],
-    },
-};
-
-export const dataProvider = supabaseDataProvider(supabase, resources);
-```
+The `supabaseDataProvider` leverages [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest). Please refer to their documentation to know how to use it.
 
 ### The `supabaseAuthProvider`
 
@@ -143,7 +201,7 @@ export const authProvider = supabaseAuthProvider(supabase, {
 });
 ```
 
-`supabaseAuthProvider` also provides an additional `setPassword` method. This method allows you to create UI for users to set their passwords after being invited for example. This could be done in a custom route. See the [Authentication](#authentication) section for more details. The method signature is the following:
+`supabaseAuthProvider` also provides an additional `setPassword` method. This method allows you to create UI for users to set their passwords after being invited for example. This could be done in a custom route. The method signature is the following:
 
 `setPassword({ access_token: string; password: string }): Promise<void>`
 
@@ -213,4 +271,3 @@ const MyLoginPage = () => {
 ## Roadmap
 
 -   Add support for magic link authentication
--   Add support for third party authentication

@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { AuthContext } from 'ra-core';
-import { renderWithRedux } from 'ra-test';
-import { waitFor } from '@testing-library/react';
-import { Router } from 'react-router';
+import { CoreAdminContext } from 'ra-core';
+import { render, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import {
     useRedirectIfAuthenticated,
@@ -34,12 +32,10 @@ describe('useRedirectIfAuthenticated', () => {
         const history = createMemoryHistory({ initialEntries: ['/login'] });
         const push = jest.spyOn(history, 'push');
 
-        renderWithRedux(
-            <Router history={history}>
-                <AuthContext.Provider value={authProvider}>
-                    <UseRedirectIfAuthenticated />
-                </AuthContext.Provider>
-            </Router>
+        render(
+            <CoreAdminContext authProvider={authProvider} history={history}>
+                <UseRedirectIfAuthenticated />
+            </CoreAdminContext>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
@@ -60,17 +56,23 @@ describe('useRedirectIfAuthenticated', () => {
         const history = createMemoryHistory({ initialEntries: ['/login'] });
         const push = jest.spyOn(history, 'push');
 
-        renderWithRedux(
-            <Router history={history}>
-                <AuthContext.Provider value={authProvider}>
-                    <UseRedirectIfAuthenticated />
-                </AuthContext.Provider>
-            </Router>
+        render(
+            <CoreAdminContext authProvider={authProvider} history={history}>
+                <UseRedirectIfAuthenticated />
+            </CoreAdminContext>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith('/');
+            expect(push).toHaveBeenCalledWith(
+                {
+                    hash: '',
+                    pathname: '/',
+                    search: '',
+                },
+                undefined,
+                {}
+            );
         });
     });
 
@@ -86,17 +88,19 @@ describe('useRedirectIfAuthenticated', () => {
         const history = createMemoryHistory({ initialEntries: ['/login'] });
         const push = jest.spyOn(history, 'push');
 
-        renderWithRedux(
-            <Router history={history}>
-                <AuthContext.Provider value={authProvider}>
-                    <UseRedirectIfAuthenticated redirectTo="/dashboard" />
-                </AuthContext.Provider>
-            </Router>
+        render(
+            <CoreAdminContext authProvider={authProvider} history={history}>
+                <UseRedirectIfAuthenticated redirectTo="/dashboard" />
+            </CoreAdminContext>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith('/dashboard');
+            expect(push).toHaveBeenCalledWith(
+                { hash: '', pathname: '/dashboard', search: '' },
+                undefined,
+                {}
+            );
         });
     });
 });
