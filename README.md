@@ -8,7 +8,7 @@ This package provides a dataProvider, an authProvider, hooks and components to i
 [Documentation]: https://img.shields.io/badge/Documentation-green?style=for-the-badge
 [Source Code]: https://img.shields.io/badge/Source_Code-blue?style=for-the-badge
 
-[DocumentationLink]: ./packages/ra-supabase/Readme.md 'Documentation'
+[DocumentationLink]: ./packages/ra-supabase/README.md 'Documentation'
 [SourceCodeLink]: https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase 'Source Code'
 
 ## Projects
