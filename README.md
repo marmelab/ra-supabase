@@ -5,7 +5,7 @@ This package provides a dataProvider, an authProvider, hooks and components to i
 [![Documentation]][DocumentationLink] 
 [![Source Code]][SourceCodeLink] 
 
-[Documentation]: https://img.shields.io/badge/Documentation-green?style=for-the-badge
+[Documentation]: https://img.shields.io/badge/Documentation-darkgreen?style=for-the-badge
 [Source Code]: https://img.shields.io/badge/Source_Code-blue?style=for-the-badge
 
 [DocumentationLink]: ./packages/ra-supabase/README.md 'Documentation'
