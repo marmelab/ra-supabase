@@ -1,4 +1,4 @@
-export const raSupabaseEnglishMessages = {
+export const raSupabaseFrenchMessages = {
     'ra-supabase': {
         auth: {
             email: 'Email',
