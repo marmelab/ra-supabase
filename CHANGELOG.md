@@ -1,3 +1,7 @@
+# 2.0.5
+
+- Fix `ra-language-french` export
+
 # 2.0.4
 
 - Add support for `redirectTo` in `supabaseAuthProvider`
