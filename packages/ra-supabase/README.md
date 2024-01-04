@@ -151,8 +151,8 @@ This requires you to configure your supabase instance:
 
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
-1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/handle-callback`
-1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/handle-callback"` 
+1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback`
+1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback"` 
 
 You can now add the `/set-password` custom route:
 
@@ -192,8 +192,8 @@ This requires you to configure your supabase instance:
 
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
-1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/handle-callback`
-1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/handle-callback"` 
+1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback`
+1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback"` 
 
 You can now add the `/forgot-password` and `/set-password` custom routes:
 
@@ -261,7 +261,7 @@ This also requires you to configure the redirect URLS on your supabase instance:
 
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
-1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/handle-callback`
+1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback`
 
 To disable email/password authentication, set the `disableEmailPassword` prop:
 

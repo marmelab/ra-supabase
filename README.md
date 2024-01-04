@@ -50,7 +50,7 @@ make run
 
 The current version of supabase CLI does not allow to customize the emails sent for invitation or password reset.
 
-When you invite a new user through the [Authentication dashboard](http://localhost:54323/project/default/auth/users), you can see the email sent in [Inbucket](http://localhost:54324/monitor). Instead of clicking the link, copy it and change the `redirect_to` parameter from `http://localhost:8000` to `http://localhost:8000/handle-callback`.
+When you invite a new user through the [Authentication dashboard](http://localhost:54323/project/default/auth/users), you can see the email sent in [Inbucket](http://localhost:54324/monitor). Instead of clicking the link, copy it and change the `redirect_to` parameter from `http://localhost:8000` to `http://localhost:8000/auth-callback`.
 
 Apply the same process for password reset emails.
 
