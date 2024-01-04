@@ -41,8 +41,10 @@ export const supabaseHttpClient =
         const { data } = await supabaseClient.auth.getSession();
         if (!options.headers) options.headers = new Headers({});
 
-        if(supabaseClient['headers']) {
-            Object.entries(supabaseClient['headers']).forEach(([name, value]) => options.headers.set(name, value));
+        if (supabaseClient['headers']) {
+            Object.entries(supabaseClient['headers']).forEach(([name, value]) =>
+                options.headers.set(name, value)
+            );
         }
         if (data.session) {
             options.user = {
