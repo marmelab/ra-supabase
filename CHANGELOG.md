@@ -1,6 +1,10 @@
+# 2.0.6
+
+- Fixes set password flow doesn't work ([#44](https://github.com/marmelab/ra-supabase/pull/44)) [n0rmanc](https://github.com/n0rmanc)
+
 # 2.0.5
 
-- Fix `ra-language-french` export
+- Fix ra-supabase-language-french main export should be named raSupabaseFrenchMessages ([#43](https://github.com/marmelab/ra-supabase/pull/43)) [vicam001](https://github.com/vicam001)
 
 # 2.0.4
 
