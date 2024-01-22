@@ -1,5 +1,9 @@
 import { DataProvider, fetchUtils } from 'ra-core';
-import postgrestRestProvider from '@raphiniert/ra-data-postgrest';
+import postgrestRestProvider, {
+    IDataProviderConfig,
+    defaultPrimaryKeys,
+    defaultSchema,
+} from '@raphiniert/ra-data-postgrest';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
@@ -17,11 +21,16 @@ export const supabaseDataProvider = ({
     instanceUrl: string;
     apiKey: string;
     supabaseClient: SupabaseClient;
-}): DataProvider =>
-    postgrestRestProvider(
-        `${instanceUrl}/rest/v1`,
-        supabaseHttpClient({ apiKey, supabaseClient })
-    );
+}): DataProvider => {
+    const config: IDataProviderConfig = {
+        apiUrl: `${instanceUrl}/rest/v1`,
+        httpClient: supabaseHttpClient({ apiKey, supabaseClient }),
+        defaultListOp: 'eq',
+        primaryKeys: defaultPrimaryKeys,
+        schema: defaultSchema,
+    };
+    return postgrestRestProvider(config);
+};
 
 /**
  * A function that returns a httpClient for Supabase. It handles the authentication.

@@ -12,7 +12,13 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import { endOfYesterday, startOfWeek, startOfMonth, subMonths } from 'date-fns';
+import {
+    endOfYesterday,
+    startOfWeek,
+    endOfWeek,
+    startOfMonth,
+    subMonths,
+} from 'date-fns';
 
 import { Status } from '../misc/Status';
 
@@ -57,6 +63,16 @@ export const ContactListFilter = () => {
                     label="Before this month"
                     value={{
                         'last_seen@gte': undefined,
+                        'last_seen@lte': startOfMonth(new Date()).toISOString(),
+                    }}
+                />
+                <FilterListItem
+                    label="Last month"
+                    value={{
+                        'last_seen@gte': subMonths(
+                            startOfMonth(new Date()),
+                            1
+                        ).toISOString(),
                         'last_seen@lte': startOfMonth(new Date()).toISOString(),
                     }}
                 />
