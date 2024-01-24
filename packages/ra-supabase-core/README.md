@@ -68,7 +68,7 @@ export const MyAdmin = () => (
 
 ### DataProvider
 
-`ra-supabase` is built on [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0-alpha.0) that leverages [PostgREST](https://postgrest.org/en/stable/). As such, you have access the following features:
+`ra-supabase` is built on [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0) that leverages [PostgREST](https://postgrest.org/en/stable/). As such, you have access the following features:
 
 #### Filters operators
 
@@ -92,6 +92,29 @@ See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#opera
 #### RLS
 
 As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended. 
+
+#### Customizing the dataProvider
+
+`supabaseDataProvider` also accepts the same options as the `ra-data-postgrest` dataProvider (except `apiUrl`), like [`primaryKeys`](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md#compound-primary-keys) or [`schema`](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md#custom-schema).
+
+```jsx
+// in dataProvider.js
+import { supabaseDataProvider } from 'ra-supabase-core';
+import { supabaseClient } from './supabase';
+
+export const dataProvider = supabaseDataProvider({
+    instanceUrl: 'YOUR_SUPABASE_URL',
+    apiKey: 'YOUR_SUPABASE_ANON_KEY',
+    supabaseClient,
+    primaryKeys: new Map([
+        ['some_table', ['custom_id']],
+        ['another_table', ['first_column', 'second_column']],
+    ]),
+    schema: () => localStorage.getItem("schema") || "api",
+});
+```
+
+See the [`ra-data-postgrest`` documentation](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md) for more details.
 
 ### Authentication
 
