@@ -15,9 +15,9 @@ import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import {
     endOfYesterday,
     startOfWeek,
-    endOfWeek,
     startOfMonth,
     subMonths,
+    subWeeks,
 } from 'date-fns';
 
 import { Status } from '../misc/Status';
@@ -53,17 +53,20 @@ export const ContactListFilter = () => {
                     }}
                 />
                 <FilterListItem
-                    label="Before this week"
+                    label="Last week"
                     value={{
-                        'last_seen@gte': undefined,
+                        'last_seen@gte': subWeeks(
+                            startOfWeek(new Date()),
+                            1
+                        ).toISOString(),
                         'last_seen@lte': startOfWeek(new Date()).toISOString(),
                     }}
                 />
                 <FilterListItem
-                    label="Before this month"
+                    label="This month"
                     value={{
-                        'last_seen@gte': undefined,
-                        'last_seen@lte': startOfMonth(new Date()).toISOString(),
+                        'last_seen@gte': startOfMonth(new Date()).toISOString(),
+                        'last_seen@lte': undefined,
                     }}
                 />
                 <FilterListItem
@@ -77,7 +80,7 @@ export const ContactListFilter = () => {
                     }}
                 />
                 <FilterListItem
-                    label="Before last month"
+                    label="Earlier"
                     value={{
                         'last_seen@gte': undefined,
                         'last_seen@lte': subMonths(
