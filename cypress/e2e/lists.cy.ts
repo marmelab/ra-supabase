@@ -17,7 +17,7 @@ describe('Lists', () => {
         getPaginationText().then(el => {
             const count = parseInt(el.text().split('of')[1].trim());
 
-            cy.findByText('Before last month').click();
+            cy.findByText('Earlier').click();
             // Use should here to allow built-in retry as it may take a few ms for the list to update
             getPaginationText().should(el => {
                 const countFiltered = parseInt(el.text().split('of')[1].trim());
