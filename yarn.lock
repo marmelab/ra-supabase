@@ -2344,10 +2344,12 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@raphiniert/ra-data-postgrest@2.0.0-alpha.0":
-  version "2.0.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@raphiniert/ra-data-postgrest/-/ra-data-postgrest-2.0.0-alpha.0.tgz#12bc23ba9e25388b9b630e5400d290c4b23fe1a3"
-  integrity sha512-9bwWARORJX6ivdCkTyt/9hQ1we4hz0pW6MiPLqK7DWLSlqWyuC7A+/U0Iix5Qd52qoiB4ppA9Xov+btrDWgLWw==
+"@raphiniert/ra-data-postgrest@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@raphiniert/ra-data-postgrest/-/ra-data-postgrest-2.0.0.tgz#4038621b4fe156095dde066353e29396e33cbb39"
+  integrity sha512-1Ss+/xAxL62aGmCBSSJnlFMMSl0T2/bNSfeV0lplm7N9AtsOxSfySDKnCQs53ngbSBK1rPbk4ypc/mDVm4y4xQ==
+  dependencies:
+    qs "^6.11.1"
 
 "@react-spring/animated@~9.4.5":
   version "9.4.5"
@@ -9502,6 +9504,13 @@ q@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
+
+qs@^6.11.1:
+  version "6.11.2"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.2.tgz#64bea51f12c1f5da1bc01496f48ffcff7c69d7d9"
+  integrity sha512-tDNIz22aBzCDxLtVH++VnTfzxlfeK5CbqohpSqpJgj1Wg/cQbStNAz3NuqCs5vV+pjBsK4x4pN9HlVh7rcYRiA==
+  dependencies:
+    side-channel "^1.0.4"
 
 qs@~6.10.3:
   version "6.10.5"

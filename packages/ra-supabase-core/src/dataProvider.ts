@@ -1,5 +1,9 @@
 import { DataProvider, fetchUtils } from 'ra-core';
-import postgrestRestProvider from '@raphiniert/ra-data-postgrest';
+import postgrestRestProvider, {
+    IDataProviderConfig,
+    defaultPrimaryKeys,
+    defaultSchema,
+} from '@raphiniert/ra-data-postgrest';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
@@ -7,21 +11,33 @@ import { SupabaseClient } from '@supabase/supabase-js';
  * @param instanceUrl The URL of the Supabase instance
  * @param apiKey The API key of the Supabase instance. Prefer the anonymous key.
  * @param supabaseClient The Supabase client
+ * @param defaultListOp Optional - The default list filter operator. Defaults to 'eq'.
+ * @param primaryKeys Optional - The primary keys of the tables. Defaults to 'id'.
+ * @param schema Optional - The custom schema to use. Defaults to none.
  * @returns A dataProvider for Supabase
  */
 export const supabaseDataProvider = ({
     instanceUrl,
     apiKey,
     supabaseClient,
+    httpClient = supabaseHttpClient({ apiKey, supabaseClient }),
+    defaultListOp = 'eq',
+    primaryKeys = defaultPrimaryKeys,
+    schema = defaultSchema,
 }: {
     instanceUrl: string;
     apiKey: string;
     supabaseClient: SupabaseClient;
-}): DataProvider =>
-    postgrestRestProvider(
-        `${instanceUrl}/rest/v1`,
-        supabaseHttpClient({ apiKey, supabaseClient })
-    );
+} & Partial<Omit<IDataProviderConfig, 'apiUrl'>>): DataProvider => {
+    const config: IDataProviderConfig = {
+        apiUrl: `${instanceUrl}/rest/v1`,
+        httpClient,
+        defaultListOp,
+        primaryKeys,
+        schema,
+    };
+    return postgrestRestProvider(config);
+};
 
 /**
  * A function that returns a httpClient for Supabase. It handles the authentication.
