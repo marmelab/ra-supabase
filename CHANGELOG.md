@@ -1,37 +1,43 @@
-# 2.0.6
+# Changelog
+
+## 2.1.0
+
+* Update to latest ra-data-postgrest ([#47](https://github.com/marmelab/ra-supabase/pull/47)) ([slax57](https://github.com/slax57))
+
+## 2.0.6
 
 - Fixes set password flow doesn't work ([#44](https://github.com/marmelab/ra-supabase/pull/44)) [n0rmanc](https://github.com/n0rmanc)
 
-# 2.0.5
+## 2.0.5
 
 - Fix ra-supabase-language-french main export should be named raSupabaseFrenchMessages ([#43](https://github.com/marmelab/ra-supabase/pull/43)) [vicam001](https://github.com/vicam001)
 
-# 2.0.4
+## 2.0.4
 
 - Add support for `redirectTo` in `supabaseAuthProvider`
 - Document spanish translations
 
-# 2.0.3
+## 2.0.3
 
 - Fix wrong build in 2.0.2
 
-# 2.0.2
+## 2.0.2
 
 - Merge supabaseClient headers into postgREST requests ([#33](https://github.com/marmelab/ra-supabase/pull/33)) [milutinovici](https://github.com/milutinovici)
 
-# 2.0.1
+## 2.0.1
 
 - Fix invitations and password reset handling
 
-# 2.0.0
+## 2.0.0
 
 - Add compatibility with react-admin v4
 - Use [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0-alpha.0) for the dataProvider
 - Add support for third party authentication providers
 
-## Migration
+### Migration
 
-### DataProvider
+#### DataProvider
 
 As we now use [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0-alpha.0), you now longer need to describe your resources. However, you must now pass the `supabaseInstanceUrl` and the `apiKey`:
 
