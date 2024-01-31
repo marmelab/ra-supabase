@@ -68,8 +68,9 @@ export const supabaseHttpClient =
                 // This ensures that users are identified correctly and that RLS can be applied
                 token: `Bearer ${data.session.access_token}`,
             };
-            // This ensures the app is authorized to access the supabase instance
-            options.headers.set('apiKey', apiKey);
         }
+        // Always send the apiKey even if there isn't a session
+        options.headers.set('apiKey', apiKey);
+
         return fetchUtils.fetchJson(url, options);
     };
