@@ -49,6 +49,22 @@ export const authProvider = supabaseAuthProvider(supabase, {
             fullName: `${data.first_name} ${data.last_name}`,
         };
     },
+    getPermissions: async user => {
+        const { data, error } = await supabase
+            .from('userPermissions')
+            .select('id, can_edit')
+            .match({ email: user.email })
+            .single();
+
+        if (!data || error) {
+            throw new Error();
+        }
+
+        return {
+            id: data.id,
+            canEdit: data.can_edit,
+        };
+    },
 });
 
 // in App.js
@@ -91,7 +107,7 @@ See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#opera
 
 #### RLS
 
-As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended. 
+As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended.
 
 #### Customizing the dataProvider
 
