@@ -147,7 +147,7 @@ export const supabaseAuthProvider = (
                 throw error;
             }
             if (data.user == null) {
-                throw new Error();
+                return undefined;
             }
 
             if (typeof getPermissions === "function") {
