@@ -49,22 +49,6 @@ export const authProvider = supabaseAuthProvider(supabase, {
             fullName: `${data.first_name} ${data.last_name}`,
         };
     },
-    getPermissions: async user => {
-        const { data, error } = await supabase
-            .from('userPermissions')
-            .select('id, can_edit')
-            .match({ email: user.email })
-            .single();
-
-        if (!data || error) {
-            throw new Error();
-        }
-
-        return {
-            id: data.id,
-            canEdit: data.can_edit,
-        };
-    },
 });
 
 // in App.js
@@ -235,6 +219,33 @@ export const authProvider = supabaseAuthProvider(supabase, {
         return {
             id: data.id,
             fullName: `${data.first_name} ${data.last_name}`,
+        };
+    },
+});
+```
+
+Similarly `supabaseAuthProvider` supports an optional function to call when we need to [get permissions](https://marmelab.com/react-admin/Authentication.html#get-permissions) . Here's an example that fetches the user permissions from a `userPermissions` table. You can use permissions via the [`usePermissions`](https://marmelab.com/react-admin/usePermissions.html) hook.
+
+```jsx
+// in authProvider.js
+import { supabaseAuthProvider } from 'ra-supabase-core';
+import { supabase } from './supabase';
+
+export const authProvider = supabaseAuthProvider(supabase, {
+    getPermissions: async user => {
+        const { data, error } = await supabase
+            .from('userPermissions')
+            .select('id, can_edit')
+            .match({ email: user.email })
+            .single();
+
+        if (!data || error) {
+            throw new Error();
+        }
+
+        return {
+            id: data.id,
+            canEdit: data.can_edit,
         };
     },
 });
