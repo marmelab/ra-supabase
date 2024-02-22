@@ -150,7 +150,7 @@ export const supabaseAuthProvider = (
                 return undefined;
             }
 
-            if (typeof getPermissions === "function") {
+            if (typeof getPermissions === 'function') {
                 const permissions = await getPermissions(data.user);
                 return permissions;
             }
