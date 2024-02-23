@@ -224,7 +224,7 @@ export const authProvider = supabaseAuthProvider(supabase, {
 });
 ```
 
-Similarly `supabaseAuthProvider` supports an optional function to call when we need to [get permissions](https://marmelab.com/react-admin/Authentication.html#get-permissions) . Here's an example that fetches the user permissions from a `userPermissions` table. You can use permissions via the [`usePermissions`](https://marmelab.com/react-admin/usePermissions.html) hook.
+The `supabaseAuthProvider` supports an optional [`getpermissions`](https://marmelab.com/react-admin/Authentication.html#get-permissions) method that allows you to fetch user permissions. Here's an example that fetches user permissions from a `userPermissions` table. You can then use the [`usePermissions`](https://marmelab.com/react-admin/usePermissions.html) hook to retrieve them later.
 
 ```jsx
 // in authProvider.js
