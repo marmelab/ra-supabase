@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1
+
+- Add `getPermissions` support in `authProvider`
+
 ## 2.1.0
 
 * Update to latest ra-data-postgrest ([#47](https://github.com/marmelab/ra-supabase/pull/47)) ([slax57](https://github.com/slax57))
