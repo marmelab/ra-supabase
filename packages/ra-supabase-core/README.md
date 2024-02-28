@@ -91,7 +91,7 @@ See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#opera
 
 #### RLS
 
-As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended. 
+As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended.
 
 #### Customizing the dataProvider
 
@@ -219,6 +219,33 @@ export const authProvider = supabaseAuthProvider(supabase, {
         return {
             id: data.id,
             fullName: `${data.first_name} ${data.last_name}`,
+        };
+    },
+});
+```
+
+The `supabaseAuthProvider` supports an optional [`getpermissions`](https://marmelab.com/react-admin/Authentication.html#get-permissions) method that allows you to fetch user permissions. Here's an example that fetches user permissions from a `userPermissions` table. You can then use the [`usePermissions`](https://marmelab.com/react-admin/usePermissions.html) hook to retrieve them later.
+
+```jsx
+// in authProvider.js
+import { supabaseAuthProvider } from 'ra-supabase-core';
+import { supabase } from './supabase';
+
+export const authProvider = supabaseAuthProvider(supabase, {
+    getPermissions: async user => {
+        const { data, error } = await supabase
+            .from('userPermissions')
+            .select('id, can_edit')
+            .match({ email: user.email })
+            .single();
+
+        if (!data || error) {
+            throw new Error();
+        }
+
+        return {
+            id: data.id,
+            canEdit: data.can_edit,
         };
     },
 });

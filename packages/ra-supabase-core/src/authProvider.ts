@@ -3,7 +3,7 @@ import { Provider, SupabaseClient, User } from '@supabase/supabase-js';
 
 export const supabaseAuthProvider = (
     client: SupabaseClient,
-    { getIdentity, redirectTo }: SupabaseAuthProviderOptions
+    { getIdentity, getPermissions, redirectTo }: SupabaseAuthProviderOptions
 ): SupabaseAuthProvider => {
     return {
         async login(params) {
@@ -139,7 +139,19 @@ export const supabaseAuthProvider = (
             return Promise.resolve();
         },
         async getPermissions() {
-            return;
+const { data, error } = await client.auth.getUser();
+            if (error) {
+                throw error;
+            }
+            if (data.user == null) {
+                return undefined;
+            }
+
+            if (typeof getPermissions === 'function') {
+                const permissions = await getPermissions(data.user);
+                return permissions;
+            }
+            return undefined;
         },
         async getIdentity() {
             const { data } = await client.auth.getUser();
@@ -159,8 +171,10 @@ export const supabaseAuthProvider = (
 };
 
 export type GetIdentity = (user: User) => Promise<UserIdentity>;
+export type GetPermissions = (user: User) => Promise<any>;
 export type SupabaseAuthProviderOptions = {
     getIdentity?: GetIdentity;
+    getPermissions?: GetPermissions;
     redirectTo?: string;
 };
 
