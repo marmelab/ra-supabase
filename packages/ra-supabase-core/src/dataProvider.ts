@@ -1,4 +1,4 @@
-import { DataProvider, fetchUtils } from 'ra-core';
+import { DataProvider, fetchUtils, withLifecycleCallbacks } from 'ra-core';
 import postgrestRestProvider, {
     IDataProviderConfig,
     defaultPrimaryKeys,
@@ -24,10 +24,19 @@ export const supabaseDataProvider = ({
     defaultListOp = 'eq',
     primaryKeys = defaultPrimaryKeys,
     schema = defaultSchema,
+    storagePath,
+    filenameFromData = ({ filename }) => filename,
 }: {
     instanceUrl: string;
     apiKey: string;
     supabaseClient: SupabaseClient;
+    storagePath?: string | ((resource: string) => string);
+    filenameFromData?: (_: {
+        data: string;
+        resource: string;
+        field: string;
+        filename: string;
+    }) => string;
 } & Partial<Omit<IDataProviderConfig, 'apiUrl'>>): DataProvider => {
     const config: IDataProviderConfig = {
         apiUrl: `${instanceUrl}/rest/v1`,
@@ -36,7 +45,50 @@ export const supabaseDataProvider = ({
         primaryKeys,
         schema,
     };
-    return postgrestRestProvider(config);
+    return withLifecycleCallbacks(postgrestRestProvider(config), [
+        {
+            resource: '*',
+            beforeSave: async (
+                data: any,
+                dataProvider: DataProvider,
+                resource: string
+            ) => {
+                if (!storagePath) return data;
+                const newFiles = (
+                    await Promise.all(
+                        Object.keys(data)
+                            .filter(key => data[key]?.rawFile instanceof File)
+                            .map(async (key: string) => {
+                                const file = data[key];
+                                const bucket =
+                                    storagePath instanceof Function
+                                        ? storagePath(resource)
+                                        : storagePath;
+                                const filename = filenameFromData({
+                                    data,
+                                    resource,
+                                    field: key,
+                                    filename: file.rawFile.name,
+                                });
+
+                                const { error } = await supabaseClient.storage
+                                    .from(bucket)
+                                    .upload(filename, file.rawFile);
+                                if (error) throw error;
+                                const {
+                                    data: { publicUrl },
+                                } = supabaseClient.storage
+                                    .from(bucket)
+                                    .getPublicUrl(filename);
+
+                                return { [key]: publicUrl };
+                            })
+                    )
+                ).reduce((acc, val) => ({ ...acc, ...val }), {});
+                return { ...data, ...newFiles };
+            },
+        },
+    ]);
 };
 
 /**
