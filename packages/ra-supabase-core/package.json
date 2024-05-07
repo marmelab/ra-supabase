@@ -20,8 +20,8 @@
         "ra-core": "^4.7.0"
     },
     "devDependencies": {
-        "@raphiniert/ra-data-postgrest": "^2.0.0",
-        "@supabase/supabase-js": "^2.4.1",
+        "@raphiniert/ra-data-postgrest": "^2.1.0",
+        "@supabase/supabase-js": "^2.43.1",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^14.4.3",
