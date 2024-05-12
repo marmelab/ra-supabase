@@ -1,6 +1,6 @@
-import { useCheckAuth } from 'ra-core';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useCheckAuth } from "ra-core";
+import { useEffect } from "react";
+import { To, useNavigate } from "react-router";
 
 /**
  * This hook redirect the user to the provided path (/ by default) if they are authenticated.
@@ -13,21 +13,21 @@ import { useNavigate } from 'react-router';
  * }
  **/
 export const useRedirectIfAuthenticated = (
-    redirectTo: UseRedirectIfAuthenticatedOptions = '/'
+  redirectTo: UseRedirectIfAuthenticatedOptions = "/"
 ) => {
-    const navigate = useNavigate();
-    const checkAuth = useCheckAuth();
+  const navigate = useNavigate();
+  const checkAuth = useCheckAuth();
 
-    useEffect(() => {
-        checkAuth({}, false, undefined, true)
-            .then(() => {
-                // already authenticated, redirect to the home page
-                navigate(redirectTo);
-            })
-            .catch(() => {
-                // not authenticated, stay on the login page
-            });
-    }, [checkAuth, navigate, redirectTo]);
+  useEffect(() => {
+    checkAuth({}, false, undefined, true)
+      .then(() => {
+        // already authenticated, redirect to the home page
+        navigate(redirectTo);
+      })
+      .catch(() => {
+        // not authenticated, stay on the login page
+      });
+  }, [checkAuth, navigate, redirectTo]);
 };
 
-export type UseRedirectIfAuthenticatedOptions = string;
+export type UseRedirectIfAuthenticatedOptions = To;
