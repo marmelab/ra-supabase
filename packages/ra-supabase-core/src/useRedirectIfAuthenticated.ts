@@ -1,6 +1,6 @@
 import { useCheckAuth } from 'ra-core';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { To, useNavigate } from 'react-router';
 
 /**
  * This hook redirect the user to the provided path (/ by default) if they are authenticated.
@@ -30,4 +30,4 @@ export const useRedirectIfAuthenticated = (
     }, [checkAuth, navigate, redirectTo]);
 };
 
-export type UseRedirectIfAuthenticatedOptions = string;
+export type UseRedirectIfAuthenticatedOptions = To;
