@@ -62,7 +62,7 @@ async function main() {
     });
     const { data: persistedContacts, error: errorContacts } = await supabase
         .from('contacts')
-        .insert(contacts)
+        .insert(contacts.map(({ id, ...contact }) => contact))
         .select();
 
     if (errorContacts) {

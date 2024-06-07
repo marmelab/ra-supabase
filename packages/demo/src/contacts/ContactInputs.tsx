@@ -4,6 +4,7 @@ import {
     ReferenceInput,
     AutocompleteInput,
     BooleanInput,
+    required,
 } from 'react-admin';
 import { Divider, Box } from '@mui/material';
 
@@ -11,15 +12,23 @@ export const ContactInputs = () => {
     return (
         <Box flex="1" mt={-1}>
             <Box display="flex" width={430}>
-                <TextInput source="first_name" fullWidth />
+                <TextInput
+                    source="first_name"
+                    validate={required()}
+                    fullWidth
+                />
                 <Spacer />
-                <TextInput source="last_name" fullWidth />
+                <TextInput source="last_name" validate={required()} fullWidth />
             </Box>
             <Box display="flex" width={430}>
                 <TextInput source="title" fullWidth />
                 <Spacer />
                 <ReferenceInput source="company_id" reference="companies">
-                    <AutocompleteInput optionText="name" fullWidth />
+                    <AutocompleteInput
+                        optionText="name"
+                        fullWidth
+                        validate={required()}
+                    />
                 </ReferenceInput>
             </Box>
             <Divider />
