@@ -7,6 +7,7 @@ import { Contact } from '../types';
 export const Avatar = (props: { record?: Contact }) => {
     const record = useRecordContext<Contact>(props);
     if (!record) return null;
+
     return (
         <MuiAvatar src={record.avatar}>
             {record.first_name.charAt(0)}

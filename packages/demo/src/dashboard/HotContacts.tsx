@@ -35,14 +35,12 @@ export const HotContacts = () => {
                     color="textSecondary"
                     component={RouterLink}
                     to="/contacts"
-                    id="hot-contacts"
                 >
                     Hot contacts
                 </Link>
             </Box>
             <Card>
                 <SimpleList<Contact>
-                    aria-describedby="hot-contacts"
                     linkType="show"
                     data={contactData}
                     total={contactTotal}

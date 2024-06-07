@@ -77,9 +77,6 @@ const ContactListContent = () => {
                             </ListItemAvatar>
                             <ListItemText
                                 primary={`${contact.first_name} ${contact.last_name}`}
-                                secondaryTypographyProps={{
-                                    component: 'div',
-                                }}
                                 secondary={
                                     <>
                                         {contact.title} at{' '}
@@ -91,7 +88,8 @@ const ContactListContent = () => {
                                             <TextField source="name" />
                                         </ReferenceField>{' '}
                                         {contact.nb_notes &&
-                                            `- ${contact.nb_notes} notes `}
+                                            `- ${contact.nb_notes} notes`}
+                                        &nbsp;&nbsp;
                                         <TagsList />
                                     </>
                                 }

@@ -40,7 +40,6 @@ export const NewNote = ({
             sales_id: identity.id,
             date,
             text,
-            type: 'Note',
         };
         if (showStatus) {
             data.status = status;
@@ -58,6 +57,7 @@ export const NewNote = ({
                         data: {
                             last_seen: date,
                             status,
+                            nb_notes: record.nb_notes + 1,
                         },
                         previousData: record,
                     });
@@ -102,6 +102,7 @@ export const NewNote = ({
                                     type="datetime-local"
                                     variant="filled"
                                     size="small"
+                                    margin="none"
                                     value={date}
                                     onChange={(
                                         event: React.ChangeEvent<HTMLInputElement>

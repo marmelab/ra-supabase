@@ -22,9 +22,7 @@ const stages = [
 ];
 //const tags = ["new deal", "upsell", "SAV"];
 
-export const generateDeals = (
-    db: Pick<Db, 'companies' | 'contacts'>
-): Deal[] => {
+export const generateDeals = (db: Db): Deal[] => {
     const deals = Array.from(Array(50).keys()).map(id => {
         const company = random.arrayElement(db.companies);
         company.nb_deals++;
@@ -53,6 +51,7 @@ export const generateDeals = (
             ).toISOString(),
             sales_id: company.sales_id,
             index: 0,
+            nb_notes: 0,
         };
     });
     // compute index based on stage

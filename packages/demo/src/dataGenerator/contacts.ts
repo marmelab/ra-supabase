@@ -21,9 +21,7 @@ const maxContacts = {
     500: 50,
 };
 
-export const generateContacts = (
-    db: Pick<Db, 'companies' | 'tags'>
-): Contact[] => {
+export const generateContacts = (db: Db): Contact[] => {
     const nbAvailblePictures = 223;
     let numberOfContacts = 0;
 
@@ -78,6 +76,7 @@ export const generateContacts = (
                 .arrayElements(db.tags, random.arrayElement([0, 0, 0, 1, 1, 2]))
                 .map(tag => tag.id), // finalize
             sales_id: company.sales_id,
+            nb_notes: 0,
         };
     });
 };

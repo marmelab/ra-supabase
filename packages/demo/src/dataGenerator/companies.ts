@@ -22,13 +22,13 @@ const sizes = [1, 10, 50, 250, 500];
 
 const regex = /\W+/;
 
-export const generateCompanies = (db: Pick<Db, 'sales'>): Company[] => {
+export const generateCompanies = (db: Db): Company[] => {
     return Array.from(Array(55).keys()).map(id => {
         const name = company.companyName();
         return {
             id,
             name: name,
-            logo: `/logos/${id}.png`,
+            logo: `./logos/${id}.png`,
             sector: random.arrayElement(sectors),
             size: random.arrayElement(sizes) as 1 | 10 | 50 | 250 | 500,
             linkedIn: `https://www.linkedin.com/company/${name
@@ -44,7 +44,7 @@ export const generateCompanies = (db: Pick<Db, 'sales'>): Company[] => {
             nb_deals: 0,
             // at least 1/3rd of companies for Jane Doe
             sales_id:
-                random.number(2) === 0 ? 1 : random.arrayElement(db.sales).id,
+                random.number(2) === 0 ? 0 : random.arrayElement(db.sales).id,
             created_at: randomDate().toISOString(),
         };
     });

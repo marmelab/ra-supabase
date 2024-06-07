@@ -12,13 +12,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import {
-    endOfYesterday,
-    startOfWeek,
-    startOfMonth,
-    subMonths,
-    subWeeks,
-} from 'date-fns';
+import { endOfYesterday, startOfWeek, startOfMonth, subMonths } from 'date-fns';
 
 import { Status } from '../misc/Status';
 
@@ -29,9 +23,9 @@ export const ContactListFilter = () => {
         sort: { field: 'name', order: 'ASC' },
     });
     return (
-        <Box width="13em" minWidth="13em" order={-1} mr={2} mt={7}>
+        <Box width="13em" minWidth="13em" order={-1} mr={2} mt={5}>
             <FilterLiveSearch
-                source="fts@fts"
+                hiddenLabel
                 sx={{
                     display: 'block',
                     '& .MuiFilledInput-root': { width: '100%' },
@@ -41,49 +35,36 @@ export const ContactListFilter = () => {
                 <FilterListItem
                     label="Today"
                     value={{
-                        'last_seen@gte': endOfYesterday().toISOString(),
-                        'last_seen@lte': undefined,
+                        last_seen_gte: endOfYesterday().toISOString(),
+                        last_seen_lte: undefined,
                     }}
                 />
                 <FilterListItem
                     label="This week"
                     value={{
-                        'last_seen@gte': startOfWeek(new Date()).toISOString(),
-                        'last_seen@lte': undefined,
+                        last_seen_gte: startOfWeek(new Date()).toISOString(),
+                        last_seen_lte: undefined,
                     }}
                 />
                 <FilterListItem
-                    label="Last week"
+                    label="Before this week"
                     value={{
-                        'last_seen@gte': subWeeks(
-                            startOfWeek(new Date()),
-                            1
-                        ).toISOString(),
-                        'last_seen@lte': startOfWeek(new Date()).toISOString(),
+                        last_seen_gte: undefined,
+                        last_seen_lte: startOfWeek(new Date()).toISOString(),
                     }}
                 />
                 <FilterListItem
-                    label="This month"
+                    label="Before this month"
                     value={{
-                        'last_seen@gte': startOfMonth(new Date()).toISOString(),
-                        'last_seen@lte': undefined,
+                        last_seen_gte: undefined,
+                        last_seen_lte: startOfMonth(new Date()).toISOString(),
                     }}
                 />
                 <FilterListItem
-                    label="Last month"
+                    label="Before last month"
                     value={{
-                        'last_seen@gte': subMonths(
-                            startOfMonth(new Date()),
-                            1
-                        ).toISOString(),
-                        'last_seen@lte': startOfMonth(new Date()).toISOString(),
-                    }}
-                />
-                <FilterListItem
-                    label="Earlier"
-                    value={{
-                        'last_seen@gte': undefined,
-                        'last_seen@lte': subMonths(
+                        last_seen_gte: undefined,
+                        last_seen_lte: subMonths(
                             startOfMonth(new Date()),
                             1
                         ).toISOString(),
@@ -140,7 +121,7 @@ export const ContactListFilter = () => {
                                     }}
                                 />
                             }
-                            value={{ 'tags@cs': `{${record.id}}` }}
+                            value={{ tags: [record.id] }}
                         />
                     ))}
             </FilterList>

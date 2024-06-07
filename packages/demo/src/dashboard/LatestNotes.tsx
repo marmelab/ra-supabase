@@ -58,22 +58,17 @@ export const LatestNotes = () => {
                 <Box ml={2} mr={2} display="flex">
                     <NoteIcon color="disabled" fontSize="large" />
                 </Box>
-                <Typography
-                    variant="h5"
-                    color="textSecondary"
-                    id="latest-notes"
-                >
+                <Typography variant="h5" color="textSecondary">
                     My Latest Notes
                 </Typography>
             </Box>
             <Card>
-                <CardContent role="list" aria-describedby="latest-notes">
+                <CardContent>
                     {allNotes.map(note => (
                         <Box
                             id={`${note.type}_${note.id}`}
                             key={`${note.type}_${note.id}`}
                             sx={{ marginBottom: 2 }}
-                            role="listitem"
                         >
                             <Typography variant="body2" color="textSecondary">
                                 on{' '}
@@ -136,7 +131,7 @@ const Contact = ({ note }: any) => (
         >
             <FunctionField<ContactType>
                 variant="body2"
-                render={(contact?: ContactType) =>
+                render={contact =>
                     contact ? `${contact.first_name} ${contact.last_name}` : ''
                 }
             />
