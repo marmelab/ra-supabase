@@ -72,7 +72,6 @@ import {
  * );
  */
 export const LoginPage = (props: LoginPageProps) => {
-    useRedirectIfAuthenticated();
     const {
         children,
         disableEmailPassword = false,

@@ -61,5 +61,8 @@
     ],
     "jest": {
         "testEnvironment": "jsdom"
+    },
+    "dependencies": {
+        "ra-core": "^4.16.17"
     }
 }

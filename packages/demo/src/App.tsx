@@ -38,7 +38,7 @@ const App = () => (
             i18nProvider={i18nProvider}
             layout={Layout}
             dashboard={Dashboard}
-            loginPage={LoginPage}
+            loginPage={<LoginPage />}
             queryClient={queryClient}
             theme={{
                 ...defaultTheme,
