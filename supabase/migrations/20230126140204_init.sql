@@ -45,7 +45,8 @@ create table "public"."contacts" (
     "has_newsletter" boolean not null,
     "status" character varying not null,
     "tags" bigint[] not null,
-    "sales_id" bigint not null
+    "sales_id" bigint not null,
+    "nb_notes" smallint not null
 );
 
 
