@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0
+
+* Update supabase-js dev to match new auth system ([#55](https://github.com/marmelab/ra-supabase/pull/55)) ([Revarh](https://github.com/Revarh))
+* [TypeScript] Allow react-router To type for UseRedirectIfAuthenticatedOptions ([#56](https://github.com/marmelab/ra-supabase/pull/56)) ([MohammedFaragallah](https://github.com/MohammedFaragallah))
+
 ## 2.2.0
 
 - Add `getPermissions` support in `authProvider`
