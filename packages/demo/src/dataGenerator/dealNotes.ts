@@ -12,7 +12,6 @@ export const generateDealNotes = (db: Db) => {
         const date = company
             ? randomDate(new Date(company.created_at)).toISOString()
             : randomDate().toISOString();
-        deal.nb_notes++;
         return {
             id,
             deal_id: deal.id,

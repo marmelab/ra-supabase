@@ -44,8 +44,7 @@ create table "public"."contacts" (
     "has_newsletter" boolean not null,
     "status" character varying not null,
     "tags" bigint[] not null,
-    "sales_id" bigint not null,
-    "nb_notes" smallint not null default 0
+    "sales_id" bigint not null
 );
 
 
@@ -72,8 +71,7 @@ create table "public"."deals" (
     "updated_at" timestamp without time zone not null,
     "start_at" timestamp without time zone not null,
     "sales_id" bigint not null,
-    "index" bigint not null,
-    "nb_notes" smallint not null default 0
+    "index" bigint not null
 );
 
 

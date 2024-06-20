@@ -51,7 +51,6 @@ export const Note = ({
                 notify('Note deleted', { type: 'info', undoable: true });
                 update(reference, {
                     id: record.id,
-                    data: { nb_notes: record.nb_notes - 1 },
                     previousData: record,
                 });
             },

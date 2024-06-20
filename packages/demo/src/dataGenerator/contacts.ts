@@ -76,7 +76,6 @@ export const generateContacts = (db: Db): Contact[] => {
                 .arrayElements(db.tags, random.arrayElement([0, 0, 0, 1, 1, 2]))
                 .map(tag => tag.id), // finalize
             sales_id: company.sales_id,
-            nb_notes: 0,
         };
     });
 };

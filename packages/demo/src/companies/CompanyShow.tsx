@@ -39,6 +39,7 @@ import { LogoField } from './LogoField';
 import { CompanyAside } from './CompanyAside';
 import { Company, Deal, Contact } from '../types';
 import { stageNames } from '../deals/stages';
+import { NbRelations } from '../misc/NbRelations';
 
 export const CompanyShow = () => (
     <ShowBase>
@@ -185,16 +186,16 @@ const ContactsIterator = () => {
                             secondary={
                                 <>
                                     {contact.title}
-                                    {contact.nb_notes
-                                        ? ` - ${contact.nb_notes} note${
-                                              contact.nb_notes > 1 ? 's' : ''
-                                          }`
-                                        : ''}
-                                    {contact.nb_tasks
-                                        ? ` - ${contact.nb_tasks} task${
-                                              contact.nb_tasks > 1 ? 's' : ''
-                                          }`
-                                        : ''}
+                                    <NbRelations
+                                        label="note"
+                                        reference="contactNotes"
+                                        target="contact_id"
+                                    />
+                                    <NbRelations
+                                        label="task"
+                                        reference="tasks"
+                                        target="contact_id"
+                                    />
                                     &nbsp; &nbsp;
                                     <TagsList />
                                 </>

@@ -51,7 +51,6 @@ export const generateDeals = (db: Db): Deal[] => {
             ).toISOString(),
             sales_id: company.sales_id,
             index: 0,
-            nb_notes: 0,
         };
     });
     // compute index based on stage

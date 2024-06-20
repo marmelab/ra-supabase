@@ -110,7 +110,7 @@ async function main() {
     });
     const { data: persistedDeals, error: errorDeals } = await supabase
         .from('deals')
-        .insert(deals.map(({ nb_notes, id, ...deal }) => deal))
+        .insert(deals.map(({ id, ...deal }) => deal))
         .select();
 
     if (errorDeals) {

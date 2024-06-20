@@ -34,6 +34,7 @@ import { Status } from '../misc/Status';
 import { TagsList } from './TagsList';
 import { ContactListFilter } from './ContactListFilter';
 import { Contact } from '../types';
+import { NbRelations } from '../misc/NbRelations';
 
 const ContactListContent = () => {
     const {
@@ -91,20 +92,16 @@ const ContactListContent = () => {
                                         >
                                             <TextField source="name" />
                                         </ReferenceField>
-                                        {contact.nb_notes
-                                            ? ` - ${contact.nb_notes} note${
-                                                  contact.nb_notes > 1
-                                                      ? 's'
-                                                      : ''
-                                              }`
-                                            : ''}
-                                        {contact.nb_tasks
-                                            ? ` - ${contact.nb_tasks} task${
-                                                  contact.nb_tasks > 1
-                                                      ? 's'
-                                                      : ''
-                                              }`
-                                            : ''}
+                                        <NbRelations
+                                            label="note"
+                                            reference="contactNotes"
+                                            target="contact_id"
+                                        />
+                                        <NbRelations
+                                            label="task"
+                                            reference="tasks"
+                                            target="contact_id"
+                                        />
                                         &nbsp;&nbsp;
                                         <TagsList />
                                     </>
