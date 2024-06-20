@@ -85,6 +85,7 @@ export const Task = ({
                                             .toISOString()
                                             .slice(0, 10),
                                     },
+                                    previousData: task,
                                 });
                                 handleClose();
                             }}
@@ -102,6 +103,7 @@ export const Task = ({
                                             .toISOString()
                                             .slice(0, 10),
                                     },
+                                    previousData: task,
                                 });
                                 handleClose();
                             }}
