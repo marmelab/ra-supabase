@@ -44,7 +44,6 @@ export interface Contact extends RaRecord {
 
 export interface ContactNote extends RaRecord {
     contact_id: Identifier;
-    type: string;
     text: string;
     date: string;
     sales_id: Identifier;

@@ -26,9 +26,9 @@ const LoadingGridList = () => (
 );
 
 const LoadedGridList = () => {
-    const { data, isLoading } = useListContext<Company>();
+    const { data, error, isLoading } = useListContext<Company>();
 
-    if (isLoading) return null;
+    if (isLoading || error) return null;
 
     return (
         <Box display="flex" flexWrap="wrap" width="100%" gap={1}>

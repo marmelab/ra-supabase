@@ -70,7 +70,11 @@ export const LatestNotes = () => {
                             key={`${note.type}_${note.id}`}
                             sx={{ marginBottom: 2 }}
                         >
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                component="div"
+                            >
                                 on{' '}
                                 {note.type === 'dealNote' ? (
                                     <Deal note={note} />
@@ -131,9 +135,7 @@ const Contact = ({ note }: any) => (
         >
             <FunctionField<ContactType>
                 variant="body2"
-                render={contact =>
-                    contact ? `${contact.first_name} ${contact.last_name}` : ''
-                }
+                render={contact => `${contact.first_name} ${contact.last_name}`}
             />
         </ReferenceField>
     </>

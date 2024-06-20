@@ -10,7 +10,7 @@ import {
     Identifier,
     useResourceContext,
 } from 'react-admin';
-import { Box, TextField as TextInput, Button } from '@mui/material';
+import { Box, TextField as TextInput, Button, Stack } from '@mui/material';
 
 import { StatusSelector } from './StatusSelector';
 
@@ -34,6 +34,7 @@ export const NewNote = ({
     if (!record || !identity) return null;
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        console.log(record.type);
         event.preventDefault();
         const data: any = {
             [foreignKeyMapping[reference]]: record.id,
@@ -41,6 +42,9 @@ export const NewNote = ({
             date,
             text,
         };
+        if (record.type) {
+            data.type = record.type;
+        }
         if (showStatus) {
             data.status = status;
         }
@@ -54,11 +58,7 @@ export const NewNote = ({
                     refetch();
                     update(reference, {
                         id: (record && record.id) as unknown as Identifier,
-                        data: {
-                            last_seen: date,
-                            status,
-                            nb_notes: record.nb_notes + 1,
-                        },
+                        data: { last_seen: date, status },
                         previousData: record,
                     });
                 },
@@ -84,7 +84,7 @@ export const NewNote = ({
                 <Box display="flex" justifyContent="space-between" mt={1}>
                     <span>
                         {text ? (
-                            <>
+                            <Stack direction="row">
                                 {showStatus && (
                                     <StatusSelector
                                         status={status}
@@ -116,7 +116,7 @@ export const NewNote = ({
                                         },
                                     }}
                                 />
-                            </>
+                            </Stack>
                         ) : null}
                     </span>
                     <Button

@@ -63,7 +63,13 @@ const App = () => (
             <Resource name="contacts" {...contacts} />
             <Resource name="companies" {...companies} />
             <Resource name="tasks" list={ListGuesser} />
-            <Resource name="sales" list={ListGuesser} />
+            <Resource
+                name="sales"
+                list={ListGuesser}
+                recordRepresentation={(record: any) =>
+                    `${record.first_name} ${record.last_name}`
+                }
+            />
             <Resource name="tags" list={ListGuesser} />
         </Admin>
     </BrowserRouter>
