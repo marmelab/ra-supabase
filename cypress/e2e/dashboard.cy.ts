@@ -5,14 +5,13 @@ describe('Dashboard spec', () => {
         cy.visit('/');
         login();
         cy.findByText('Upcoming Deal Revenue').should('exist');
-        cy.findByRole('list', { description: 'My Latest Notes' }).within(() => {
-            cy.findAllByRole('listitem').should('have.length.gt', 0);
-        });
-        cy.findByRole('list', { description: 'Hot contacts' }).within(() => {
-            cy.findAllByRole('listitem').should('have.length.gt', 0);
-        });
-        cy.findByRole('list', { description: 'Deals Pipeline' }).within(() => {
-            cy.findAllByRole('listitem').should('have.length.gt', 0);
-        });
+        cy.findByText('My Latest Notes').should('exist');
+        cy.findByText('Upcoming tasks').should('exist');
+        cy.findByText('Hot contacts').should('exist');
+        cy.findByTestId('my-latest-notes')
+            .find('p')
+            .should('have.length.gt', 0);
+        cy.findByTestId('tasks-list').find('li').should('have.length.gt', 0);
+        cy.findByTestId('hot-contacts').find('li').should('have.length.gt', 0);
     });
 });

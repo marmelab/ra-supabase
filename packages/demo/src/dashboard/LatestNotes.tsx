@@ -53,7 +53,7 @@ export const LatestNotes = () => {
         .slice(0, 5);
 
     return (
-        <div>
+        <div data-testid="my-latest-notes">
             <Box display="flex" alignItems="center" marginBottom="1em">
                 <Box ml={2} mr={2} display="flex">
                     <NoteIcon color="disabled" fontSize="large" />

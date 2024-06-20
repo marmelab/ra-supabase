@@ -53,7 +53,7 @@ export const TasksList = () => {
     if (isPending || !tasks || !contacts) return null;
 
     return (
-        <>
+        <div data-testid="tasks-list">
             <Box display="flex" alignItems="center" marginBottom="1em">
                 <Box ml={2} mr={2} display="flex">
                     <AssignmentTurnedInIcon color="disabled" fontSize="large" />
@@ -84,6 +84,6 @@ export const TasksList = () => {
                     </Button>
                 )}
             </Card>
-        </>
+        </div>
     );
 };
