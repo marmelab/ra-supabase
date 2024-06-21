@@ -29,6 +29,8 @@ describe('useRedirectIfAuthenticated', () => {
             setPassword: jest.fn(),
         };
 
+        const pushState = jest.spyOn(window.history, 'pushState');
+
         render(
             <TestMemoryRouter initialEntries={['/login']}>
                 <CoreAdminContext authProvider={authProvider}>
@@ -39,7 +41,7 @@ describe('useRedirectIfAuthenticated', () => {
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(window.history.pushState).toHaveBeenCalledTimes(0);
+            expect(pushState).toHaveBeenCalledTimes(0);
         });
     });
 
@@ -53,6 +55,8 @@ describe('useRedirectIfAuthenticated', () => {
             setPassword: jest.fn(),
         };
 
+        const pushState = jest.spyOn(window.history, 'pushState');
+
         render(
             <TestMemoryRouter initialEntries={['/login']}>
                 <CoreAdminContext authProvider={authProvider}>
@@ -63,7 +67,7 @@ describe('useRedirectIfAuthenticated', () => {
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(window.history.pushState).toHaveBeenCalledWith(
+            expect(pushState).toHaveBeenCalledWith(
                 {
                     hash: '',
                     pathname: '/',
@@ -85,6 +89,8 @@ describe('useRedirectIfAuthenticated', () => {
             setPassword: jest.fn(),
         };
 
+        const pushState = jest.spyOn(window.history, 'pushState');
+
         render(
             <TestMemoryRouter initialEntries={['/login']}>
                 <CoreAdminContext authProvider={authProvider}>
@@ -95,7 +101,7 @@ describe('useRedirectIfAuthenticated', () => {
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(window.history.pushState).toHaveBeenCalledWith(
+            expect(pushState).toHaveBeenCalledWith(
                 { hash: '', pathname: '/dashboard', search: '' },
                 undefined,
                 {}

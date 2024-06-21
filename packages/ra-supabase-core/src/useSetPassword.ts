@@ -5,7 +5,7 @@ import {
     useNotify,
     useRedirect,
 } from 'ra-core';
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { SetPasswordParams, SupabaseAuthProvider } from './authProvider';
 
 /**
@@ -37,9 +37,9 @@ import { SetPasswordParams, SupabaseAuthProvider } from './authProvider';
 export const useSetPassword = (
     options?: UseSetPasswordOptions
 ): [
-    UseMutationResult<unknown, Error, SetPasswordParams>['mutate'],
-    UseMutationResult<unknown, Error, SetPasswordParams>
-] => {
+        UseMutationResult<unknown, Error, SetPasswordParams>['mutate'],
+        UseMutationResult<unknown, Error, SetPasswordParams>
+    ] => {
     const notify = useNotify();
     const redirect = useRedirect();
     const authProvider = useAuthProvider<SupabaseAuthProvider>();
