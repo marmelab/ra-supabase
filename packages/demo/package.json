@@ -4,7 +4,7 @@
     "private": true,
     "dependencies": {
         "@mui/icons-material": "^5.0.1",
-        "@mui/material": "^5.0.2",
+        "@mui/material": "^5.15.20",
         "@nivo/bar": "^0.80.0",
         "@nivo/core": "^0.80.0",
         "@vitejs/plugin-react": "^2.2.0",
@@ -16,7 +16,7 @@
         "ra-data-fakerest": "^4.0.0",
         "ra-supabase": "^2.3.0",
         "react": "^18.2.0",
-        "react-admin": "^4.0.0",
+        "react-admin": "^5.0.0",
         "react-beautiful-dnd": "^13.0.0",
         "react-dom": "^18.2.0",
         "react-error-boundary": "^3.1.4",

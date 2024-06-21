@@ -1,4 +1,4 @@
-import { onError, OnSuccess, useAuthProvider, useNotify } from 'ra-core';
+import { OnError, OnSuccess, useAuthProvider, useNotify } from 'ra-core';
 import { useMutation, UseMutationResult } from 'react-query';
 import { ResetPasswordParams, SupabaseAuthProvider } from './authProvider';
 
@@ -54,5 +54,5 @@ export const useResetPassword = (
 
 export type UseResetPasswordOptions = {
     onSuccess?: OnSuccess;
-    onError?: onError;
+    onError?: OnError;
 };

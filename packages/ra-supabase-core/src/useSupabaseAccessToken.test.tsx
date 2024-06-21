@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import { createMemoryHistory } from 'history';
-import { CoreAdminContext } from 'ra-core';
+import { CoreAdminContext, TestMemoryRouter } from 'react-admin';
 import {
     useSupabaseAccessToken,
     UseSupabaseAccessTokenOptions,
@@ -21,14 +20,13 @@ describe.skip('useSupabaseAccessToken', () => {
             'React Admin',
             '/set-password?access_token=bazinga'
         );
-        const history = createMemoryHistory({
-            initialEntries: ['/set-password'],
-        });
 
         const { queryByText } = render(
-            <CoreAdminContext history={history}>
-                <UseSupabaseAccessToken />
-            </CoreAdminContext>
+            <TestMemoryRouter initialEntries={['/set-password']}>
+                <CoreAdminContext>
+                    <UseSupabaseAccessToken />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         await waitFor(() => {
@@ -42,14 +40,13 @@ describe.skip('useSupabaseAccessToken', () => {
             'React Admin',
             '/set-password?my_token=bazinga'
         );
-        const history = createMemoryHistory({
-            initialEntries: ['/set-password'],
-        });
 
         const { queryByText } = render(
-            <CoreAdminContext history={history}>
-                <UseSupabaseAccessToken parameterName="my_token" />
-            </CoreAdminContext>
+            <TestMemoryRouter initialEntries={['/set-password']}>
+                <CoreAdminContext>
+                    <UseSupabaseAccessToken parameterName="my_token" />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         await waitFor(() => {
@@ -59,52 +56,49 @@ describe.skip('useSupabaseAccessToken', () => {
 
     test('should redirect users if the access token is not present in the URL', async () => {
         window.history.pushState({}, 'React Admin', '/set-password');
-        const history = createMemoryHistory({
-            initialEntries: ['/set-password'],
-        });
 
         render(
-            <CoreAdminContext history={history}>
-                <UseSupabaseAccessToken />
-            </CoreAdminContext>
+            <TestMemoryRouter initialEntries={['/set-password']}>
+                <CoreAdminContext>
+                    <UseSupabaseAccessToken />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         await waitFor(() => {
-            expect(history.location.pathname).toEqual('/');
+            expect(window.location.pathname).toEqual('/');
         });
     });
 
     test('should redirect users to the provided path if the access token is not present in the URL', async () => {
         window.history.pushState({}, 'React Admin', '/set-password');
-        const history = createMemoryHistory({
-            initialEntries: ['/set-password'],
-        });
 
         render(
-            <CoreAdminContext history={history}>
-                <UseSupabaseAccessToken redirectTo="/login" />
-            </CoreAdminContext>
+            <TestMemoryRouter initialEntries={['/set-password']}>
+                <CoreAdminContext>
+                    <UseSupabaseAccessToken redirectTo="/login" />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         await waitFor(() => {
-            expect(history.location.pathname).toEqual('/login');
+            expect(window.location.pathname).toEqual('/login');
         });
     });
 
     test('should not redirect users if the access token is not present in the URL and redirectTo is false', async () => {
         window.history.pushState({}, 'React Admin', '/set-password');
-        const history = createMemoryHistory({
-            initialEntries: ['/set-password'],
-        });
 
         render(
-            <CoreAdminContext history={history}>
-                <UseSupabaseAccessToken redirectTo={false} />
-            </CoreAdminContext>
+            <TestMemoryRouter initialEntries={['/set-password']}>
+                <CoreAdminContext>
+                    <UseSupabaseAccessToken redirectTo={false} />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         await waitFor(() => {
-            expect(history.location.pathname).toEqual('/set-password');
+            expect(window.location.pathname).toEqual('/set-password');
         });
     });
 });

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { CoreAdminContext } from 'ra-core';
+import { CoreAdminContext, TestMemoryRouter } from 'react-admin';
 import { render, waitFor } from '@testing-library/react';
-import { createMemoryHistory } from 'history';
 import {
     useRedirectIfAuthenticated,
     UseRedirectIfAuthenticatedOptions,
@@ -29,18 +28,18 @@ describe('useRedirectIfAuthenticated', () => {
             getPermissions: jest.fn(),
             setPassword: jest.fn(),
         };
-        const history = createMemoryHistory({ initialEntries: ['/login'] });
-        const push = jest.spyOn(history, 'push');
 
         render(
-            <CoreAdminContext authProvider={authProvider} history={history}>
-                <UseRedirectIfAuthenticated />
-            </CoreAdminContext>
+            <TestMemoryRouter initialEntries={['/login']}>
+                <CoreAdminContext authProvider={authProvider}>
+                    <UseRedirectIfAuthenticated />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledTimes(0);
+            expect(window.history.pushState).toHaveBeenCalledTimes(0);
         });
     });
 
@@ -53,18 +52,18 @@ describe('useRedirectIfAuthenticated', () => {
             getPermissions: jest.fn(),
             setPassword: jest.fn(),
         };
-        const history = createMemoryHistory({ initialEntries: ['/login'] });
-        const push = jest.spyOn(history, 'push');
 
         render(
-            <CoreAdminContext authProvider={authProvider} history={history}>
-                <UseRedirectIfAuthenticated />
-            </CoreAdminContext>
+            <TestMemoryRouter initialEntries={['/login']}>
+                <CoreAdminContext authProvider={authProvider}>
+                    <UseRedirectIfAuthenticated />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith(
+            expect(window.history.pushState).toHaveBeenCalledWith(
                 {
                     hash: '',
                     pathname: '/',
@@ -85,18 +84,18 @@ describe('useRedirectIfAuthenticated', () => {
             getPermissions: jest.fn(),
             setPassword: jest.fn(),
         };
-        const history = createMemoryHistory({ initialEntries: ['/login'] });
-        const push = jest.spyOn(history, 'push');
 
         render(
-            <CoreAdminContext authProvider={authProvider} history={history}>
-                <UseRedirectIfAuthenticated redirectTo="/dashboard" />
-            </CoreAdminContext>
+            <TestMemoryRouter initialEntries={['/login']}>
+                <CoreAdminContext authProvider={authProvider}>
+                    <UseRedirectIfAuthenticated redirectTo="/dashboard" />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith(
+            expect(window.history.pushState).toHaveBeenCalledWith(
                 { hash: '', pathname: '/dashboard', search: '' },
                 undefined,
                 {}

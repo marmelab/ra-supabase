@@ -1,5 +1,5 @@
 import {
-    onError,
+    OnError,
     OnSuccess,
     useAuthProvider,
     useNotify,
@@ -61,5 +61,5 @@ export const useSetPassword = (
 
 export type UseSetPasswordOptions = {
     onSuccess?: OnSuccess;
-    onError?: onError;
+    onError?: OnError;
 };
