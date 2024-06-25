@@ -37,9 +37,9 @@ import { SetPasswordParams, SupabaseAuthProvider } from './authProvider';
 export const useSetPassword = (
     options?: UseSetPasswordOptions
 ): [
-        UseMutationResult<unknown, Error, SetPasswordParams>['mutate'],
-        UseMutationResult<unknown, Error, SetPasswordParams>
-    ] => {
+    UseMutationResult<unknown, Error, SetPasswordParams>['mutate'],
+    UseMutationResult<unknown, Error, SetPasswordParams>
+] => {
     const notify = useNotify();
     const redirect = useRedirect();
     const authProvider = useAuthProvider<SupabaseAuthProvider>();

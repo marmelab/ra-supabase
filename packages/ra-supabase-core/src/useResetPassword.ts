@@ -29,9 +29,9 @@ import { ResetPasswordParams, SupabaseAuthProvider } from './authProvider';
 export const useResetPassword = (
     options?: UseResetPasswordOptions
 ): [
-        UseMutationResult<unknown, Error, ResetPasswordParams>['mutate'],
-        UseMutationResult<unknown, Error, ResetPasswordParams>
-    ] => {
+    UseMutationResult<unknown, Error, ResetPasswordParams>['mutate'],
+    UseMutationResult<unknown, Error, ResetPasswordParams>
+] => {
     const notify = useNotify();
     const authProvider = useAuthProvider<SupabaseAuthProvider>();
 
