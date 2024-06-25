@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { CoreAdminContext, TestMemoryRouter } from 'react-admin';
+import { CoreAdminContext } from 'react-admin';
 import { render, waitFor } from '@testing-library/react';
 import { useSetPassword, UseSetPasswordOptions } from './useSetPassword';
 

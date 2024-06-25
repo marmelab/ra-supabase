@@ -38,8 +38,5 @@
         "watch": "tsc --outDir esm --module es2015 --watch",
         "lint": "eslint --fix ./src",
         "test-unit": "jest ./src"
-    },
-    "jest": {
-        "testEnvironment": "jsdom"
     }
 }

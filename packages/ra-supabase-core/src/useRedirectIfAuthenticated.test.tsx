@@ -29,10 +29,14 @@ describe('useRedirectIfAuthenticated', () => {
             setPassword: jest.fn(),
         };
 
-        const pushState = jest.spyOn(window.history, 'pushState');
-
+        let location;
         render(
-            <TestMemoryRouter initialEntries={['/login']}>
+            <TestMemoryRouter
+                initialEntries={['/login']}
+                locationCallback={l => {
+                    location = l;
+                }}
+            >
                 <CoreAdminContext authProvider={authProvider}>
                     <UseRedirectIfAuthenticated />
                 </CoreAdminContext>
@@ -40,9 +44,13 @@ describe('useRedirectIfAuthenticated', () => {
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
-        await waitFor(() => {
-            expect(pushState).toHaveBeenCalledTimes(0);
-        });
+        expect(location).toEqual(
+            expect.objectContaining({
+                hash: '',
+                pathname: '/login',
+                search: '',
+            })
+        );
     });
 
     test('should redirect users if they are authenticated', async () => {
@@ -55,10 +63,14 @@ describe('useRedirectIfAuthenticated', () => {
             setPassword: jest.fn(),
         };
 
-        const pushState = jest.spyOn(window.history, 'pushState');
-
+        let location;
         render(
-            <TestMemoryRouter initialEntries={['/login']}>
+            <TestMemoryRouter
+                initialEntries={['/login']}
+                locationCallback={l => {
+                    location = l;
+                }}
+            >
                 <CoreAdminContext authProvider={authProvider}>
                     <UseRedirectIfAuthenticated />
                 </CoreAdminContext>
@@ -67,14 +79,12 @@ describe('useRedirectIfAuthenticated', () => {
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(pushState).toHaveBeenCalledWith(
-                {
+            expect(location).toEqual(
+                expect.objectContaining({
                     hash: '',
                     pathname: '/',
                     search: '',
-                },
-                undefined,
-                {}
+                })
             );
         });
     });
@@ -89,10 +99,14 @@ describe('useRedirectIfAuthenticated', () => {
             setPassword: jest.fn(),
         };
 
-        const pushState = jest.spyOn(window.history, 'pushState');
-
+        let location;
         render(
-            <TestMemoryRouter initialEntries={['/login']}>
+            <TestMemoryRouter
+                initialEntries={['/login']}
+                locationCallback={l => {
+                    location = l;
+                }}
+            >
                 <CoreAdminContext authProvider={authProvider}>
                     <UseRedirectIfAuthenticated redirectTo="/dashboard" />
                 </CoreAdminContext>
@@ -101,10 +115,12 @@ describe('useRedirectIfAuthenticated', () => {
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(pushState).toHaveBeenCalledWith(
-                { hash: '', pathname: '/dashboard', search: '' },
-                undefined,
-                {}
+            expect(location).toEqual(
+                expect.objectContaining({
+                    hash: '',
+                    pathname: '/dashboard',
+                    search: '',
+                })
             );
         });
     });
