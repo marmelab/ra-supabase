@@ -49,12 +49,14 @@ export const useSetPassword = (
         onError = error => notify(error.message, { type: 'error' }),
     } = options || {};
 
-    const mutation = useMutation<unknown, Error, SetPasswordParams>(
-        params => {
+    const mutation = useMutation<unknown, Error, SetPasswordParams>({
+        mutationFn: params => {
             return authProvider.setPassword(params);
         },
-        { onSuccess, onError, retry: false }
-    );
+        onSuccess,
+        onError,
+        retry: false,
+    });
 
     return [mutation.mutate, mutation];
 };

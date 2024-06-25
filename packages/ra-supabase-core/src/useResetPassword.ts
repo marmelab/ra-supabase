@@ -42,12 +42,14 @@ export const useResetPassword = (
         onError = error => notify(error.message, { type: 'error' }),
     } = options || {};
 
-    const mutation = useMutation<unknown, Error, ResetPasswordParams>(
-        params => {
+    const mutation = useMutation<unknown, Error, ResetPasswordParams>({
+        mutationFn: params => {
             return authProvider.resetPassword(params);
         },
-        { onSuccess, onError, retry: false }
-    );
+        onSuccess,
+        onError,
+        retry: false,
+    });
 
     return [mutation.mutate, mutation];
 };
