@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CoreAdminContext, TestMemoryRouter } from 'react-admin';
+import { CoreAdminContext, TestMemoryRouter } from 'ra-core';
 import { render, waitFor } from '@testing-library/react';
 import {
     useRedirectIfAuthenticated,
