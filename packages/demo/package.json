@@ -14,7 +14,7 @@
         "faker": "~5.4.0",
         "lodash": "~4.17.5",
         "prop-types": "^15.7.2",
-        "ra-data-fakerest": "^4.0.0",
+        "ra-data-fakerest": "^5.0.0",
         "ra-supabase": "^2.3.0",
         "react": "^18.2.0",
         "react-admin": "^5.0.0",

@@ -17,7 +17,7 @@
     "peerDependencies": {
         "@raphiniert/ra-data-postgrest": "^2.0.0",
         "@supabase/supabase-js": "^2.0.0",
-        "ra-core": "^4.7.0"
+        "ra-core": "^5.0.1"
     },
     "devDependencies": {
         "@raphiniert/ra-data-postgrest": "^2.1.0",
