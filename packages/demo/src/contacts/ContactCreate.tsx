@@ -15,6 +15,7 @@ export const ContactCreate = () => {
                 first_seen: new Date().toISOString(),
                 last_seen: new Date().toISOString(),
                 tags: [],
+                status: 'in-contract',
             })}
         >
             <Box mt={2} display="flex">
