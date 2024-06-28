@@ -141,7 +141,7 @@ export const ContactListFilter = () => {
                                     }}
                                 />
                             }
-                            value={{ tags: `{${record.id}}` }}
+                            value={{ 'tags@cs': `{${record.id}}` }}
                         />
                     ))}
             </FilterList>
