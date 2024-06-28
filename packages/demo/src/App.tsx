@@ -16,7 +16,7 @@ import {
     SetPasswordPage,
     ForgotPasswordPage,
 } from 'ra-supabase';
-import { QueryClient } from 'react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { authProvider } from './authProvider';
 import Layout from './Layout';
 import contacts from './contacts';

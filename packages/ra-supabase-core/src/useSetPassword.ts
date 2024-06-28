@@ -1,11 +1,11 @@
 import {
-    onError,
+    OnError,
     OnSuccess,
     useAuthProvider,
     useNotify,
     useRedirect,
 } from 'ra-core';
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { SetPasswordParams, SupabaseAuthProvider } from './authProvider';
 
 /**
@@ -49,17 +49,19 @@ export const useSetPassword = (
         onError = error => notify(error.message, { type: 'error' }),
     } = options || {};
 
-    const mutation = useMutation<unknown, Error, SetPasswordParams>(
-        params => {
+    const mutation = useMutation<unknown, Error, SetPasswordParams>({
+        mutationFn: params => {
             return authProvider.setPassword(params);
         },
-        { onSuccess, onError, retry: false }
-    );
+        onSuccess,
+        onError,
+        retry: false,
+    });
 
     return [mutation.mutate, mutation];
 };
 
 export type UseSetPasswordOptions = {
     onSuccess?: OnSuccess;
-    onError?: onError;
+    onError?: OnError;
 };
