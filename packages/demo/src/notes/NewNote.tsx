@@ -55,11 +55,13 @@ export const NewNote = ({
                     setText('');
                     notify('Note added successfully');
                     refetch();
-                    update(reference, {
-                        id: (record && record.id) as unknown as Identifier,
-                        data: { last_seen: date, status },
-                        previousData: record,
-                    });
+                    if (reference === 'contacts') {
+                        update(reference, {
+                            id: (record && record.id) as unknown as Identifier,
+                            data: { last_seen: date, status },
+                            previousData: record,
+                        });
+                    }
                 },
             }
         );
