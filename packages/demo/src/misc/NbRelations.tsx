@@ -3,7 +3,7 @@ import {
     useRecordContext,
     useReferenceManyFieldController,
     useTimeout,
-} from 'ra-core';
+} from 'react-admin';
 import ErrorIcon from '@mui/icons-material/Error';
 
 export const NbRelations = (props: NbNotesProps) => {
