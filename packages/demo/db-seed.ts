@@ -91,11 +91,9 @@ async function main() {
                     new Date(a.date).valueOf() - new Date(b.date).valueOf()
             )
             .map(note => {
-                const relatedContact = {
-                    ...persistedContacts.find(
-                        contact => contact.id === note.contact_id
-                    ),
-                };
+                const relatedContact = persistedContacts.find(
+                    contact => contact.id === note.contact_id
+                );
                 return supabase.from('contacts').update({
                     ...relatedContact,
                     status: note.status,

@@ -31,7 +31,7 @@ const type = [
     'None',
 ];
 
-export const generateTasks = (db: Db) => {
+export const generateTasks = (db: Pick<Db, 'contacts'>) => {
     return Array.from(Array(400).keys()).map(id => {
         const contact = random.arrayElement(db.contacts);
         return {

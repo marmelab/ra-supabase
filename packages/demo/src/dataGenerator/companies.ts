@@ -22,7 +22,7 @@ const sizes = [1, 10, 50, 250, 500];
 
 const regex = /\W+/;
 
-export const generateCompanies = (db: Db): Company[] => {
+export const generateCompanies = (db: Pick<Db, 'sales'>): Company[] => {
     return Array.from(Array(55).keys()).map(id => {
         const name = company.companyName();
         return {

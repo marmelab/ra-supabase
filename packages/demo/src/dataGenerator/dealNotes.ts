@@ -5,7 +5,7 @@ import { randomDate } from './utils';
 
 const type = ['Email', 'Call', 'Call', 'Call', 'Call', 'Meeting', 'Reminder'];
 
-export const generateDealNotes = (db: Db) => {
+export const generateDealNotes = (db: Pick<Db, 'companies' | 'deals'>) => {
     return Array.from(Array(300).keys()).map(id => {
         const deal = random.arrayElement(db.deals);
         const company = db.companies[deal.company_id as number];
