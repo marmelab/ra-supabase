@@ -10,6 +10,7 @@ import {
     useListContext,
     RecordContextProvider,
     SortButton,
+    useReferenceManyFieldController,
 } from 'react-admin';
 import {
     Box,
@@ -53,6 +54,22 @@ const CompanyShowContent = () => {
     const handleTabChange = (event: ChangeEvent<{}>, newValue: number) => {
         setTabValue(newValue);
     };
+    const { total: nb_contacts } = useReferenceManyFieldController({
+        page: 1,
+        perPage: 1,
+        source: 'id',
+        reference: 'contacts',
+        target: 'company_id',
+        record,
+    });
+    const { total: nb_deals } = useReferenceManyFieldController({
+        page: 1,
+        perPage: 1,
+        source: 'id',
+        reference: 'deals',
+        target: 'company_id',
+        record,
+    });
     if (isLoading || !record) return null;
     return (
         <Box mt={2} display="flex">
@@ -81,21 +98,21 @@ const CompanyShowContent = () => {
                             textColor="primary"
                             onChange={handleTabChange}
                         >
-                            {record.nb_contacts && (
+                            {nb_contacts && (
                                 <Tab
                                     label={
-                                        record.nb_contacts === 1
+                                        nb_contacts === 1
                                             ? '1 Contact'
-                                            : `${record.nb_contacts} Contacts`
+                                            : `${nb_contacts} Contacts`
                                     }
                                 />
                             )}
-                            {record.nb_deals && (
+                            {nb_deals && (
                                 <Tab
                                     label={
-                                        record.nb_deals === 1
+                                        nb_deals === 1
                                             ? '1 deal'
-                                            : `${record.nb_deals} Deals`
+                                            : `${nb_deals} Deals`
                                     }
                                 />
                             )}
@@ -183,6 +200,9 @@ const ContactsIterator = () => {
                         </ListItemAvatar>
                         <ListItemText
                             primary={`${contact.first_name} ${contact.last_name}`}
+                            secondaryTypographyProps={{
+                                component: 'div',
+                            }}
                             secondary={
                                 <>
                                     {contact.title}
