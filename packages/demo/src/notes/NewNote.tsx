@@ -34,7 +34,6 @@ export const NewNote = ({
     if (!record || !identity) return null;
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        console.log(record.type);
         event.preventDefault();
         const data: any = {
             [foreignKeyMapping[reference]]: record.id,
