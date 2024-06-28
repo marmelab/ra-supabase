@@ -139,7 +139,7 @@ export const supabaseAuthProvider = (
             return Promise.resolve();
         },
         async getPermissions() {
-const { data, error } = await client.auth.getUser();
+            const { data, error } = await client.auth.getUser();
             if (error) {
                 throw error;
             }

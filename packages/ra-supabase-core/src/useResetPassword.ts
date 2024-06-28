@@ -1,5 +1,5 @@
-import { onError, OnSuccess, useAuthProvider, useNotify } from 'ra-core';
-import { useMutation, UseMutationResult } from 'react-query';
+import { OnError, OnSuccess, useAuthProvider, useNotify } from 'ra-core';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { ResetPasswordParams, SupabaseAuthProvider } from './authProvider';
 
 /**
@@ -42,17 +42,19 @@ export const useResetPassword = (
         onError = error => notify(error.message, { type: 'error' }),
     } = options || {};
 
-    const mutation = useMutation<unknown, Error, ResetPasswordParams>(
-        params => {
+    const mutation = useMutation<unknown, Error, ResetPasswordParams>({
+        mutationFn: params => {
             return authProvider.resetPassword(params);
         },
-        { onSuccess, onError, retry: false }
-    );
+        onSuccess,
+        onError,
+        retry: false,
+    });
 
     return [mutation.mutate, mutation];
 };
 
 export type UseResetPasswordOptions = {
     onSuccess?: OnSuccess;
-    onError?: onError;
+    onError?: OnError;
 };

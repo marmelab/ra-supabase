@@ -18,7 +18,7 @@ jobs:
             - name: Use Node.js LTS
               uses: actions/setup-node@v1
               with:
-                  node-version: '16.x'
+                  node-version: '18.x'
             - uses: bahmutov/npm-install@v1
             - name: Build
               run: make build
@@ -39,7 +39,7 @@ jobs:
         - name: Use Node.js LTS
           uses: actions/setup-node@v1
           with:
-              node-version: '16.x'
+              node-version: '18.x'
         - uses: bahmutov/npm-install@v1
         - name: Prepare env
           run: cp -n ./packages/demo/.env.local-example ./packages/demo/.env
@@ -47,7 +47,7 @@ jobs:
           run: make build build-demo
         - uses: supabase/setup-cli@v1.1.5
           with:
-            version: 1.38.6
+            version: 1.131.2
         - name: Start Supabase local development setup
           run: supabase start
         - name: Setup database

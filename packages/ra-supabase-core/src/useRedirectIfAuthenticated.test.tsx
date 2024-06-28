@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { CoreAdminContext } from 'ra-core';
+import { CoreAdminContext, TestMemoryRouter } from 'ra-core';
 import { render, waitFor } from '@testing-library/react';
-import { createMemoryHistory } from 'history';
 import {
     useRedirectIfAuthenticated,
     UseRedirectIfAuthenticatedOptions,
@@ -29,19 +28,29 @@ describe('useRedirectIfAuthenticated', () => {
             getPermissions: jest.fn(),
             setPassword: jest.fn(),
         };
-        const history = createMemoryHistory({ initialEntries: ['/login'] });
-        const push = jest.spyOn(history, 'push');
 
+        let location;
         render(
-            <CoreAdminContext authProvider={authProvider} history={history}>
-                <UseRedirectIfAuthenticated />
-            </CoreAdminContext>
+            <TestMemoryRouter
+                initialEntries={['/login']}
+                locationCallback={l => {
+                    location = l;
+                }}
+            >
+                <CoreAdminContext authProvider={authProvider}>
+                    <UseRedirectIfAuthenticated />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
-        await waitFor(() => {
-            expect(push).toHaveBeenCalledTimes(0);
-        });
+        expect(location).toEqual(
+            expect.objectContaining({
+                hash: '',
+                pathname: '/login',
+                search: '',
+            })
+        );
     });
 
     test('should redirect users if they are authenticated', async () => {
@@ -53,25 +62,29 @@ describe('useRedirectIfAuthenticated', () => {
             getPermissions: jest.fn(),
             setPassword: jest.fn(),
         };
-        const history = createMemoryHistory({ initialEntries: ['/login'] });
-        const push = jest.spyOn(history, 'push');
 
+        let location;
         render(
-            <CoreAdminContext authProvider={authProvider} history={history}>
-                <UseRedirectIfAuthenticated />
-            </CoreAdminContext>
+            <TestMemoryRouter
+                initialEntries={['/login']}
+                locationCallback={l => {
+                    location = l;
+                }}
+            >
+                <CoreAdminContext authProvider={authProvider}>
+                    <UseRedirectIfAuthenticated />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith(
-                {
+            expect(location).toEqual(
+                expect.objectContaining({
                     hash: '',
                     pathname: '/',
                     search: '',
-                },
-                undefined,
-                {}
+                })
             );
         });
     });
@@ -85,21 +98,29 @@ describe('useRedirectIfAuthenticated', () => {
             getPermissions: jest.fn(),
             setPassword: jest.fn(),
         };
-        const history = createMemoryHistory({ initialEntries: ['/login'] });
-        const push = jest.spyOn(history, 'push');
 
+        let location;
         render(
-            <CoreAdminContext authProvider={authProvider} history={history}>
-                <UseRedirectIfAuthenticated redirectTo="/dashboard" />
-            </CoreAdminContext>
+            <TestMemoryRouter
+                initialEntries={['/login']}
+                locationCallback={l => {
+                    location = l;
+                }}
+            >
+                <CoreAdminContext authProvider={authProvider}>
+                    <UseRedirectIfAuthenticated redirectTo="/dashboard" />
+                </CoreAdminContext>
+            </TestMemoryRouter>
         );
 
         expect(authProvider.checkAuth).toHaveBeenCalled();
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith(
-                { hash: '', pathname: '/dashboard', search: '' },
-                undefined,
-                {}
+            expect(location).toEqual(
+                expect.objectContaining({
+                    hash: '',
+                    pathname: '/dashboard',
+                    search: '',
+                })
             );
         });
     });
