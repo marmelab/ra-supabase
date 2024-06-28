@@ -1,11 +1,4 @@
-import {
-    company,
-    internet,
-    address,
-    phone,
-    random,
-    datatype,
-} from 'faker/locale/en_US';
+import { company, internet, address, phone, random } from 'faker/locale/en_US';
 import { randomDate } from './utils';
 
 import { Db } from './types';
@@ -51,7 +44,7 @@ export const generateCompanies = (db: Pick<Db, 'sales'>): Company[] => {
             nb_deals: 0,
             // at least 1/3rd of companies for Jane Doe
             sales_id:
-                datatype.number({ min: 0, max: 2 }) === 0
+                random.number({ min: 0, max: 2 }) === 0
                     ? 0
                     : random.arrayElement(db.sales).id,
             created_at: randomDate().toISOString(),
