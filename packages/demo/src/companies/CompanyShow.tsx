@@ -10,7 +10,6 @@ import {
     useListContext,
     RecordContextProvider,
     SortButton,
-    useReferenceManyFieldController,
 } from 'react-admin';
 import {
     Box,
@@ -41,6 +40,7 @@ import { CompanyAside } from './CompanyAside';
 import { Company, Deal, Contact } from '../types';
 import { stageNames } from '../deals/stages';
 import { NbRelations } from '../misc/NbRelations';
+import { useNbRelations } from '../misc/useNbRelations';
 
 export const CompanyShow = () => (
     <ShowBase>
@@ -54,18 +54,14 @@ const CompanyShowContent = () => {
     const handleTabChange = (event: ChangeEvent<{}>, newValue: number) => {
         setTabValue(newValue);
     };
-    const { total: nb_contacts } = useReferenceManyFieldController({
-        page: 1,
-        perPage: 1,
-        source: 'id',
+    const { total: nb_contacts, label: nb_contacts_label } = useNbRelations({
+        label: 'Contact',
         reference: 'contacts',
         target: 'company_id',
         record,
     });
-    const { total: nb_deals } = useReferenceManyFieldController({
-        page: 1,
-        perPage: 1,
-        source: 'id',
+    const { total: nb_deals, label: nb_deals_label } = useNbRelations({
+        label: 'Deal',
         reference: 'deals',
         target: 'company_id',
         record,
@@ -98,24 +94,8 @@ const CompanyShowContent = () => {
                             textColor="primary"
                             onChange={handleTabChange}
                         >
-                            {nb_contacts && (
-                                <Tab
-                                    label={
-                                        nb_contacts === 1
-                                            ? '1 Contact'
-                                            : `${nb_contacts} Contacts`
-                                    }
-                                />
-                            )}
-                            {nb_deals && (
-                                <Tab
-                                    label={
-                                        nb_deals === 1
-                                            ? '1 deal'
-                                            : `${nb_deals} Deals`
-                                    }
-                                />
-                            )}
+                            {nb_contacts && <Tab label={nb_contacts_label} />}
+                            {nb_deals && <Tab label={nb_deals_label} />}
                         </Tabs>
                         <Divider />
                         <TabPanel value={tabValue} index={0}>

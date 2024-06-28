@@ -1,25 +1,12 @@
 import { Typography, CircularProgress } from '@mui/material';
-import {
-    useRecordContext,
-    useReferenceManyFieldController,
-    useTimeout,
-} from 'react-admin';
+import { RaRecord, useTimeout } from 'react-admin';
 import ErrorIcon from '@mui/icons-material/Error';
+import { useNbRelations } from './useNbRelations';
 
 export const NbRelations = (props: NbNotesProps) => {
-    const record = useRecordContext(props);
-    const { reference, target, label, timeout = 1000 } = props;
-
+    const { timeout = 1000, ...rest } = props;
+    const { isLoading, error, label } = useNbRelations(rest);
     const oneSecondHasPassed = useTimeout(timeout);
-
-    const { isLoading, error, total } = useReferenceManyFieldController({
-        page: 1,
-        perPage: 1,
-        record,
-        reference,
-        source: 'id',
-        target,
-    });
 
     const body = isLoading ? (
         oneSecondHasPassed ? (
@@ -29,8 +16,8 @@ export const NbRelations = (props: NbNotesProps) => {
         )
     ) : error ? (
         <ErrorIcon color="error" fontSize="small" titleAccess="error" />
-    ) : total ? (
-        `- ${total} ${label}${total > 1 ? 's' : ''}`
+    ) : label ? (
+        ` - ${label}`
     ) : (
         ''
     );
@@ -47,4 +34,5 @@ export interface NbNotesProps {
     target: string;
     timeout?: number;
     label: string;
+    record?: RaRecord;
 }
