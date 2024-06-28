@@ -149,7 +149,7 @@ export const ContactList = () => {
         <RaList
             actions={<ContactListActions />}
             aside={<ContactListFilter />}
-            perPage={25}
+            perPage={10}
             pagination={<Pagination rowsPerPageOptions={[10, 25, 50, 100]} />}
             filterDefaultValues={{ sales_id: identity?.id }}
             sort={{ field: 'last_seen', order: 'DESC' }}
