@@ -18,7 +18,7 @@ export const CompanyListFilter = () => {
     const { identity } = useGetIdentity();
     return (
         <Box width="13em" minWidth="13em" order={-1} mr={2} mt={5}>
-            <FilterLiveSearch hiddenLabel />
+            <FilterLiveSearch source="fts@fts" hiddenLabel />
 
             <FilterList label="Size" icon={<BusinessIcon />}>
                 {sizes.map(size => (
