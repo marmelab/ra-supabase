@@ -24,6 +24,8 @@ const isUrl = (value: string) => {
     }
 };
 
+const filterToQuery = (searchText: string) => ({ 'name@ilike': searchText });
+
 export const ContactInputs = () => {
     const [create] = useCreate();
     const { identity } = useGetIdentity();
@@ -75,6 +77,7 @@ export const ContactInputs = () => {
                         onCreate={handleCreateCompany}
                         helperText={false}
                         fullWidth
+                        filterToQuery={filterToQuery}
                     />
                 </ReferenceInput>
             </Stack>
