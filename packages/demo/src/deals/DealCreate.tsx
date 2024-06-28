@@ -16,7 +16,7 @@ import {
     DateInput,
 } from 'react-admin';
 import { Dialog } from '@mui/material';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { stageChoices } from './stages';
 import { typeChoices } from './types';
 import { Deal } from '../types';
