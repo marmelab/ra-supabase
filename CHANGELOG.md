@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0
+
+- The `<LoginPage>` will no longer automatically redirect to the app if the user is already authenticated.
+
 ## 2.2.0
 
 - Add `getPermissions` support in `authProvider`
