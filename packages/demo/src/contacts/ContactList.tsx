@@ -82,6 +82,9 @@ const ContactListContent = () => {
                             </ListItemAvatar>
                             <ListItemText
                                 primary={`${contact.first_name} ${contact.last_name}`}
+                                secondaryTypographyProps={{
+                                    component: 'div',
+                                }}
                                 secondary={
                                     <>
                                         {contact.title} at{' '}
