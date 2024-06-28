@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ReactNode } from 'react';
 
-import { useRedirectIfAuthenticated } from 'ra-supabase-core';
 import { AuthLayout } from './AuthLayout';
 import { LoginForm } from './LoginForm';
 import { Provider } from '@supabase/supabase-js';
@@ -72,7 +71,6 @@ import {
  * );
  */
 export const LoginPage = (props: LoginPageProps) => {
-    useRedirectIfAuthenticated();
     const {
         children,
         disableEmailPassword = false,

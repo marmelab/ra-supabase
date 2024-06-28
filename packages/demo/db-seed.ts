@@ -91,10 +91,11 @@ async function main() {
                     new Date(a.date).valueOf() - new Date(b.date).valueOf()
             )
             .map(note => {
+                const relatedContact = persistedContacts.find(
+                    contact => contact.id === note.contact_id
+                );
                 return supabase.from('contacts').update({
-                    ...persistedContacts.find(
-                        contact => contact.id === note.contact_id
-                    ),
+                    ...relatedContact,
                     status: note.status,
                 });
             })
@@ -107,7 +108,7 @@ async function main() {
     });
     const { data: persistedDeals, error: errorDeals } = await supabase
         .from('deals')
-        .insert(deals.map(({ nb_notes, id, ...deal }) => deal))
+        .insert(deals.map(({ id, ...deal }) => deal))
         .select();
 
     if (errorDeals) {

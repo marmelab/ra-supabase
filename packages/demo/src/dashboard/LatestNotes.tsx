@@ -53,29 +53,28 @@ export const LatestNotes = () => {
         .slice(0, 5);
 
     return (
-        <div>
+        <div data-testid="my-latest-notes">
             <Box display="flex" alignItems="center" marginBottom="1em">
                 <Box ml={2} mr={2} display="flex">
                     <NoteIcon color="disabled" fontSize="large" />
                 </Box>
-                <Typography
-                    variant="h5"
-                    color="textSecondary"
-                    id="latest-notes"
-                >
+                <Typography variant="h5" color="textSecondary">
                     My Latest Notes
                 </Typography>
             </Box>
             <Card>
-                <CardContent role="list" aria-describedby="latest-notes">
+                <CardContent>
                     {allNotes.map(note => (
                         <Box
                             id={`${note.type}_${note.id}`}
                             key={`${note.type}_${note.id}`}
                             sx={{ marginBottom: 2 }}
-                            role="listitem"
                         >
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                component="div"
+                            >
                                 on{' '}
                                 {note.type === 'dealNote' ? (
                                     <Deal note={note} />
@@ -136,9 +135,7 @@ const Contact = ({ note }: any) => (
         >
             <FunctionField<ContactType>
                 variant="body2"
-                render={(contact?: ContactType) =>
-                    contact ? `${contact.first_name} ${contact.last_name}` : ''
-                }
+                render={contact => `${contact.first_name} ${contact.last_name}`}
             />
         </ReferenceField>
     </>

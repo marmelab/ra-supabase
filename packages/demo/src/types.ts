@@ -1,4 +1,4 @@
-import { RaRecord, Identifier } from 'react-admin';
+import { Identifier, RaRecord } from 'react-admin';
 
 export interface Sale extends RaRecord {
     first_name: string;
@@ -18,6 +18,8 @@ export interface Company extends RaRecord {
     zipcode: string;
     city: string;
     stateAbbr: string;
+    nb_contacts: number;
+    nb_deals: number;
     sales_id: Identifier;
     created_at: string;
 }
@@ -35,11 +37,12 @@ export interface Contact extends RaRecord {
     tags: Identifier[];
     gender: string;
     sales_id: Identifier;
+    status: string;
+    background: string;
 }
 
 export interface ContactNote extends RaRecord {
     contact_id: Identifier;
-    type: string;
     text: string;
     date: string;
     sales_id: Identifier;
@@ -56,6 +59,7 @@ export interface Deal extends RaRecord {
     amount: number;
     created_at: string;
     updated_at: string;
+    start_at: string;
     sales_id: Identifier;
     index: number;
 }

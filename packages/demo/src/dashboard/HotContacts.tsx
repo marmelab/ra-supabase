@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Card, Box, Link } from '@mui/material';
+import { Card, Box } from '@mui/material';
 import ContactsIcon from '@mui/icons-material/Contacts';
-import { useGetList, SimpleList, useGetIdentity } from 'react-admin';
+import { useGetList, Link, SimpleList, useGetIdentity } from 'react-admin';
 import { formatDistance } from 'date-fns';
 
 import { Avatar } from '../contacts/Avatar';
@@ -24,7 +23,7 @@ export const HotContacts = () => {
         { enabled: Number.isInteger(identity?.id) }
     );
     return (
-        <>
+        <div data-testid="hot-contacts">
             <Box display="flex" alignItems="center" marginBottom="1em">
                 <Box ml={2} mr={2} display="flex">
                     <ContactsIcon color="disabled" fontSize="large" />
@@ -33,16 +32,13 @@ export const HotContacts = () => {
                     underline="none"
                     variant="h5"
                     color="textSecondary"
-                    component={RouterLink}
                     to="/contacts"
-                    id="hot-contacts"
                 >
                     Hot contacts
                 </Link>
             </Box>
             <Card>
                 <SimpleList<Contact>
-                    aria-describedby="hot-contacts"
                     linkType="show"
                     data={contactData}
                     total={contactTotal}
@@ -61,8 +57,9 @@ export const HotContacts = () => {
                         )
                     }
                     leftAvatar={contact => <Avatar record={contact} />}
+                    dense
                 />
             </Card>
-        </>
+        </div>
     );
 };

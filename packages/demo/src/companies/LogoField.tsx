@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRecordContext } from 'react-admin';
 import { Box } from '@mui/material';
 
-import { Company, Contact } from '../types';
+import { Company } from '../types';
 
 const sizeInPixel = {
     medium: 42,
@@ -14,8 +14,8 @@ export const LogoField = ({
 }: {
     size?: 'small' | 'medium';
 }) => {
-    const record = useRecordContext<Company | Contact>();
-    if (!record) return null;
+    const record = useRecordContext<Company>();
+    if (!record || !record.logo) return null;
     return (
         <Box
             component="img"

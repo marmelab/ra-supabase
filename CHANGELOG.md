@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0
+
+- Upgrade to react-admin v5
+- The `<LoginPage>` will no longer automatically redirect to the app if the user is already authenticated.
+
 ## 2.3.0
 
 * Update supabase-js dev to match new auth system ([#55](https://github.com/marmelab/ra-supabase/pull/55)) ([Revarh](https://github.com/Revarh))

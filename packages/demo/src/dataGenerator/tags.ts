@@ -1,5 +1,3 @@
-import { Db } from './types';
-
 // --champagne-pink: #eddcd2ff;
 // --linen: #fff1e6ff;
 // --pale-pink: #fde2e4ff;

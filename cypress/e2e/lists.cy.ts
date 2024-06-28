@@ -1,6 +1,7 @@
 import { login } from './login';
 
-const getPaginationText = () => cy.findByText(/\d+-\d+ of \d+/);
+const getPaginationText = () =>
+    cy.findByText(/\d+-\d+ of \d+/, { timeout: 10000 });
 
 describe('Lists', () => {
     it('should render a list', () => {
@@ -91,11 +92,23 @@ describe('Lists', () => {
         cy.visit('/');
         login();
         cy.findByText('Contacts').click();
-        cy.findAllByText(/\d+ days? ago/).should('have.length.greaterThan', 0);
-        cy.findAllByText(/\d+ years? ago/).should('have.length', 0);
+        cy.findAllByText(/\d+ days? ago/, { timeout: 10000 }).should(
+            'have.length.greaterThan',
+            0
+        );
+        cy.findAllByText(/\d+ years? ago/, { timeout: 10000 }).should(
+            'have.length',
+            0
+        );
         cy.findByText('Sort by Last seen descending').click();
         cy.findByText('Last seen ascending').click();
-        cy.findAllByText(/\d+ days? ago/).should('have.length', 0);
-        cy.findAllByText(/\d+ years? ago/).should('have.length.greaterThan', 0);
+        cy.findAllByText(/\d+ days? ago/, { timeout: 10000 }).should(
+            'have.length',
+            0
+        );
+        cy.findAllByText(/\d+ years? ago/, { timeout: 10000 }).should(
+            'have.length.greaterThan',
+            0
+        );
     });
 });

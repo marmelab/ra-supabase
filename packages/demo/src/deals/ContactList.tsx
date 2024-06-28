@@ -4,9 +4,9 @@ import { Box, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 export const ContactList = () => {
-    const { data, isLoading } = useListContext();
+    const { data, error, isLoading } = useListContext();
 
-    if (isLoading) return <div style={{ height: '2em' }} />;
+    if (isLoading || error) return <div style={{ height: '2em' }} />;
     return (
         <Box
             component="ul"

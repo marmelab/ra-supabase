@@ -1,24 +1,40 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Paper, Typography, Link as MuiLink, Box } from '@mui/material';
+import { Paper, Typography, Box } from '@mui/material';
 import ContactsIcon from '@mui/icons-material/AccountCircle';
 import DealIcon from '@mui/icons-material/MonetizationOn';
-import { useCreatePath, SelectField, useRecordContext } from 'react-admin';
-import { Link } from 'react-router-dom';
+import {
+    useCreatePath,
+    SelectField,
+    useRecordContext,
+    Link,
+} from 'react-admin';
 
 import { sectors } from './sectors';
 import { CompanyAvatar } from './CompanyAvatar';
 import { Company } from '../types';
+import { useNbRelations } from '../misc/useNbRelations';
 
 export const CompanyCard = (props: { record?: Company }) => {
     const [elevation, setElevation] = useState(1);
     const createPath = useCreatePath();
     const record = useRecordContext<Company>(props);
+    const { total: nb_contacts } = useNbRelations({
+        label: 'Contact',
+        reference: 'contacts',
+        target: 'company_id',
+        record,
+    });
+    const { total: nb_deals } = useNbRelations({
+        label: 'Deal',
+        reference: 'deals',
+        target: 'company_id',
+        record,
+    });
     if (!record) return null;
 
     return (
-        <MuiLink
-            component={Link}
+        <Link
             to={createPath({
                 resource: 'companies',
                 id: record.id,
@@ -57,12 +73,10 @@ export const CompanyCard = (props: { record?: Company }) => {
                         <ContactsIcon color="disabled" sx={{ mr: 1 }} />
                         <div>
                             <Typography variant="subtitle2" sx={{ mb: -1 }}>
-                                {record.nb_contacts}
+                                {nb_contacts}
                             </Typography>
                             <Typography variant="caption" color="textSecondary">
-                                {record.nb_contacts > 1
-                                    ? 'contacts'
-                                    : 'contact'}
+                                {nb_contacts > 1 ? 'contacts' : 'contact'}
                             </Typography>
                         </div>
                     </Box>
@@ -70,15 +84,15 @@ export const CompanyCard = (props: { record?: Company }) => {
                         <DealIcon color="disabled" sx={{ mr: 1 }} />
                         <div>
                             <Typography variant="subtitle2" sx={{ mb: -1 }}>
-                                {record.nb_deals}
+                                {nb_deals}
                             </Typography>
                             <Typography variant="caption" color="textSecondary">
-                                {record.nb_deals > 1 ? 'deals' : 'deal'}
+                                {nb_deals > 1 ? 'deals' : 'deal'}
                             </Typography>
                         </div>
                     </Box>
                 </Box>
             </Paper>
-        </MuiLink>
+        </Link>
     );
 };

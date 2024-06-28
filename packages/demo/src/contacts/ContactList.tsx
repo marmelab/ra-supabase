@@ -34,16 +34,21 @@ import { Status } from '../misc/Status';
 import { TagsList } from './TagsList';
 import { ContactListFilter } from './ContactListFilter';
 import { Contact } from '../types';
+import { NbRelations } from '../misc/NbRelations';
 
 const ContactListContent = () => {
     const {
         data: contacts,
+        error,
         isLoading,
         onToggleItem,
         selectedIds,
     } = useListContext<Contact>();
     if (isLoading) {
         return <SimpleListLoading hasLeftAvatarOrIcon hasSecondaryText />;
+    }
+    if (error) {
+        return null;
     }
     const now = Date.now();
 
@@ -52,7 +57,7 @@ const ContactListContent = () => {
             <BulkActionsToolbar>
                 <BulkDeleteButton />
             </BulkActionsToolbar>
-            <List>
+            <List dense>
                 {contacts.map(contact => (
                     <RecordContextProvider key={contact.id} value={contact}>
                         <ListItem
@@ -89,9 +94,18 @@ const ContactListContent = () => {
                                             link={false}
                                         >
                                             <TextField source="name" />
-                                        </ReferenceField>{' '}
-                                        {contact.nb_notes &&
-                                            `- ${contact.nb_notes} notes `}
+                                        </ReferenceField>
+                                        <NbRelations
+                                            label="note"
+                                            reference="contactNotes"
+                                            target="contact_id"
+                                        />
+                                        <NbRelations
+                                            label="task"
+                                            reference="tasks"
+                                            target="contact_id"
+                                        />
+                                        &nbsp;&nbsp;
                                         <TagsList />
                                     </>
                                 }
@@ -135,7 +149,7 @@ export const ContactList = () => {
         <RaList
             actions={<ContactListActions />}
             aside={<ContactListFilter />}
-            perPage={25}
+            perPage={10}
             pagination={<Pagination rowsPerPageOptions={[10, 25, 50, 100]} />}
             filterDefaultValues={{ sales_id: identity?.id }}
             sort={{ field: 'last_seen', order: 'DESC' }}

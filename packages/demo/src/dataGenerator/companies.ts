@@ -44,7 +44,9 @@ export const generateCompanies = (db: Pick<Db, 'sales'>): Company[] => {
             nb_deals: 0,
             // at least 1/3rd of companies for Jane Doe
             sales_id:
-                random.number(2) === 0 ? 1 : random.arrayElement(db.sales).id,
+                random.number({ min: 0, max: 2 }) === 0
+                    ? 1
+                    : random.arrayElement(db.sales).id,
             created_at: randomDate().toISOString(),
         };
     });

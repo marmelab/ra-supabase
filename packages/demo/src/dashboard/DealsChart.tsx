@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Link } from '@mui/material';
+import { useMemo } from 'react';
+import { Box } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { useGetList } from 'react-admin';
+import { useGetList, Link } from 'react-admin';
 import { startOfMonth, format } from 'date-fns';
 import { ResponsiveBar } from '@nivo/bar';
 
@@ -24,13 +23,12 @@ export const DealsChart = () => {
             order: 'ASC',
         },
     });
-    const [months, setMonths] = useState<any[]>([]);
 
-    useEffect(() => {
-        if (!data) return;
+    const months = useMemo(() => {
+        if (!data) return [];
         const dealsByMonth = data.reduce((acc, deal) => {
             const month = startOfMonth(
-                deal.start_at ? new Date(deal.start_at) : new Date()
+                new Date(deal.start_at) ?? new Date()
             ).toISOString();
             if (!acc[month]) {
                 acc[month] = [];
@@ -66,7 +64,7 @@ export const DealsChart = () => {
             };
         });
 
-        setMonths(amountByMonth);
+        return amountByMonth;
     }, [data]);
 
     if (isLoading) return null; // FIXME return skeleton instead
@@ -90,7 +88,6 @@ export const DealsChart = () => {
                     underline="none"
                     variant="h5"
                     color="textSecondary"
-                    component={RouterLink}
                     to="/deals"
                 >
                     Upcoming Deal Revenue

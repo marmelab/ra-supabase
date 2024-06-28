@@ -9,6 +9,7 @@ import {
     useRecordContext,
     useListContext,
     RecordContextProvider,
+    SortButton,
 } from 'react-admin';
 import {
     Box,
@@ -24,6 +25,7 @@ import {
     Tabs,
     Tab,
     Divider,
+    Stack,
 } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Link as RouterLink } from 'react-router-dom';
@@ -37,6 +39,8 @@ import { LogoField } from './LogoField';
 import { CompanyAside } from './CompanyAside';
 import { Company, Deal, Contact } from '../types';
 import { stageNames } from '../deals/stages';
+import { NbRelations } from '../misc/NbRelations';
+import { useNbRelations } from '../misc/useNbRelations';
 
 export const CompanyShow = () => (
     <ShowBase>
@@ -50,6 +54,18 @@ const CompanyShowContent = () => {
     const handleTabChange = (event: ChangeEvent<{}>, newValue: number) => {
         setTabValue(newValue);
     };
+    const { total: nb_contacts, label: nb_contacts_label } = useNbRelations({
+        label: 'Contact',
+        reference: 'contacts',
+        target: 'company_id',
+        record,
+    });
+    const { total: nb_deals, label: nb_deals_label } = useNbRelations({
+        label: 'Deal',
+        reference: 'deals',
+        target: 'company_id',
+        record,
+    });
     if (isLoading || !record) return null;
     return (
         <Box mt={2} display="flex">
@@ -63,7 +79,8 @@ const CompanyShowContent = () => {
                                     {record.name}
                                 </Typography>
                                 <Typography variant="body2">
-                                    <TextField source="sector" />,{' '}
+                                    <TextField source="sector" />
+                                    {record.size && ', '}
                                     <SelectField
                                         source="size"
                                         choices={sizes}
@@ -77,24 +94,8 @@ const CompanyShowContent = () => {
                             textColor="primary"
                             onChange={handleTabChange}
                         >
-                            {record.nb_contacts && (
-                                <Tab
-                                    label={
-                                        record.nb_contacts === 1
-                                            ? '1 Contact'
-                                            : `${record.nb_contacts} Contacts`
-                                    }
-                                />
-                            )}
-                            {record.nb_deals && (
-                                <Tab
-                                    label={
-                                        record.nb_deals === 1
-                                            ? '1 deal'
-                                            : `${record.nb_deals} Deals`
-                                    }
-                                />
-                            )}
+                            {nb_contacts && <Tab label={nb_contacts_label} />}
+                            {nb_deals && <Tab label={nb_deals_label} />}
                         </Tabs>
                         <Divider />
                         <TabPanel value={tabValue} index={0}>
@@ -103,6 +104,21 @@ const CompanyShowContent = () => {
                                 target="company_id"
                                 sort={{ field: 'last_name', order: 'ASC' }}
                             >
+                                <Stack
+                                    direction="row"
+                                    justifyContent="flex-end"
+                                    spacing={2}
+                                    mt={1}
+                                >
+                                    <SortButton
+                                        fields={[
+                                            'last_name',
+                                            'first_name',
+                                            'last_seen',
+                                        ]}
+                                    />
+                                    <CreateRelatedContactButton />
+                                </Stack>
                                 <ContactsIterator />
                             </ReferenceManyField>
                         </TabPanel>
@@ -151,48 +167,58 @@ const ContactsIterator = () => {
 
     const now = Date.now();
     return (
-        <Box>
-            <List>
-                {contacts.map(contact => (
-                    <RecordContextProvider key={contact.id} value={contact}>
-                        <ListItem
-                            button
-                            component={RouterLink}
-                            to={`/contacts/${contact.id}/show`}
-                        >
-                            <ListItemAvatar>
-                                <Avatar />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={`${contact.first_name} ${contact.last_name}`}
-                                secondary={
-                                    <>
-                                        {contact.title} <TagsList />
-                                    </>
-                                }
-                            />
-                            <ListItemSecondaryAction>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                    component="span"
-                                >
-                                    last activity{' '}
-                                    {formatDistance(
-                                        new Date(contact.last_seen),
-                                        now
-                                    )}{' '}
-                                    ago <Status status={contact.status} />
-                                </Typography>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    </RecordContextProvider>
-                ))}
-            </List>
-            <Box textAlign="center" mt={1}>
-                <CreateRelatedContactButton />
-            </Box>
-        </Box>
+        <List dense sx={{ pt: 0 }}>
+            {contacts.map(contact => (
+                <RecordContextProvider key={contact.id} value={contact}>
+                    <ListItem
+                        button
+                        component={RouterLink}
+                        to={`/contacts/${contact.id}/show`}
+                    >
+                        <ListItemAvatar>
+                            <Avatar />
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={`${contact.first_name} ${contact.last_name}`}
+                            secondaryTypographyProps={{
+                                component: 'div',
+                            }}
+                            secondary={
+                                <>
+                                    {contact.title}
+                                    <NbRelations
+                                        label="note"
+                                        reference="contactNotes"
+                                        target="contact_id"
+                                    />
+                                    <NbRelations
+                                        label="task"
+                                        reference="tasks"
+                                        target="contact_id"
+                                    />
+                                    &nbsp; &nbsp;
+                                    <TagsList />
+                                </>
+                            }
+                        />
+                        <ListItemSecondaryAction>
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                component="span"
+                            >
+                                last activity{' '}
+                                {formatDistance(
+                                    new Date(contact.last_seen),
+                                    now
+                                )}{' '}
+                                ago <Status status={contact.status} />
+                            </Typography>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                </RecordContextProvider>
+            ))}
+        </List>
     );
 };
 
@@ -202,9 +228,8 @@ const CreateRelatedContactButton = () => {
         <Button
             component={RouterLink}
             to="/contacts/create"
-            state={{ record: { company_id: company.id } }}
+            state={company ? { record: { company_id: company.id } } : undefined}
             color="primary"
-            variant="contained"
             size="small"
             startIcon={<PersonAddIcon />}
         >
@@ -220,7 +245,7 @@ const DealsIterator = () => {
     const now = Date.now();
     return (
         <Box>
-            <List>
+            <List dense>
                 {deals.map(deal => (
                     <ListItem
                         button

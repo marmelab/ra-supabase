@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useListFilterContext, useGetIdentity } from 'react-admin';
 import { Box, Switch, FormControlLabel } from '@mui/material';
 
-export const OnlyMineInput = ({ alwaysOn }: { alwaysOn: boolean }) => {
+export const OnlyMineInput = (_: { alwaysOn: boolean; source: string }) => {
     const { filterValues, displayedFilters, setFilters } =
         useListFilterContext();
     const { identity } = useGetIdentity();
@@ -32,5 +32,3 @@ export const OnlyMineInput = ({ alwaysOn }: { alwaysOn: boolean }) => {
         </Box>
     );
 };
-
-OnlyMineInput.defaultProps = { source: 'sales_id' };

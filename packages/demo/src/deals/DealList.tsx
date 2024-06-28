@@ -17,7 +17,7 @@ import { DealShow } from './DealShow';
 import { OnlyMineInput } from './OnlyMineInput';
 import { typeChoices } from './types';
 
-export const DealList = () => {
+const DealList = () => {
     const { identity } = useGetIdentity();
     const location = useLocation();
     const matchCreate = matchPath('/deals/create', location.pathname);
@@ -35,8 +35,8 @@ export const DealList = () => {
                 component="div"
             >
                 <DealListContent />
+                <DealCreate open={!!matchCreate} />
             </List>
-            <DealCreate open={!!matchCreate} />
             <DealShow open={!!matchShow} id={matchShow?.params.id} />
         </>
     );
@@ -44,7 +44,7 @@ export const DealList = () => {
 
 const dealFilters = [
     <SearchInput source="fts@fts" alwaysOn />,
-    <OnlyMineInput alwaysOn />,
+    <OnlyMineInput source="sales_id" alwaysOn />,
     <SelectInput source="type" choices={typeChoices} />,
 ];
 
@@ -61,3 +61,5 @@ const DealActions = () => {
         </TopToolbar>
     );
 };
+
+export default DealList;
