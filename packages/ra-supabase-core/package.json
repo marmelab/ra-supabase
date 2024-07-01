@@ -15,12 +15,12 @@
     "types": "esm/index.d.ts",
     "sideEffects": false,
     "peerDependencies": {
-        "@raphiniert/ra-data-postgrest": "^2.0.0",
+        "@raphiniert/ra-data-postgrest": "^2.3.0",
         "@supabase/supabase-js": "^2.0.0",
         "ra-core": "^5.0.1"
     },
     "devDependencies": {
-        "@raphiniert/ra-data-postgrest": "^2.1.0",
+        "@raphiniert/ra-data-postgrest": "^2.3.0",
         "@supabase/supabase-js": "^2.43.5",
         "@testing-library/jest-dom": "^6.4.5",
         "@testing-library/react": "^15.0.7",
