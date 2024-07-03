@@ -18,7 +18,7 @@ npm install ra-supabase
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+export const supabaseClient = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
 
 // in dataProvider.js
 import { supabaseDataProvider } from 'ra-supabase';
@@ -32,11 +32,11 @@ export const dataProvider = supabaseDataProvider({
 
 // in authProvider.js
 import { supabaseAuthProvider } from 'ra-supabase';
-import { supabase } from './supabase';
+import { supabaseClient } from './supabase';
 
-export const authProvider = supabaseAuthProvider(supabase, {
+export const authProvider = supabaseAuthProvider(supabaseClient, {
     getIdentity: async user => {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('userProfiles')
             .select('id, first_name, last_name')
             .match({ email: user.email })
