@@ -8,6 +8,7 @@ export const raSupabaseEnglishMessages = {
             reset_password: 'Reset password',
             password_reset:
                 'Your password has been reset. You will receive an email containing a link to log in.',
+            missing_tokens: 'Access and refresh tokens are missing',
         },
         validation: {
             password_mismatch: 'Passwords do not match',
