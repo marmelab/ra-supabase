@@ -52,7 +52,7 @@ export const useSetPassword = (
 
     if (authProvider.setPassword == null) {
         throw new Error(
-            'The authProvider does not support the setPassword() method'
+            'The setPassword() method is missing from the AuthProvider although it is required. You may consider adding it'
         );
     }
 

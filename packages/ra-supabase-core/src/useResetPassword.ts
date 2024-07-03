@@ -43,7 +43,7 @@ export const useResetPassword = (
 
     if (authProvider.resetPassword == null) {
         throw new Error(
-            'The authProvider does not support the resetPassword() method'
+            'The setPassword() method is missing from the AuthProvider although it is required. You may consider adding it'
         );
     }
 
