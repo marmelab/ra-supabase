@@ -5,7 +5,7 @@ export const supabaseAuthProvider = (
     client: SupabaseClient,
     { getIdentity, getPermissions, redirectTo }: SupabaseAuthProviderOptions
 ): SupabaseAuthProvider => {
-    return {
+    const authProvider: SupabaseAuthProvider = {
         async login(params) {
             const emailPasswordParams = params as LoginWithEmailPasswordParams;
             if (emailPasswordParams.email && emailPasswordParams.password) {
@@ -153,21 +153,22 @@ export const supabaseAuthProvider = (
             }
             return undefined;
         },
-        async getIdentity() {
+    };
+
+    if (typeof getIdentity === 'function') {
+        authProvider.getIdentity = async () => {
             const { data } = await client.auth.getUser();
 
             if (data.user == null) {
                 throw new Error();
             }
 
-            if (typeof getIdentity === 'function') {
-                const identity = await getIdentity(data.user);
-                return identity;
-            }
+            const identity = await getIdentity(data.user);
+            return identity;
+        };
+    }
 
-            return undefined;
-        },
-    };
+    return authProvider;
 };
 
 export type GetIdentity = (user: User) => Promise<UserIdentity>;

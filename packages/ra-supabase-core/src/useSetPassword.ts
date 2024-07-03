@@ -44,6 +44,18 @@ export const useSetPassword = (
     const redirect = useRedirect();
     const authProvider = useAuthProvider<SupabaseAuthProvider>();
 
+    if (authProvider == null) {
+        throw new Error(
+            'No authProvider found. Did you forget to set up an AuthProvider on the <Admin> component?'
+        );
+    }
+
+    if (authProvider.setPassword == null) {
+        throw new Error(
+            'The authProvider does not support the setPassword() method'
+        );
+    }
+
     const {
         onSuccess = () => redirect('/'),
         onError = error => notify(error.message, { type: 'error' }),

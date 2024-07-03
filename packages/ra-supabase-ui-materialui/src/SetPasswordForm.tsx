@@ -13,6 +13,7 @@ export const SetPasswordForm = () => {
     const refresh_token = useSupabaseAccessToken({
         parameterName: 'refresh_token',
     });
+
     const notify = useNotify();
     const translate = useTranslate();
     const [setPassword] = useSetPassword({
@@ -45,8 +46,21 @@ export const SetPasswordForm = () => {
                 confirmPassword: 'ra-supabase.validation.password_mismatch',
             };
         }
-        return undefined;
+        return {};
     };
+
+    if (!access_token || !refresh_token) {
+        if (process.env.NODE_ENV === 'development') {
+            console.error(
+                'Missing access_token or refresh_token for set password'
+            );
+        }
+        return (
+            <div className={SupabaseLoginFormClasses.container}>
+                <div>{translate('ra-supabase.auth.missing_tokens')}</div>
+            </div>
+        );
+    }
 
     const submit = (values: FormData) => {
         return setPassword({
@@ -94,8 +108,8 @@ export const SetPasswordForm = () => {
 };
 
 interface FormData {
-    password?: string;
-    confirmPassword?: string;
+    password: string;
+    confirmPassword: string;
 }
 
 const PREFIX = 'RaSupabaseSetPasswordForm';

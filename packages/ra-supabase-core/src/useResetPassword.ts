@@ -35,6 +35,18 @@ export const useResetPassword = (
     const notify = useNotify();
     const authProvider = useAuthProvider<SupabaseAuthProvider>();
 
+    if (authProvider == null) {
+        throw new Error(
+            'No authProvider found. Did you forget to set up an AuthProvider on the <Admin> component?'
+        );
+    }
+
+    if (authProvider.resetPassword == null) {
+        throw new Error(
+            'The authProvider does not support the resetPassword() method'
+        );
+    }
+
     const {
         onSuccess = () => {
             notify('ra-supabase.auth.password_reset', { type: 'info' });

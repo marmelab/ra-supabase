@@ -69,7 +69,7 @@ export const ForgotPasswordForm = () => {
 };
 
 interface FormData {
-    email?: string;
+    email: string;
 }
 
 const PREFIX = 'RaSupabaseForgotPasswordForm';
