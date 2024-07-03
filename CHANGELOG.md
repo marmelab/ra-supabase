@@ -2,8 +2,11 @@
 
 ## 3.0.0
 
-- Upgrade to react-admin v5
-- Bump minimum version of ra-data-postgrest to 2.3.0
+* Upgrade to react-admin v5 ([#61](https://github.com/marmelab/ra-supabase/pull/61)) ([mrkpatchaa](https://github.com/mrkpatchaa))
+* Bump ra-data-postgrest to 2.3.0 ([#62](https://github.com/marmelab/ra-supabase/pull/62)) ([slax57](https://github.com/slax57))
+* Enable strictNullChecks ([#63](https://github.com/marmelab/ra-supabase/pull/63)) ([djhi](https://github.com/djhi))
+* Update demo ([#59](https://github.com/marmelab/ra-supabase/pull/59)) ([erwanMarmelab](https://github.com/erwanMarmelab))
+
 - The `<LoginPage>` will no longer automatically redirect to the app if the user is already authenticated
 
 ## 2.3.0
