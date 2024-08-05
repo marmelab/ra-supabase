@@ -1,5 +1,5 @@
-import { AuthProvider, UserIdentity } from 'ra-core';
 import { Provider, SupabaseClient, User } from '@supabase/supabase-js';
+import { AuthProvider, UserIdentity } from 'ra-core';
 
 export const supabaseAuthProvider = (
     client: SupabaseClient,
@@ -74,7 +74,13 @@ export const supabaseAuthProvider = (
             }
         },
         async checkError(error) {
-            if (error.status === 401 || error.status === 403) {
+            if (
+                error.status === 401 ||
+                error.status === 403 ||
+                // Supabase returns 400 when the session is missing, we need to check this case too.
+                (error.status === 400 &&
+                    error.name === 'AuthSessionMissingError')
+            ) {
                 return Promise.reject();
             }
 
