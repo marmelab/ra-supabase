@@ -7,7 +7,7 @@ import {
 } from './useSupabaseAccessToken';
 
 // TODO: fix those tests
-describe.skip('useSupabaseAccessToken', () => {
+describe('useSupabaseAccessToken', () => {
     const UseSupabaseAccessToken = (props?: UseSupabaseAccessTokenOptions) => {
         const token = useSupabaseAccessToken(props);
 
@@ -19,6 +19,26 @@ describe.skip('useSupabaseAccessToken', () => {
             {},
             'React Admin',
             '/set-password?access_token=bazinga'
+        );
+
+        const { queryByText } = render(
+            <TestMemoryRouter initialEntries={['/set-password']}>
+                <CoreAdminContext>
+                    <UseSupabaseAccessToken />
+                </CoreAdminContext>
+            </TestMemoryRouter>
+        );
+
+        await waitFor(() => {
+            expect(queryByText('bazinga')).not.toBeNull();
+        });
+    });
+
+    test('should return the access token if present in the hash route', async () => {
+        window.history.pushState(
+            {},
+            'React Admin',
+            '/set-password#access_token=bazinga'
         );
 
         const { queryByText } = render(
@@ -54,7 +74,7 @@ describe.skip('useSupabaseAccessToken', () => {
         });
     });
 
-    test('should redirect users if the access token is not present in the URL', async () => {
+    test.skip('should redirect users if the access token is not present in the URL', async () => {
         window.history.pushState({}, 'React Admin', '/set-password');
 
         render(
@@ -70,7 +90,7 @@ describe.skip('useSupabaseAccessToken', () => {
         });
     });
 
-    test('should redirect users to the provided path if the access token is not present in the URL', async () => {
+    test.skip('should redirect users to the provided path if the access token is not present in the URL', async () => {
         window.history.pushState({}, 'React Admin', '/set-password');
 
         render(
@@ -86,7 +106,7 @@ describe.skip('useSupabaseAccessToken', () => {
         });
     });
 
-    test('should not redirect users if the access token is not present in the URL and redirectTo is false', async () => {
+    test.skip('should not redirect users if the access token is not present in the URL and redirectTo is false', async () => {
         window.history.pushState({}, 'React Admin', '/set-password');
 
         render(
