@@ -1,5 +1,6 @@
 import { Provider, SupabaseClient, User } from '@supabase/supabase-js';
 import { AuthProvider, UserIdentity } from 'ra-core';
+import { getSearchString } from './getSearchString';
 
 export const supabaseAuthProvider = (
     client: SupabaseClient,
@@ -93,9 +94,12 @@ export const supabaseAuthProvider = (
             if (type === 'recovery' || type === 'invite') {
                 if (access_token && refresh_token) {
                     return {
-                        redirectTo: `${
-                            redirectTo ? `${redirectTo}/` : '/'
-                        }set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        redirectTo: () => ({
+                            pathname: redirectTo
+                                ? `${redirectTo}/set-password`
+                                : '/set-password',
+                            search: `access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        }),
                     };
                 }
 
@@ -108,24 +112,32 @@ export const supabaseAuthProvider = (
         },
         async checkAuth() {
             // Users are on the set-password page, nothing to do
-            if (window.location.pathname === '/set-password') {
+            if (
+                window.location.pathname === '/set-password' ||
+                window.location.hash.includes('#/set-password')
+            ) {
                 return;
             }
             // Users are on the forgot-password page, nothing to do
-            if (window.location.pathname === '/forgot-password') {
+            if (
+                window.location.pathname === '/forgot-password' ||
+                window.location.hash.includes('#/forgot-password')
+            ) {
                 return;
             }
 
             const { access_token, refresh_token, type } = getUrlParams();
-
             // Users have reset their password or have just been invited and must set a new password
             if (type === 'recovery' || type === 'invite') {
                 if (access_token && refresh_token) {
                     // eslint-disable-next-line no-throw-literal
                     throw {
-                        redirectTo: `${
-                            redirectTo ? `${redirectTo}/` : '/'
-                        }set-password?access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        redirectTo: () => ({
+                            pathname: redirectTo
+                                ? `${redirectTo}/set-password`
+                                : '/set-password',
+                            search: `access_token=${access_token}&refresh_token=${refresh_token}&type=${type}`,
+                        }),
                         message: false,
                     };
                 }
@@ -145,6 +157,20 @@ export const supabaseAuthProvider = (
             return Promise.resolve();
         },
         async getPermissions() {
+            if (
+                window.location.pathname === '/set-password' ||
+                window.location.hash.includes('#/set-password')
+            ) {
+                return;
+            }
+            // Users are on the forgot-password page, nothing to do
+            if (
+                window.location.pathname === '/forgot-password' ||
+                window.location.hash.includes('#/forgot-password')
+            ) {
+                return;
+            }
+
             const { data, error } = await client.auth.getUser();
             if (error) {
                 throw error;
@@ -164,7 +190,6 @@ export const supabaseAuthProvider = (
     if (typeof getIdentity === 'function') {
         authProvider.getIdentity = async () => {
             const { data } = await client.auth.getUser();
-
             if (data.user == null) {
                 throw new Error();
             }
@@ -222,10 +247,8 @@ export type ResetPasswordParams = {
 };
 
 const getUrlParams = () => {
-    const urlSearchParams = new URLSearchParams(
-        window.location.hash.substring(1)
-    );
-
+    const searchStr = getSearchString();
+    const urlSearchParams = new URLSearchParams(searchStr);
     const access_token = urlSearchParams.get('access_token');
     const refresh_token = urlSearchParams.get('refresh_token');
     const type = urlSearchParams.get('type');

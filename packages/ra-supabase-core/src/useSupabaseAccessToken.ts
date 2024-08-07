@@ -1,5 +1,6 @@
 import { useRedirect } from 'ra-core';
 import { useEffect } from 'react';
+import { getSearchString } from './getSearchString';
 
 /**
  * This hook gets the access_token from supabase in the current browser URL and redirects to the specified page (/ by default) if there is none.
@@ -34,10 +35,8 @@ export const useSupabaseAccessToken = ({
 }: UseSupabaseAccessTokenOptions = {}) => {
     const redirect = useRedirect();
 
-    const urlSearchParams = new URLSearchParams(
-        window.location.search.substr(1)
-    );
-
+    const searchStr = getSearchString();
+    const urlSearchParams = new URLSearchParams(searchStr);
     const access_token = urlSearchParams.get(parameterName);
     useEffect(() => {
         if (access_token == null) {
