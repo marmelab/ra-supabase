@@ -3,6 +3,7 @@
 ## 3.1.0
 
 * Feat: Handle `HashRouter` & `BrowserRouter` for Supabase redirections ([#67](https://github.com/marmelab/ra-supabase/pull/67)) ([arimet](https://github.com/arimet))
+* Fix: It is no longer possible to access a page using direct URL if user is logged out ([#65](https://github.com/marmelab/ra-supabase/pull/65)) ([jonathan-marmelab](https://github.com/jonathan-marmelab)
 
 ## 3.0.0
 
