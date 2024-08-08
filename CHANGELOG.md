@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.0
+
+* Feat: Handle `HashRouter` & `BrowserRouter` for Supabase redirections ([#67](https://github.com/marmelab/ra-supabase/pull/67)) ([arimet](https://github.com/arimet))
+
 ## 3.0.0
 
 * Upgrade to react-admin v5 ([#61](https://github.com/marmelab/ra-supabase/pull/61)) ([mrkpatchaa](https://github.com/mrkpatchaa))
