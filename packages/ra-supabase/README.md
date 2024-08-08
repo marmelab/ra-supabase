@@ -95,12 +95,37 @@ Supabase uses URL hash links for its redirections. This can cause conflicts if y
 
 If you want to use the HashRouter, you'll need to modify the code.
 
-1. Create a custom `auth-callback` folder inside your public folder.
-2. Create an `index.html` file inside the `auth-callback`. This file will intercept the supabase redirect and rewrite the URL to prevent conflicts with the HashRouter. For example, see `packages/demo/public/auth-callback.html`.
-3. Remove `BrowserRouter` from your `App.ts`
-4. Go to your dashboard **Authentication** section
-5. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback.html`
-6. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback.html"`
+1. Create a custom `auth-callback.html` file inside your public folder. This file will intercept the supabase redirect and rewrite the URL to prevent conflicts with the HashRouter. For example, see `packages/demo/public/auth-callback.html`.
+2. Remove `BrowserRouter` from your `App.ts`
+
+#### Via Dashboard
+3. Go to your Supabase dashboard **Authentication** section
+4. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback.html`
+5. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback.html"`
+
+##### Via config.toml
+
+3. Go to your `config.toml` file
+4. In `[auth]` section set `site_url` to your application URL
+5. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback.html"]`
+6. Add an `[auth.email.template.{TYPE}]` section with the following option : 
+
+```
+[auth.email.template.TYPE]
+subject = {TYPE_MESSAGE}
+content_path = "./supabase/templates/{TYPE}.html"
+```
+
+In `{TYPE}.html` set the `auth-callback` redirection
+
+```HTML
+<html>
+  <body>
+   <h2>{TYPE_MESSAGE}</h2>
+    <p><a href="{{ .ConfirmationURL }}/auth-callback.html">{TYPE_CTA}</a></p>
+
+</html>
+```
 
 ## Features
 
