@@ -104,7 +104,7 @@ If you want to use the HashRouter, you'll need to modify the code.
 4. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback.html`
 5. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback.html"`
 
-##### Via config.toml
+##### Configuring a local Supabase instance
 
 3. Go to your `config.toml` file
 4. In `[auth]` section set `site_url` to your application URL
