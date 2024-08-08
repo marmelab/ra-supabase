@@ -109,7 +109,7 @@ If you want to use the HashRouter, you'll need to modify the code.
 3. Go to your `config.toml` file
 4. In `[auth]` section set `site_url` to your application URL
 5. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback.html"]`
-6. Add an `[auth.email.template.{TYPE}]` section with the following option : 
+6. Add an `[auth.email.template.{TYPE}]` section with the following option :
 
 ```
 [auth.email.template.TYPE]
@@ -210,7 +210,7 @@ export const MyAdmin = () => (
 
 This requires you to configure your supabase instance:
 
-##### Via config.toml
+##### Configuring a local Supabase instance
 
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
@@ -235,7 +235,7 @@ In `invite.html` set the `auth-callback` redirection
 </html>
 ```
 
-##### Via Dashboard
+#### Configuring an hosted Supabase instance
 
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
@@ -280,7 +280,7 @@ If users forgot their password, they can request for a reset if you add the `/fo
 
 This requires you to configure your supabase instance:
 
-##### Via config.toml
+##### Configuring a local Supabase instance
 
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
@@ -304,7 +304,7 @@ In `recovery.html` set the `auth-callback` redirection
 </html>
 ```
 
-##### Via Dashboard
+#### Configuring an hosted Supabase instance
 
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
@@ -378,12 +378,14 @@ Make sure you enabled the specified providers in your Supabase instance:
 
 This also requires you to configure the redirect URLS on your supabase instance:
 
-##### Via config.toml
+##### Configuring a local Supabase instance
+
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
 3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback"]`
 
-##### Via Dashboard
+#### Configuring an hosted Supabase instance
+
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
 1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback`
