@@ -96,10 +96,11 @@ Supabase uses URL hash links for its redirections. This can cause conflicts if y
 If you want to use the HashRouter, you'll need to modify the code.
 
 1. Create a custom `auth-callback` folder inside your public folder.
-2. Create an `index.html` file inside the `auth-callback`. This file will intercept the supabase redirect and rewrite the URL to prevent conflicts with the HashRouter. For example, see `packages/demo/public/auth-callback/index.html`.
+2. Create an `index.html` file inside the `auth-callback`. This file will intercept the supabase redirect and rewrite the URL to prevent conflicts with the HashRouter. For example, see `packages/demo/public/auth-callback.html`.
 3. Remove `BrowserRouter` from your `App.ts`
-4. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback/index.html`
-5. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback/index.html"`
+4. Go to your dashboard **Authentication** section
+5. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback.html`
+6. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback.html"`
 
 ## Features
 
