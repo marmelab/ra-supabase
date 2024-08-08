@@ -18,7 +18,10 @@ npm install ra-supabase
 // in supabase.js
 import { createClient } from '@supabase/supabase-js';
 
-export const supabaseClient = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+export const supabaseClient = createClient(
+    'YOUR_SUPABASE_URL',
+    'YOUR_SUPABASE_ANON_KEY'
+);
 
 // in dataProvider.js
 import { supabaseDataProvider } from 'ra-supabase';
@@ -27,7 +30,7 @@ import { supabaseClient } from './supabase';
 export const dataProvider = supabaseDataProvider({
     instanceUrl: 'YOUR_SUPABASE_URL',
     apiKey: 'YOUR_SUPABASE_ANON_KEY',
-    supabaseClient
+    supabaseClient,
 });
 
 // in authProvider.js
@@ -86,6 +89,45 @@ export const MyAdmin = () => (
 
 You must wrap your `<Admin>` inside a `<BrowserRouter>` as supabase use hash parameters for passing authentication tokens.
 
+### Using Hash Router
+
+Supabase uses URL hash links for its redirections. This can cause conflicts if you use a HashRouter. For this reason, we recommend using the BrowserRouter.
+
+If you want to use the HashRouter, you'll need to modify the code.
+
+1. Create a custom `auth-callback.html` file inside your public folder. This file will intercept the supabase redirect and rewrite the URL to prevent conflicts with the HashRouter. For example, see `packages/demo/public/auth-callback.html`.
+2. Remove `BrowserRouter` from your `App.ts`
+
+#### Configuring an hosted Supabase instance
+
+3. Go to your Supabase dashboard **Authentication** section
+4. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback.html`
+5. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback.html"`
+
+##### Configuring a local Supabase instance
+
+3. Go to your `config.toml` file
+4. In `[auth]` section set `site_url` to your application URL
+5. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback.html"]`
+6. Add an `[auth.email.template.{TYPE}]` section with the following option :
+
+```
+[auth.email.template.TYPE]
+subject = {TYPE_MESSAGE}
+content_path = "./supabase/templates/{TYPE}.html"
+```
+
+In `{TYPE}.html` set the `auth-callback` redirection
+
+```HTML
+<html>
+  <body>
+   <h2>{TYPE_MESSAGE}</h2>
+    <p><a href="{{ .ConfirmationURL }}/auth-callback.html">{TYPE_CTA}</a></p>
+
+</html>
+```
+
 ## Features
 
 ### DataProvider
@@ -102,18 +144,14 @@ const postFilters = [
     <TextInput label="Views" source="views@gte" />,
 ];
 
-export const PostList = () => (
-    <List filters={postFilters}>
-        ...
-    </List>
-);
+export const PostList = () => <List filters={postFilters}>...</List>;
 ```
 
 See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#operators) for a list of supported operators.
 
 #### RLS
 
-As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended. 
+As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended.
 
 #### Customizing the dataProvider
 
@@ -132,7 +170,7 @@ export const dataProvider = supabaseDataProvider({
         ['some_table', ['custom_id']],
         ['another_table', ['first_column', 'second_column']],
     ]),
-    schema: () => localStorage.getItem("schema") || "api",
+    schema: () => localStorage.getItem('schema') || 'api',
 });
 ```
 
@@ -172,10 +210,37 @@ export const MyAdmin = () => (
 
 This requires you to configure your supabase instance:
 
+##### Configuring a local Supabase instance
+
+1. Go to your `config.toml` file
+2. In `[auth]` section set `site_url` to your application URL
+3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback"]`
+4. Add an `[auth.email.template.invite]` section with the following option
+
+```
+[auth.email.template.invite]
+subject = "You have been invited"
+content_path = "./supabase/templates/invite.html"
+```
+
+In `invite.html` set the `auth-callback` redirection
+
+```HTML
+<html>
+  <body>
+   <h2>You have been invited</h2>
+    <p>You have been invited to create a user on {{ .SiteURL }}. Follow this link to accept the invite:</p>
+    <p><a href="{{ .ConfirmationURL }}/auth-callback">Accept the invite</a></p>
+
+</html>
+```
+
+#### Configuring an hosted Supabase instance
+
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
 1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback`
-1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback"` 
+1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback"`
 
 You can now add the `/set-password` custom route:
 
@@ -207,16 +272,44 @@ export const MyAdmin = () => (
 );
 ```
 
+For HashRouter see [Using Hash Router](#using-hash-router).
+
 ### Password Reset When Forgotten
 
 If users forgot their password, they can request for a reset if you add the `/forgot-password` custom route. You should also set up the [`/set-password` custom route](#invitation-handling) to allow them to choose their new password.
 
 This requires you to configure your supabase instance:
 
+##### Configuring a local Supabase instance
+
+1. Go to your `config.toml` file
+2. In `[auth]` section set `site_url` to your application URL
+3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback"]`
+4. Add an `[auth.email.template.recovery]` section with the following option
+
+```
+[auth.email.template.recovery]
+subject = "Reset Password"
+content_path = "./supabase/templates/recovery.html"
+```
+
+In `recovery.html` set the `auth-callback` redirection
+
+```HTML
+<html>
+  <body>
+    <h2>Reset Password</h2>
+    <p><a href="{{ .ConfirmationURL }}/auth-callback">Reset your password</a></p>
+  </body>
+</html>
+```
+
+#### Configuring an hosted Supabase instance
+
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
 1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback`
-1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback"` 
+1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback"`
 
 You can now add the `/forgot-password` and `/set-password` custom routes:
 
@@ -252,6 +345,8 @@ export const MyAdmin = () => (
 );
 ```
 
+For HashRouter see [Using Hash Router](#using-hash-router).
+
 #### OAuth Authentication
 
 To setup OAuth authentication, you can pass a `LoginPage` element:
@@ -277,10 +372,19 @@ export const MyAdmin = () => (
 ```
 
 Make sure you enabled the specified providers in your Supabase instance:
-- [Hosted instance](https://supabase.com/docs/guides/auth/social-login)
-- [Local instance](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled)
+
+-   [Hosted instance](https://supabase.com/docs/guides/auth/social-login)
+-   [Local instance](https://supabase.com/docs/reference/cli/config#auth.external.provider.enabled)
 
 This also requires you to configure the redirect URLS on your supabase instance:
+
+##### Configuring a local Supabase instance
+
+1. Go to your `config.toml` file
+2. In `[auth]` section set `site_url` to your application URL
+3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback"]`
+
+#### Configuring an hosted Supabase instance
 
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
@@ -298,13 +402,17 @@ export const MyAdmin = () => (
     <Admin
         dataProvider={dataProvider}
         authProvider={authProvider}
-        loginPage={<LoginPage disableEmailPassword providers={['github', 'twitter']} />}
+        loginPage={
+            <LoginPage disableEmailPassword providers={['github', 'twitter']} />
+        }
     >
         <Resource name="posts" list={ListGuesser} />
         <Resource name="authors" list={ListGuesser} />
     </Admin>
 );
 ```
+
+For HashRouter see [Using Hash Router](#using-hash-router).
 
 ## Internationalization Support
 
