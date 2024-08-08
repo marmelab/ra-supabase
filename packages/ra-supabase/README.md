@@ -98,7 +98,8 @@ If you want to use the HashRouter, you'll need to modify the code.
 1. Create a custom `auth-callback.html` file inside your public folder. This file will intercept the supabase redirect and rewrite the URL to prevent conflicts with the HashRouter. For example, see `packages/demo/public/auth-callback.html`.
 2. Remove `BrowserRouter` from your `App.ts`
 
-#### Via Dashboard
+#### Configuring an hosted Supabase instance
+
 3. Go to your Supabase dashboard **Authentication** section
 4. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback.html`
 5. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback.html"`
