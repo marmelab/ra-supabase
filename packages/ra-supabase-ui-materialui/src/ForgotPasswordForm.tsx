@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { CardActions, Stack, styled, Typography } from '@mui/material';
 import { Form, required, useNotify, useTranslate } from 'ra-core';
-import { CardActions, styled } from '@mui/material';
-import { TextInput, SaveButton } from 'ra-ui-materialui';
 import { useResetPassword } from 'ra-supabase-core';
+import { SaveButton, TextInput } from 'ra-ui-materialui';
+import * as React from 'react';
 
 /**
  * A component that renders a form for resetting the user password.
@@ -42,6 +42,26 @@ export const ForgotPasswordForm = () => {
     return (
         <Root onSubmit={submit}>
             <div className={SupabaseLoginFormClasses.container}>
+                <Stack spacing={1}>
+                    <Typography variant="h1" fontSize="150%">
+                        {translate(
+                            'ra-supabase.reset_password.forgot_password',
+                            {
+                                _: 'Forgot password',
+                            }
+                        )}
+                    </Typography>
+
+                    <Typography variant="body2" color="GrayText">
+                        {translate(
+                            'ra-supabase.reset_password.forgot_password_details',
+                            {
+                                _: 'Enter your email to receive a reset password link.',
+                            }
+                        )}
+                    </Typography>
+                </Stack>
+
                 <div className={SupabaseLoginFormClasses.input}>
                     <TextInput
                         source="email"
