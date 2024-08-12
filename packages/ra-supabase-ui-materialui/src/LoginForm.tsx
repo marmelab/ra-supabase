@@ -1,8 +1,8 @@
+import { CardActions, styled } from '@mui/material';
+import { Form, required, useLogin, useNotify, useTranslate } from 'ra-core';
+import { Link, PasswordInput, SaveButton, TextInput } from 'ra-ui-materialui';
 import * as React from 'react';
 import { ComponentProps } from 'react';
-import { Form, required, useLogin, useNotify, useTranslate } from 'ra-core';
-import { CardActions, styled } from '@mui/material';
-import { Link, PasswordInput, SaveButton, TextInput } from 'ra-ui-materialui';
 import { ForgotPasswordPage } from './ForgotPasswordPage';
 
 /**
@@ -72,6 +72,7 @@ export const LoginForm = ({
                     type="submit"
                     className={SupabaseLoginFormClasses.button}
                     label={translate('ra.auth.sign_in')}
+                    icon={<></>}
                 />
                 {!disableForgotPassword ? (
                     <Link to={ForgotPasswordPage.path}>
