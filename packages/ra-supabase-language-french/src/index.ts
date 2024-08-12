@@ -11,6 +11,14 @@ export const raSupabaseFrenchMessages = {
             missing_tokens:
                 "Les jetons d'accès et de rafraîchissement sont manquants",
         },
+        reset_password: {
+            forgot_password: 'Mot de passe oublié',
+            forgot_password_details:
+                'Veuilez saisir votre email pour recevoir un lien de réinitialisation du mot de passe.',
+        },
+        set_password: {
+            new_password: 'Veuillez saisir un nouveau mot de passe',
+        },
         validation: {
             password_mismatch: 'Les mots de passe ne correspondent pas',
         },

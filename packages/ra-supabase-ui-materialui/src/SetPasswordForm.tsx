@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { CardActions, styled, Typography } from '@mui/material';
 import { Form, required, useNotify, useTranslate } from 'ra-core';
-import { CardActions, styled } from '@mui/material';
-import { PasswordInput, SaveButton } from 'ra-ui-materialui';
 import { useSetPassword, useSupabaseAccessToken } from 'ra-supabase-core';
+import { PasswordInput, SaveButton } from 'ra-ui-materialui';
+import * as React from 'react';
 
 /**
  * A component that renders a form for setting the current user password through Supabase.
@@ -73,6 +73,12 @@ export const SetPasswordForm = () => {
     return (
         <Root onSubmit={submit} validate={validate}>
             <div className={SupabaseLoginFormClasses.container}>
+                <Typography variant="h1" fontSize="150%">
+                    {translate('ra-supabase.set_password.new_password', {
+                        _: 'Forgot password',
+                    })}
+                </Typography>
+
                 <div className={SupabaseLoginFormClasses.input}>
                     <PasswordInput
                         source="password"
