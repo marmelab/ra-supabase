@@ -82,6 +82,7 @@ export const ForgotPasswordForm = () => {
                     label={translate('ra.action.reset_password', {
                         _: 'Reset password',
                     })}
+                    icon={<></>}
                 />
             </CardActions>
         </Root>
