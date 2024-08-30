@@ -5,9 +5,9 @@ French translations for [ra-supabase](https://www.npmjs.com/package/ra-supabase)
 ## Installation
 
 ```sh
-npm install ra-supabase-language-french
-# or
 yarn add ra-supabase-language-french
+# or
+npm install ra-supabase-language-french
 ```
 
 ## Usage
