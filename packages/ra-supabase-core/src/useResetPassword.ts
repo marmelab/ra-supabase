@@ -1,4 +1,10 @@
-import { OnError, OnSuccess, useAuthProvider, useNotify } from 'ra-core';
+import {
+    OnError,
+    OnSuccess,
+    useAuthProvider,
+    useNotify,
+    useRedirect,
+} from 'ra-core';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { ResetPasswordParams, SupabaseAuthProvider } from './authProvider';
 
@@ -33,6 +39,7 @@ export const useResetPassword = (
     UseMutationResult<unknown, Error, ResetPasswordParams>
 ] => {
     const notify = useNotify();
+    const redirect = useRedirect();
     const authProvider = useAuthProvider<SupabaseAuthProvider>();
 
     if (authProvider == null) {
@@ -49,6 +56,7 @@ export const useResetPassword = (
 
     const {
         onSuccess = () => {
+            redirect('/login');
             notify('ra-supabase.auth.password_reset', { type: 'info' });
         },
         onError = error => notify(error.message, { type: 'error' }),
