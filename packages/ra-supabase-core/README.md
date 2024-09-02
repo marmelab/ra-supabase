@@ -20,12 +20,12 @@ export const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KE
 
 // in dataProvider.js
 import { supabaseDataProvider } from 'ra-supabase-core';
-import { supabaseClient } from './supabase';
+import { supabase } from './supabase';
 
 export const dataProvider = supabaseDataProvider({
     instanceUrl: 'YOUR_SUPABASE_URL',
     apiKey: 'YOUR_SUPABASE_ANON_KEY',
-    supabaseClient
+    supabase
 });
 
 // in authProvider.js
