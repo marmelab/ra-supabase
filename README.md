@@ -45,8 +45,19 @@ You can then start the application in `development` mode with:
 make run
 ```
 
-### Testing Invitations And Password Reset
+Log in with the following credentials:
 
+- Email: `janedoe@atomic.dev`
+- Password: `password`
+
+If you need debug the backend, you can access the following services: 
+
+- Supabase dashboard: [http://localhost:54323/](http://localhost:54323/)
+- REST API: [http://127.0.0.1:54321](http://127.0.0.1:54321)
+- Attachments storage: [http://localhost:54323/project/default/storage/buckets/attachments](http://localhost:54323/project/default/storage/buckets/attachments)
+- Inbucket email testing service: [http://localhost:54324/](http://localhost:54324/)
+
+### Testing Invitations And Password Reset
 
 The current version of supabase CLI does not allow to customize the emails sent for invitation or password reset.
 

@@ -4,30 +4,38 @@ import postgrestRestProvider, {
     defaultPrimaryKeys,
     defaultSchema,
 } from '@raphiniert/ra-data-postgrest';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * A function that returns a dataProvider for Supabase.
  * @param instanceUrl The URL of the Supabase instance
  * @param apiKey The API key of the Supabase instance. Prefer the anonymous key.
  * @param supabaseClient The Supabase client
+ * @param httpClient Optional - The httpClient to use. Defaults to a httpClient that handles the authentication.
  * @param defaultListOp Optional - The default list filter operator. Defaults to 'eq'.
  * @param primaryKeys Optional - The primary keys of the tables. Defaults to 'id'.
  * @param schema Optional - The custom schema to use. Defaults to none.
+ * @param postgrestConfig Optional - The postgrest configuration. Defaults to none.
  * @returns A dataProvider for Supabase
  */
 export const supabaseDataProvider = ({
     instanceUrl,
     apiKey,
-    supabaseClient,
+    supabaseClient = createClient(instanceUrl, apiKey),
     httpClient = supabaseHttpClient({ apiKey, supabaseClient }),
+    postgrestConfig,
+    /* @deprecated Use postgrestConfig instead */
     defaultListOp = 'eq',
+    /* @deprecated Use postgrestConfig instead */
     primaryKeys = defaultPrimaryKeys,
+    /* @deprecated Use postgrestConfig instead */
     schema = defaultSchema,
 }: {
     instanceUrl: string;
     apiKey: string;
-    supabaseClient: SupabaseClient;
+    supabaseClient?: SupabaseClient;
+    postgrestConfig?: Partial<Omit<IDataProviderConfig, 'apiUrl'>>;
 } & Partial<Omit<IDataProviderConfig, 'apiUrl'>>): DataProvider => {
     const config: IDataProviderConfig = {
         apiUrl: `${instanceUrl}/rest/v1`,
@@ -35,6 +43,7 @@ export const supabaseDataProvider = ({
         defaultListOp,
         primaryKeys,
         schema,
+        ...postgrestConfig,
     };
     return postgrestRestProvider(config);
 };

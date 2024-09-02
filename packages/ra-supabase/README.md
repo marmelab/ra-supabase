@@ -155,7 +155,7 @@ As users authenticate through supabase, you can leverage [Row Level Security](ht
 
 #### Customizing the dataProvider
 
-`supabaseDataProvider` also accepts the same options as the `ra-data-postgrest` dataProvider (except `apiUrl`), like [`primaryKeys`](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md#compound-primary-keys) or [`schema`](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md#custom-schema).
+`supabaseDataProvider` also accepts a `postgrestOptions` object to initialize the `ra-data-postgrest` dataProvider. This object accepts options like [`primaryKeys`](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md#compound-primary-keys) or [`schema`](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md#custom-schema).
 
 ```jsx
 // in dataProvider.js
@@ -166,11 +166,13 @@ export const dataProvider = supabaseDataProvider({
     instanceUrl: 'YOUR_SUPABASE_URL',
     apiKey: 'YOUR_SUPABASE_ANON_KEY',
     supabaseClient,
-    primaryKeys: new Map([
-        ['some_table', ['custom_id']],
-        ['another_table', ['first_column', 'second_column']],
-    ]),
-    schema: () => localStorage.getItem('schema') || 'api',
+    postgrestOptions: {
+        primaryKeys: new Map([
+            ['some_table', ['custom_id']],
+            ['another_table', ['first_column', 'second_column']],
+        ]),
+        schema: () => localStorage.getItem('schema') || 'api',
+    },
 });
 ```
 
