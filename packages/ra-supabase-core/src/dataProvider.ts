@@ -24,18 +24,14 @@ export const supabaseDataProvider = ({
     apiKey,
     supabaseClient = createClient(instanceUrl, apiKey),
     httpClient = supabaseHttpClient({ apiKey, supabaseClient }),
-    postgrestConfig,
-    /* @deprecated Use postgrestConfig instead */
     defaultListOp = 'eq',
-    /* @deprecated Use postgrestConfig instead */
     primaryKeys = defaultPrimaryKeys,
-    /* @deprecated Use postgrestConfig instead */
     schema = defaultSchema,
+    ...rest
 }: {
     instanceUrl: string;
     apiKey: string;
     supabaseClient?: SupabaseClient;
-    postgrestConfig?: Partial<Omit<IDataProviderConfig, 'apiUrl'>>;
 } & Partial<Omit<IDataProviderConfig, 'apiUrl'>>): DataProvider => {
     const config: IDataProviderConfig = {
         apiUrl: `${instanceUrl}/rest/v1`,
@@ -43,7 +39,7 @@ export const supabaseDataProvider = ({
         defaultListOp,
         primaryKeys,
         schema,
-        ...postgrestConfig,
+        ...rest,
     };
     return postgrestRestProvider(config);
 };
