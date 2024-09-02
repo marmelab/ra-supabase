@@ -16,7 +16,6 @@ import type { SupabaseClient } from '@supabase/supabase-js';
  * @param defaultListOp Optional - The default list filter operator. Defaults to 'eq'.
  * @param primaryKeys Optional - The primary keys of the tables. Defaults to 'id'.
  * @param schema Optional - The custom schema to use. Defaults to none.
- * @param postgrestConfig Optional - The postgrest configuration. Defaults to none.
  * @returns A dataProvider for Supabase
  */
 export const supabaseDataProvider = ({
