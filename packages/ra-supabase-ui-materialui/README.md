@@ -53,7 +53,7 @@ export const authProvider = supabaseAuthProvider(supabase, {
 
 // in App.js
 import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
-import { LoginPage, ResetPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
+import { LoginPage, ForgotPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
@@ -148,7 +148,7 @@ A page component to use in a custom route to allow users to reset their password
 ```jsx
 // in App.js
 import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
-import { LoginPage, ForgotPasswordPage, ResetPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
+import { LoginPage, ForgotPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
@@ -187,7 +187,7 @@ A page component to use in a custom route to allow users to set their passwords.
 ```jsx
 // in App.js
 import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
-import { LoginPage, ForgotPasswordPage, ResetPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
+import { LoginPage, ForgotPasswordPage, SetPasswordPage } from 'ra-supabase-ui-materialui';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 
