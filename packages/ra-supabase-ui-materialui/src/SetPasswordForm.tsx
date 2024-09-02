@@ -73,9 +73,9 @@ export const SetPasswordForm = () => {
     return (
         <Root onSubmit={submit} validate={validate}>
             <div className={SupabaseLoginFormClasses.container}>
-                <Typography variant="h1" fontSize="150%">
+                <Typography variant="h5" textAlign="center" gutterBottom>
                     {translate('ra-supabase.set_password.new_password', {
-                        _: 'Forgot password',
+                        _: 'Choose your password',
                     })}
                 </Typography>
 
@@ -131,7 +131,7 @@ const Root = styled(Form, {
     overridesResolver: (props, styles) => styles.root,
 })(({ theme }) => ({
     [`& .${SupabaseLoginFormClasses.container}`]: {
-        padding: '0 1em 1em 1em',
+        padding: '0 1em 0 1em',
     },
     [`& .${SupabaseLoginFormClasses.input}`]: {
         marginTop: '1em',

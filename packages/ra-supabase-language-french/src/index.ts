@@ -10,14 +10,14 @@ export const raSupabaseFrenchMessages = {
                 'Votre mot de passe a été réinitialisé. Vous recevrez un email contenant un lien pour vous connecter.',
             missing_tokens:
                 "Les jetons d'accès et de rafraîchissement sont manquants",
+            back_to_login: 'Retour à la page de connexion',
         },
         reset_password: {
-            forgot_password: 'Mot de passe oublié',
-            forgot_password_details:
-                'Veuilez saisir votre email pour recevoir un lien de réinitialisation du mot de passe.',
+            forgot_password: 'Mot de passe oublié ?',
+            forgot_password_details: 'Obtenez les instructions par email.',
         },
         set_password: {
-            new_password: 'Veuillez saisir un nouveau mot de passe',
+            new_password: 'Nouveau mot de passe',
         },
         validation: {
             password_mismatch: 'Les mots de passe ne correspondent pas',

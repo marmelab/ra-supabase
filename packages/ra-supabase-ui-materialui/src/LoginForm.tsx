@@ -75,7 +75,7 @@ export const LoginForm = ({
                     icon={<></>}
                 />
                 {!disableForgotPassword ? (
-                    <Link to={ForgotPasswordPage.path}>
+                    <Link to={ForgotPasswordPage.path} variant="body2">
                         {translate('ra-supabase.auth.forgot_password', {
                             _: 'Forgot password?',
                         })}
