@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.2.0
+
+* Add ability to pass additional options to postgrest ([#74](https://github.com/marmelab/ra-supabase/pull/74)) ([fzaninotto](https://github.com/fzaninotto))
+* Fix Reset Password form doesn't redirect to login page ([#75](https://github.com/marmelab/ra-supabase/pull/75)) ([fzaninotto](https://github.com/fzaninotto))
+* Improve UI of set password & reset password pages ([#76](https://github.com/marmelab/ra-supabase/pull/76)) ([fzaninotto](https://github.com/fzaninotto))
+* [Doc] Fix example in material UI readme ([#73](https://github.com/marmelab/ra-supabase/pull/73)) ([Patys](https://github.com/Patys))
+* [Doc] Fix code in dataProvider example in readme ([#72](https://github.com/marmelab/ra-supabase/pull/72)) ([Patys](https://github.com/Patys))
+* [Doc] Align style in readme for language packages([#71](https://github.com/marmelab/ra-supabase/pull/71)) ([Patys](https://github.com/Patys))
+
 ## 3.1.1
 
 * Fix: Remove 'save' icon from 'Reset password' and 'Sign In' buttons ([#69](https://github.com/marmelab/ra-supabase/pull/69)) ([jonathan-marmelab](https://github.com/jonathan-marmelab))
