@@ -1,7 +1,7 @@
 import { CardActions, Stack, styled, Typography } from '@mui/material';
 import { Form, required, useNotify, useTranslate } from 'ra-core';
 import { useResetPassword } from 'ra-supabase-core';
-import { SaveButton, TextInput } from 'ra-ui-materialui';
+import { Link, SaveButton, TextInput } from 'ra-ui-materialui';
 import * as React from 'react';
 
 /**
@@ -43,16 +43,18 @@ export const ForgotPasswordForm = () => {
         <Root onSubmit={submit}>
             <div className={SupabaseLoginFormClasses.container}>
                 <Stack spacing={1}>
-                    <Typography variant="h1" fontSize="150%">
+                    <Typography variant="h5" textAlign="center">
                         {translate(
                             'ra-supabase.reset_password.forgot_password',
-                            {
-                                _: 'Forgot password',
-                            }
+                            { _: 'Forgot password?' }
                         )}
                     </Typography>
 
-                    <Typography variant="body2" color="GrayText">
+                    <Typography
+                        variant="body2"
+                        color="GrayText"
+                        textAlign="center"
+                    >
                         {translate(
                             'ra-supabase.reset_password.forgot_password_details',
                             {
@@ -74,7 +76,7 @@ export const ForgotPasswordForm = () => {
                     />
                 </div>
             </div>
-            <CardActions>
+            <CardActions sx={{ flexDirection: 'column', gap: 1 }}>
                 <SaveButton
                     variant="contained"
                     type="submit"
@@ -84,6 +86,11 @@ export const ForgotPasswordForm = () => {
                     })}
                     icon={<></>}
                 />
+                <Link to="/login" variant="body2">
+                    {translate('ra-supabase.auth.back_to_login', {
+                        _: 'Back to login page',
+                    })}
+                </Link>
             </CardActions>
         </Root>
     );
@@ -106,7 +113,7 @@ const Root = styled(Form, {
     overridesResolver: (props, styles) => styles.root,
 })(({ theme }) => ({
     [`& .${SupabaseLoginFormClasses.container}`]: {
-        padding: '0 1em 1em 1em',
+        padding: '0 1em 0 1em',
     },
     [`& .${SupabaseLoginFormClasses.input}`]: {
         marginTop: '1em',
