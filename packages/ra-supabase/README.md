@@ -89,7 +89,142 @@ export const MyAdmin = () => (
 
 You must wrap your `<Admin>` inside a `<BrowserRouter>` as supabase use hash parameters for passing authentication tokens.
 
-### Using Hash Router
+`ra-supabase` is built on [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0) that leverages [PostgREST](https://postgrest.org/en/stable/). 
+
+### Filters operators
+
+When specifying the `source` prop of filter inputs, you can either set it to the field name for simple equality checks or add an operator suffix for more control. For instance, the `gte` (Greater Than or Equal) or the `ilike` (Case insensitive like) operators:
+
+```jsx
+const postFilters = [
+    <TextInput label="Title" source="title@ilike" alwaysOn />,
+    <TextInput label="Views" source="views@gte" />,
+];
+
+export const PostList = () => <List filters={postFilters}>...</List>;
+```
+
+These operators are available:
+
+| Abbreviation | In PostgreSQL          | Meaning                                                                                                     |
+|--------------|------------------------|-------------------------------------------------------------------------------------------------------------|
+| eq           | `=`                    | equals                                                                                                      |
+| gt           | `>`                    | greater than                                                                                                 |
+| gte          | `>=`                   | greater than or equal                                                                                       |
+| lt           | `<`                    | less than                                                                                                   |
+| lte          | `<=`                   | less than or equal                                                                                          |
+| neq          | `<>` or `!=`           | not equal                                                                                                   |
+| like         | `LIKE`                 | LIKE operator (to avoid [URL encoding](https://en.wikipedia.org/wiki/Percent-encoding) you can use `*` as an alias of the percent sign `%` for the pattern) |
+| ilike        | `ILIKE`                | ILIKE operator (to avoid [URL encoding](https://en.wikipedia.org/wiki/Percent-encoding) you can use `*` as an alias of the percent sign `%` for the pattern) |
+| match        | `~`                    | `~` operator                                                                          |
+| imatch       | `~*`                   | `~*` operator                                                                         |
+| in           | `IN`                   | one of a list of values, e.g. `?a=in.(1,2,3)` – also supports commas in quoted strings like `?a=in.("hi,there","yes,you")` |
+| is           | `IS`                   | checking for exact equality (null, true, false, unknown)                                                    |
+| isdistinct   | `IS DISTINCT FROM`     | not equal, treating `NULL` as a comparable value                                                            |
+| fts          | `@@`                   | full-text search using `to_tsquery`                                                                         |
+| plfts        | `@@`                   | full-text search using `plainto_tsquery`                                                                    |
+| phfts        | `@@`                   | full-text search using `phraseto_tsquery`                                                                   |
+| wfts         | `@@`                   | full-text search using `websearch_to_tsquery`                                                               |
+| cs           | `@>`                   | contains e.g. `?tags=cs.{example, new}`                                                                     |
+| cd           | `<@`                   | contained in e.g. `?values=cd.{1,2,3}`                                                                      |
+| ov           | `&&`                   | overlap (have points in common), e.g. `?period=ov.[2017-01-01,2017-06-30]` – also supports array types, use curly braces instead of square brackets e.g. `?arr=ov.{1,3}` |
+| sl           | `<<`                   | strictly left of, e.g. `?range=sl.(1,10)`                                                                   |
+| sr           | `>>`                   | strictly right of                                                                                           |
+| nxr          | `&<`                   | does not extend to the right of, e.g. `?range=nxr.(1,10)`                                                   |
+| nxl          | `&>`                   | does not extend to the left of                                                                              |
+| adj          | `-|-`                  | is adjacent to, e.g. `?range=adj.(1,10)`                                                                    |
+| not          | `NOT`                  | negates another operator logical operators                                                             |
+| or           | `OR`                   | logical `OR`, see logical operators                                                                         |
+| and          | `AND`                  | logical `AND`, see logical operators                                                                        |
+| all          | `ALL`                  | comparison matches all the values in the list                                                |
+| any          | `ANY`                  | comparison matches any value in the list                                                     |
+
+See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#operators) for more details.
+
+### Vertical Filtering & Embedding
+
+Use the `meta.columns` parameter to restrict the columns that you want to fetch:
+
+```jsx
+const { data, total, isLoading, error } = useGetList(
+    'contact',
+    {
+        pagination: { page: 1, perPage: 10 },
+        sort: { field: 'created_at', order: 'DESC' }
+        meta: { columns: ['id', 'first_name', 'last_name'] }
+    }
+);
+```
+
+You can leverage this feature to:
+
+- rename columns: `columns: ['id', 'firstName:first_name', 'lastName:last_name']`
+- cast columns: `columns: ['id::text', 'first_name', 'last_name']`
+- embed relationships: `columns: ['*', 'company:companies(*)']`
+
+The last example will return all columns from the `contact` table and all columns from the `companies` table related to the `contact` table.
+
+```jsx
+{
+    id: 123,
+    first_name: 'John',
+    last_name: 'Doe',
+    company_id: 456,
+    company: {
+        id: 456,
+        name: 'ACME'
+    }
+}
+```
+
+Tou can leverage this feature to access related data in `Field` component:
+
+```jsx
+const ContactShow = () => (
+    <Show>
+        <SimpleShowLayout>
+            <TextField source="id" />
+            <TextField source="first_name" />
+            <TextField source="last_name" />
+            <TextField source="company.name" />
+        </SimpleShowLayout>
+    </Show>
+);
+```
+
+### Null Sort Order
+
+When ordering by a column that contains null values, you can specify whether the null values should be sorted first or last:
+
+```jsx
+const { data, total, isLoading, error } = useGetList(
+    'posts',
+    {
+        pagination: { page: 1, perPage: 10 },
+        sort: { field: 'published_at', order: 'DESC' },
+        meta: { nullslast: true }
+    }
+);
+```
+
+You can also set this option globally in the dataProvider:
+
+```jsx
+import { PostgRestSortOrder } from '@raphiniert/ra-data-postgrest';
+
+const config = {
+    ...
+    sortOrder: PostgRestSortOrder.AscendingNullsLastDescendingNullsLast
+}
+
+const dataProvider = supabaseDataProvider(config);
+```
+
+### Row-Level Security
+
+As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended.
+
+## Using Hash Router
 
 Supabase uses URL hash links for its redirections. This can cause conflicts if you use a HashRouter. For this reason, we recommend using the BrowserRouter.
 
@@ -98,13 +233,13 @@ If you want to use the HashRouter, you'll need to modify the code.
 1. Create a custom `auth-callback.html` file inside your public folder. This file will intercept the supabase redirect and rewrite the URL to prevent conflicts with the HashRouter. For example, see `packages/demo/public/auth-callback.html`.
 2. Remove `BrowserRouter` from your `App.ts`
 
-#### Configuring an hosted Supabase instance
+### Configuring an hosted Supabase instance
 
 3. Go to your Supabase dashboard **Authentication** section
 4. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback.html`
 5. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback.html"`
 
-##### Configuring a local Supabase instance
+### Configuring a local Supabase instance
 
 3. Go to your `config.toml` file
 4. In `[auth]` section set `site_url` to your application URL
@@ -128,32 +263,7 @@ In `{TYPE}.html` set the `auth-callback` redirection
 </html>
 ```
 
-## Features
-
-### DataProvider
-
-`ra-supabase` is built on [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0) that leverages [PostgREST](https://postgrest.org/en/stable/). As such, you have access the following features:
-
-#### Filters operators
-
-When specifying the `source` prop of filter inputs, you can either set it to the field name for simple equality checks or add an operator suffix for more control. For instance, the `gte` (Greater Than or Equal) or the `ilike` (Case insensitive like) operators:
-
-```jsx
-const postFilters = [
-    <TextInput label="Title" source="title@ilike" alwaysOn />,
-    <TextInput label="Views" source="views@gte" />,
-];
-
-export const PostList = () => <List filters={postFilters}>...</List>;
-```
-
-See the [PostgREST documentation](https://postgrest.org/en/stable/api.html#operators) for a list of supported operators.
-
-#### RLS
-
-As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended.
-
-#### Customizing the dataProvider
+## Customizing the dataProvider
 
 `supabaseDataProvider` also accepts the same options as the `ra-data-postgrest` dataProvider (except `apiUrl`), like [`primaryKeys`](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md#compound-primary-keys) or [`schema`](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md#custom-schema).
 
@@ -176,11 +286,9 @@ export const dataProvider = supabaseDataProvider({
 
 See the [`ra-data-postgrest`` documentation](https://github.com/raphiniert-com/ra-data-postgrest/blob/master/README.md) for more details.
 
-### Authentication
+## Authentication
 
-`ra-supabase` supports email/password and OAuth authentication.
-
-#### Email & Password Authentication
+### Email & Password Authentication
 
 To setup only the email/password authentication, just pass the `LoginPage` to the `loginPage` prop of the `<Admin>` component:
 
@@ -210,7 +318,7 @@ export const MyAdmin = () => (
 
 This requires you to configure your supabase instance:
 
-##### Configuring a local Supabase instance
+#### Configuring a local Supabase instance
 
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
@@ -235,7 +343,7 @@ In `invite.html` set the `auth-callback` redirection
 </html>
 ```
 
-#### Configuring an hosted Supabase instance
+### Configuring an hosted Supabase instance
 
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
@@ -274,13 +382,13 @@ export const MyAdmin = () => (
 
 For HashRouter see [Using Hash Router](#using-hash-router).
 
-### Password Reset When Forgotten
+### Password Reset
 
 If users forgot their password, they can request for a reset if you add the `/forgot-password` custom route. You should also set up the [`/set-password` custom route](#invitation-handling) to allow them to choose their new password.
 
 This requires you to configure your supabase instance:
 
-##### Configuring a local Supabase instance
+#### Configuring a local Supabase instance
 
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
@@ -347,7 +455,7 @@ export const MyAdmin = () => (
 
 For HashRouter see [Using Hash Router](#using-hash-router).
 
-#### OAuth Authentication
+### OAuth Authentication
 
 To setup OAuth authentication, you can pass a `LoginPage` element:
 
@@ -378,7 +486,7 @@ Make sure you enabled the specified providers in your Supabase instance:
 
 This also requires you to configure the redirect URLS on your supabase instance:
 
-##### Configuring a local Supabase instance
+#### Configuring a local Supabase instance
 
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
