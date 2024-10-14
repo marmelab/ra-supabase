@@ -150,7 +150,7 @@ const { data, total, isLoading, error } = useGetList(
     'contact',
     {
         pagination: { page: 1, perPage: 10 },
-        sort: { field: 'created_at', order: 'DESC' }
+        sort: { field: 'created_at', order: 'DESC' },
         meta: { columns: ['id', 'first_name', 'last_name'] }
     }
 );
