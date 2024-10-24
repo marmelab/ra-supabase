@@ -257,9 +257,9 @@ In `{TYPE}.html` set the `auth-callback` redirection
 ```HTML
 <html>
   <body>
-   <h2>{TYPE_MESSAGE}</h2>
+    <h2>{TYPE_MESSAGE}</h2>
     <p><a href="{{ .ConfirmationURL }}/auth-callback.html">{TYPE_CTA}</a></p>
-
+  </body>
 </html>
 ```
 
@@ -336,14 +336,14 @@ In `invite.html` set the `auth-callback` redirection
 ```HTML
 <html>
   <body>
-   <h2>You have been invited</h2>
+    <h2>You have been invited</h2>
     <p>You have been invited to create a user on {{ .SiteURL }}. Follow this link to accept the invite:</p>
     <p><a href="{{ .ConfirmationURL }}/auth-callback">Accept the invite</a></p>
-
+  </body>
 </html>
 ```
 
-### Configuring an hosted Supabase instance
+#### Configuring an hosted Supabase instance
 
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL

@@ -59,11 +59,9 @@ If you need debug the backend, you can access the following services:
 
 ### Testing Invitations And Password Reset
 
-The current version of supabase CLI does not allow to customize the emails sent for invitation or password reset.
+When you invite a new user through the [Authentication dashboard](http://localhost:54323/project/default/auth/users), or reset a password through the [password reset form](http://localhost:8000/forgot-password), you can see the email sent in [Inbucket](http://localhost:54324/monitor).
 
-When you invite a new user through the [Authentication dashboard](http://localhost:54323/project/default/auth/users), you can see the email sent in [Inbucket](http://localhost:54324/monitor). Instead of clicking the link, copy it and change the `redirect_to` parameter from `http://localhost:8000` to `http://localhost:8000/auth-callback`.
-
-Apply the same process for password reset emails.
+Clicking the link inside the email will take you to the `/set-password` page where you can set or reset your password.
 
 ### Testing Third Party Authentication Providers
 
