@@ -12,6 +12,13 @@ yarn add ra-supabase
 npm install ra-supabase
 ```
 
+## Email Provider Setup
+
+`ra-supabase` leverage the authentication mechanisms of Supabase. If you don't need to support [the invitations workflow](#invitation-handling) **and** you only enabled [third party OAuth authentication](#oauth-authentication), you can skip this section. However, if you do want to support [the invitations workflow](#invitation-handling) or use the default email/password authentication, you have two options:
+
+- [configure Supabase with a custom SMTP provider](https://supabase.com/docs/guides/auth/auth-smtp#how-to-set-up-smtp)
+- [set up an authentication hook to send the emails yourself](https://supabase.com/docs/guides/auth/auth-hooks/send-email-hook)
+
 ## Usage
 
 ```jsx
@@ -312,6 +319,30 @@ export const MyAdmin = () => (
 );
 ```
 
+### Disabling Email & Password Authentication
+
+If you only want to support [third party OAuth authentication](#oauth-authentication), you can disable email & password authentication by providing a `LoginPage` component:
+
+```jsx
+import { Admin, Resource, ListGuesser } from 'react-admin';
+import { LoginPage } from 'ra-supabase';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={<LoginPage disableEmailPassword providers={['github', 'twitter']} />}
+        >
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
+);
+```
+
 ### Invitation Handling
 
 `ra-supabase` supports the invitation workflow. If a user is invited to use the application (by sending an invitation through Supabase dashboard for instance), you can configure the `/set-password` custom route to allow them to set their password.
@@ -471,6 +502,8 @@ export const MyAdmin = () => (
             dataProvider={dataProvider}
             authProvider={authProvider}
             loginPage={<LoginPage providers={['github', 'twitter']} />}
+            // You can also disable email & password authentication
+            loginPage={<LoginPage disableEmailPassword providers={['github', 'twitter']} />}
         >
             <Resource name="posts" list={ListGuesser} />
             <Resource name="authors" list={ListGuesser} />
