@@ -173,10 +173,10 @@ export const supabaseAuthProvider = (
 
             const { data, error } = await client.auth.getUser();
             if (error) {
-                throw error;
+                return;
             }
             if (data.user == null) {
-                return undefined;
+                return;
             }
 
             if (typeof getPermissions === 'function') {
