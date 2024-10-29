@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.1
+
+* Fix `authProvider.getPermissions()` should not throw error when not logged in ([#79](https://github.com/marmelab/ra-supabase/pull/79)) ([fzaninotto](https://github.com/fzaninotto))
+* [Doc] Improve email setup instructions ([#78](https://github.com/marmelab/ra-supabase/pull/78)) ([djhi](https://github.com/djhi))
+* [Demo] Configure local Supabase instance to support invitation and password reset out of the box ([#77](https://github.com/marmelab/ra-supabase/pull/77)) ([slax57](https://github.com/slax57))
+
 ## 3.2.0
 
 * Add ability to pass additional options to postgrest ([#74](https://github.com/marmelab/ra-supabase/pull/74)) ([fzaninotto](https://github.com/fzaninotto))
