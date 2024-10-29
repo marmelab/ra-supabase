@@ -156,15 +156,15 @@ export const supabaseAuthProvider = (
 
             return Promise.resolve();
         },
-    };
-
-    if (typeof getPermissions === 'function') {
-        authProvider.getPermissions = async () => {
-            // No permissions when users are on the set-password page
-            // or on the forgot-password page.
+        async getPermissions() {
             if (
                 window.location.pathname === '/set-password' ||
-                window.location.hash.includes('#/set-password') ||
+                window.location.hash.includes('#/set-password')
+            ) {
+                return;
+            }
+            // Users are on the forgot-password page, nothing to do
+            if (
                 window.location.pathname === '/forgot-password' ||
                 window.location.hash.includes('#/forgot-password')
             ) {
@@ -172,11 +172,20 @@ export const supabaseAuthProvider = (
             }
 
             const { data, error } = await client.auth.getUser();
-            if (error || data.user == null) return;
+            if (error) {
+                return;
+            }
+            if (data.user == null) {
+                return;
+            }
 
-            return getPermissions(data.user);
-        };
-    }
+            if (typeof getPermissions === 'function') {
+                const permissions = await getPermissions(data.user);
+                return permissions;
+            }
+            return undefined;
+        },
+    };
 
     if (typeof getIdentity === 'function') {
         authProvider.getIdentity = async () => {
