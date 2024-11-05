@@ -1,8 +1,15 @@
-import { CardActions, Stack, styled, Typography } from '@mui/material';
-import { Form, required, useNotify, useTranslate } from 'ra-core';
-import { useResetPassword } from 'ra-supabase-core';
-import { Link, SaveButton, TextInput } from 'ra-ui-materialui';
 import * as React from 'react';
+import { CardActions, Stack, styled, Typography } from '@mui/material';
+import { useResetPassword } from 'ra-supabase-core';
+import {
+    Form,
+    required,
+    useNotify,
+    useTranslate,
+    Link,
+    SaveButton,
+    TextInput,
+} from 'react-admin';
 
 /**
  * A component that renders a form for resetting the user password.

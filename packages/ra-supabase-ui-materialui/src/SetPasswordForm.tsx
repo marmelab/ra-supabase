@@ -1,8 +1,14 @@
-import { CardActions, styled, Typography } from '@mui/material';
-import { Form, required, useNotify, useTranslate } from 'ra-core';
-import { useSetPassword, useSupabaseAccessToken } from 'ra-supabase-core';
-import { PasswordInput, SaveButton } from 'ra-ui-materialui';
 import * as React from 'react';
+import { CardActions, styled, Typography } from '@mui/material';
+import {
+    Form,
+    required,
+    useNotify,
+    useTranslate,
+    PasswordInput,
+    SaveButton,
+} from 'react-admin';
+import { useSetPassword, useSupabaseAccessToken } from 'ra-supabase-core';
 
 /**
  * A component that renders a form for setting the current user password through Supabase.

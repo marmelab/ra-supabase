@@ -16,9 +16,7 @@ import {
     styled,
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-
-import { TitleComponent } from 'ra-core';
-import { defaultTheme, Notification } from 'ra-ui-materialui';
+import { defaultTheme, Notification, TitleComponent } from 'react-admin';
 
 /**
  * A standalone login page, to serve as authentication gate to the admin
