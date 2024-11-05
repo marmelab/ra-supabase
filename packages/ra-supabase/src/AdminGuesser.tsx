@@ -20,10 +20,10 @@ import { createClient } from '@supabase/supabase-js';
 import { defaultI18nProvider } from './defaultI18nProvider';
 
 export const AdminGuesser = (
-    props: AdminProps & { instanceUrl?: string; apiKey?: string }
+    props: AdminProps & { apiUrl?: string; apiKey?: string }
 ) => {
     const {
-        instanceUrl,
+        apiUrl,
         apiKey,
         dataProvider,
         authProvider,
@@ -39,17 +39,17 @@ export const AdminGuesser = (
     } = props;
 
     const defaultSupabaseClient =
-        instanceUrl && apiKey ? createClient(instanceUrl, apiKey) : null;
+        apiUrl && apiKey ? createClient(apiUrl, apiKey) : null;
     const defaultDataProvider =
-        instanceUrl && apiKey && defaultSupabaseClient
+        apiUrl && apiKey && defaultSupabaseClient
             ? supabaseDataProvider({
-                  instanceUrl,
+                  instanceUrl: apiUrl,
                   apiKey,
                   supabaseClient: defaultSupabaseClient,
               })
             : undefined;
     const defaultAuthProvider =
-        instanceUrl && apiKey && defaultSupabaseClient
+        apiUrl && apiKey && defaultSupabaseClient
             ? supabaseAuthProvider(defaultSupabaseClient, {})
             : undefined;
 
