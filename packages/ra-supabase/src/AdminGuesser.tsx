@@ -9,20 +9,26 @@ import {
 import type { AdminProps, AdminUIProps } from 'react-admin';
 import { Route } from 'react-router-dom';
 
+import { supabaseDataProvider, supabaseAuthProvider } from 'ra-supabase-core';
 import {
     useCrudGuesser,
     LoginPage,
     SetPasswordPage,
     ForgotPasswordPage,
 } from 'ra-supabase-ui-materialui';
+import { createClient } from '@supabase/supabase-js';
 import { defaultI18nProvider } from './defaultI18nProvider';
 
-export const AdminGuesser = (props: AdminProps) => {
+export const AdminGuesser = (
+    props: AdminProps & { instanceUrl?: string; apiKey?: string }
+) => {
     const {
+        instanceUrl,
+        apiKey,
+        dataProvider,
         authProvider,
         basename,
         darkTheme,
-        dataProvider,
         defaultTheme,
         i18nProvider = defaultI18nProvider,
         lightTheme,
@@ -32,12 +38,27 @@ export const AdminGuesser = (props: AdminProps) => {
         ...rest
     } = props;
 
+    const defaultSupabaseClient =
+        instanceUrl && apiKey ? createClient(instanceUrl, apiKey) : null;
+    const defaultDataProvider =
+        instanceUrl && apiKey && defaultSupabaseClient
+            ? supabaseDataProvider({
+                  instanceUrl,
+                  apiKey,
+                  supabaseClient: defaultSupabaseClient,
+              })
+            : undefined;
+    const defaultAuthProvider =
+        instanceUrl && apiKey && defaultSupabaseClient
+            ? supabaseAuthProvider(defaultSupabaseClient, {})
+            : undefined;
+
     return (
         <AdminContext
-            authProvider={authProvider}
+            authProvider={authProvider ?? defaultAuthProvider}
             basename={basename}
             darkTheme={darkTheme}
-            dataProvider={dataProvider}
+            dataProvider={dataProvider ?? defaultDataProvider}
             defaultTheme={defaultTheme}
             i18nProvider={i18nProvider}
             lightTheme={lightTheme}
@@ -60,6 +81,7 @@ const AdminUIGuesser = (props: AdminUIProps) => {
 
 import { Admin, Resource, CustomRoutes } from 'react-admin';
 import { Route } from 'react-router-dom';
+import { createClient } from '@supabase/supabase-js';
 import {
     CreateGuesser,
     EditGuesser,
@@ -69,7 +91,15 @@ import {
     SetPasswordPage,
     ShowGuesser,
     defaultI18nProvider,
+    supabaseDataProvider,
+    supabaseAuthProvider
 } from 'ra-supabase';   
+
+const instanceUrl = YOUR_SUPABASE_URL;
+const apiKey = YOUR_SUPABASE_API_KEY;
+const supabaseClient = createClient(instanceUrl, apiKey);
+const dataProvider = supabaseDataProvider({ instanceUrl, apiKey, supabaseClient });
+const authProvider = supabaseAuthProvider(supabaseClient, {});
 
 export const App = () => (
     <Admin
