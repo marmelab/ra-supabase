@@ -1,4 +1,3 @@
-export * from './AdminGuesser';
 export * from './CreateGuesser';
 export * from './EditGuesser';
 export * from './ListGuesser';

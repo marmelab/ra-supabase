@@ -9,10 +9,13 @@ import {
 import type { AdminProps, AdminUIProps } from 'react-admin';
 import { Route } from 'react-router-dom';
 
-import { useCrudGuesser } from './useCrudGuesser';
-import { LoginPage } from '../LoginPage';
-import { SetPasswordPage } from '../SetPasswordPage';
-import { ForgotPasswordPage } from '../ForgotPasswordPage';
+import {
+    useCrudGuesser,
+    LoginPage,
+    SetPasswordPage,
+    ForgotPasswordPage,
+} from 'ra-supabase-ui-materialui';
+import { defaultI18nProvider } from './defaultI18nProvider';
 
 export const AdminGuesser = (props: AdminProps) => {
     const {
@@ -21,7 +24,7 @@ export const AdminGuesser = (props: AdminProps) => {
         darkTheme,
         dataProvider,
         defaultTheme,
-        i18nProvider,
+        i18nProvider = defaultI18nProvider,
         lightTheme,
         queryClient,
         store,
@@ -65,12 +68,14 @@ import {
     LoginPage,
     SetPasswordPage,
     ShowGuesser,
+    defaultI18nProvider,
 } from 'ra-supabase';   
 
 export const App = () => (
     <Admin
         dataProvider={dataProvider}
         authProvider={authProvider}
+        i18nProvider={defaultI18nProvider}
         loginPage={LoginPage}
     >${resourceDefinitions
         .map(
