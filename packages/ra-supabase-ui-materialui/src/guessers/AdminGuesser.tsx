@@ -1,9 +1,18 @@
 import * as React from 'react';
-
-import { AdminContext, AdminUI, Resource, Loading } from 'react-admin';
+import {
+    AdminContext,
+    AdminUI,
+    Resource,
+    Loading,
+    CustomRoutes,
+} from 'react-admin';
 import type { AdminProps, AdminUIProps } from 'react-admin';
+import { Route } from 'react-router-dom';
 
 import { useCrudGuesser } from './useCrudGuesser';
+import { LoginPage } from '../LoginPage';
+import { SetPasswordPage } from '../SetPasswordPage';
+import { ForgotPasswordPage } from '../ForgotPasswordPage';
 
 export const AdminGuesser = (props: AdminProps) => {
     const {
@@ -40,15 +49,30 @@ export const AdminGuesser = (props: AdminProps) => {
 
 const AdminUIGuesser = (props: AdminUIProps) => {
     const resourceDefinitions = useCrudGuesser();
+    const hasLogged = React.useRef(false);
     const { children, ...rest } = props;
-    if (!children) {
+    if (!children && resourceDefinitions.length > 0 && !hasLogged.current) {
         console.log(
             `Guessed Admin:
-import { Admin, Resource } from 'react-admin';
-import ( ListGuesser, EditGuesser, CreateGuesser, ShowGuesser ) from 'ra-supabase';   
+
+import { Admin, Resource, CustomRoutes } from 'react-admin';
+import { Route } from 'react-router-dom';
+import {
+    CreateGuesser,
+    EditGuesser,
+    ForgotPasswordPage,
+    ListGuesser,
+    LoginPage,
+    SetPasswordPage,
+    ShowGuesser,
+} from 'ra-supabase';   
 
 export const App = () => (
-    <Admin dataProvider={dataProvider} authProvider={authProvider}>${resourceDefinitions
+    <Admin
+        dataProvider={dataProvider}
+        authProvider={authProvider}
+        loginPage={LoginPage}
+    >${resourceDefinitions
         .map(
             def => `
         <Resource name="${def.name}"${def.list ? ' list={ListGuesser}' : ''}${
@@ -58,19 +82,32 @@ export const App = () => (
             } />`
         )
         .join('')}
+        <CustomRoutes noLayout>
+            <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
+            <Route path={ForgotPasswordPage.path} element={<ForgotPasswordPage />} />
+        </CustomRoutes>
     </Admin>
 );`
         );
+        hasLogged.current = true;
     }
+
+    const resourceElements = resourceDefinitions.map(resourceDefinition => (
+        <Resource key={resourceDefinition.name} {...resourceDefinition} />
+    )) as any;
     return (
-        <AdminUI ready={Loading} {...rest}>
-            {children ??
-                resourceDefinitions.map(resourceDefinition => (
-                    <Resource
-                        key={resourceDefinition.name}
-                        {...resourceDefinition}
-                    />
-                ))}
+        <AdminUI ready={Loading} loginPage={LoginPage} {...rest}>
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+                <Route
+                    path={ForgotPasswordPage.path}
+                    element={<ForgotPasswordPage />}
+                />
+            </CustomRoutes>
+            {children ?? resourceElements}
         </AdminUI>
     );
 };

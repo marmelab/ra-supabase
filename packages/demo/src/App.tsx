@@ -3,11 +3,7 @@ import { mergeTranslations } from 'react-admin';
 import polyglotI18nProvider from 'ra-i18n-polyglot';
 import englishMessages from 'ra-language-english';
 import { BrowserRouter } from 'react-router-dom';
-import {
-    AdminGuesser,
-    LoginPage,
-    raSupabaseEnglishMessages,
-} from 'ra-supabase';
+import { AdminGuesser, raSupabaseEnglishMessages } from 'ra-supabase';
 import { authProvider } from './authProvider';
 import { Dashboard } from './dashboard/Dashboard';
 import { dataProvider } from './dataProvider';
@@ -23,7 +19,6 @@ const App = () => (
             authProvider={authProvider}
             i18nProvider={i18nProvider}
             dashboard={Dashboard}
-            loginPage={LoginPage}
             title="CRM Demo"
         />
     </BrowserRouter>
