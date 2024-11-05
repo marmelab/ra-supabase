@@ -231,6 +231,29 @@ const dataProvider = supabaseDataProvider(config);
 
 As users authenticate through supabase, you can leverage [Row Level Security](https://supabase.com/docs/guides/auth/row-level-security). Users identity will be propagated through the dataProvider if you provided the public API (anon) key. Keep in mind that passing the `service_role` key will bypass Row Level Security. This is not recommended.
 
+## Guessers
+
+`ra-supabase` provides alternative guessers for all CRUD pages, leveraging the OpenAPI schema provided by Supabase. Use these guessers instead of react-admin's default guessers for a better first experience.
+
+```jsx
+import { Admin, Resource } from 'react-admin';
+import { ListGuesser, ShowGuesser, EditGuesser, CreateGuesser } from 'ra-supabase';
+
+export const MyAdmin = () => (
+    <BrowserRouter>
+        <Admin dataProvider={dataProvider} authProvider={authProvider}>
+            <Resource
+                name="posts"
+                list={ListGuesser}
+                show={ShowGuesser}
+                edit={EditGuesser}
+                create={CreateGuesser}
+            />
+        </Admin>
+    </BrowserRouter>
+);
+```
+
 ## Using Hash Router
 
 Supabase uses URL hash links for its redirections. This can cause conflicts if you use a HashRouter. For this reason, we recommend using the BrowserRouter.
