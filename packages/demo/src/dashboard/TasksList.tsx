@@ -9,7 +9,7 @@ import {
     ListContextProvider,
     ResourceContextProvider,
 } from 'react-admin';
-import { TasksIterator } from '../tasks/TasksIterator';
+import { TasksIterator } from './TasksIterator';
 
 import { Contact } from '../types';
 

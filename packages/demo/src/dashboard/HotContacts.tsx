@@ -4,7 +4,7 @@ import ContactsIcon from '@mui/icons-material/Contacts';
 import { useGetList, Link, SimpleList, useGetIdentity } from 'react-admin';
 import { formatDistance } from 'date-fns';
 
-import { Avatar } from '../contacts/Avatar';
+import { Avatar } from './Avatar';
 import { Contact } from '../types';
 
 export const HotContacts = () => {
