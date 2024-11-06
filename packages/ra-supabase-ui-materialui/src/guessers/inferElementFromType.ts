@@ -7,6 +7,7 @@ const hasType = (type, types) => typeof types[type] !== 'undefined';
 export const inferElementFromType = ({
     name,
     description,
+    format,
     type,
     requiredFields,
     types,
@@ -14,6 +15,7 @@ export const inferElementFromType = ({
     name: string;
     types: InferredTypeMap;
     description?: string;
+    format?: string;
     type?: string;
     requiredFields?: string[];
 }) => {
@@ -44,6 +46,39 @@ export const inferElementFromType = ({
     if (type === 'array') {
         // FIXME instrospect further
         return new InferredElement(types.string, {
+            source: name,
+            validate,
+        });
+    }
+    if (type === 'string') {
+        if (name === 'email' && hasType('email', types)) {
+            return new InferredElement(types.email, {
+                source: name,
+                validate,
+            });
+        }
+        if (['url', 'website'].includes(name) && hasType('url', types)) {
+            return new InferredElement(types.url, {
+                source: name,
+                validate,
+            });
+        }
+        if (
+            format &&
+            [
+                'timestamp with time zone',
+                'timestamp without time zone',
+            ].includes(format) &&
+            hasType('date', types)
+        ) {
+            return new InferredElement(types.date, {
+                source: name,
+                validate,
+            });
+        }
+    }
+    if (type === 'integer' && hasType('number', types)) {
+        return new InferredElement(types.number, {
             source: name,
             validate,
         });

@@ -74,6 +74,7 @@ export const CreateGuesserView = (
                     types: editFieldTypes,
                     description:
                         resourceDefinition.properties![source].description,
+                    format: resourceDefinition.properties![source].format,
                     type: (resourceDefinition.properties &&
                     resourceDefinition.properties[source] &&
                     typeof resourceDefinition.properties[source].type ===
