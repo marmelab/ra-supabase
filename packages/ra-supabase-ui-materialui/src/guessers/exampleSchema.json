@@ -1,0 +1,2521 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "",
+        "title": "standard public schema",
+        "version": "12.0.1 (cd38da5)"
+    },
+    "host": "0.0.0.0:3000",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json",
+        "application/vnd.pgrst.object+json;nulls=stripped",
+        "application/vnd.pgrst.object+json",
+        "text/csv"
+    ],
+    "produces": [
+        "application/json",
+        "application/vnd.pgrst.object+json;nulls=stripped",
+        "application/vnd.pgrst.object+json",
+        "text/csv"
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "produces": [
+                    "application/openapi+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "summary": "OpenAPI description (this document)",
+                "tags": [
+                    "Introspection"
+                ]
+            }
+        },
+        "/companies": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.logo"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.sector"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.size"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.linkedIn"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.website"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.phone_number"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.address"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.zipcode"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.city"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.stateAbbr"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.created_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/order"
+                    },
+                    {
+                        "$ref": "#/parameters/range"
+                    },
+                    {
+                        "$ref": "#/parameters/rangeUnit"
+                    },
+                    {
+                        "$ref": "#/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/parameters/preferCount"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/companies"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content"
+                    }
+                },
+                "tags": [
+                    "companies"
+                ]
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/body.companies"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/preferPost"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "tags": [
+                    "companies"
+                ]
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.logo"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.sector"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.size"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.linkedIn"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.website"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.phone_number"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.address"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.zipcode"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.city"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.stateAbbr"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.created_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "companies"
+                ]
+            },
+            "patch": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.logo"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.sector"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.size"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.linkedIn"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.website"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.phone_number"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.address"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.zipcode"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.city"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.stateAbbr"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.created_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.companies.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/body.companies"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "companies"
+                ]
+            }
+        },
+        "/contacts": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.first_name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.last_name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.gender"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.title"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.company_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.email"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.phone_number1"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.phone_number2"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.background"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.acquisition"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.avatar"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.first_seen"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.last_seen"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.has_newsletter"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.status"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.tags"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/order"
+                    },
+                    {
+                        "$ref": "#/parameters/range"
+                    },
+                    {
+                        "$ref": "#/parameters/rangeUnit"
+                    },
+                    {
+                        "$ref": "#/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/parameters/preferCount"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/contacts"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content"
+                    }
+                },
+                "tags": [
+                    "contacts"
+                ]
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/body.contacts"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/preferPost"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "tags": [
+                    "contacts"
+                ]
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.first_name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.last_name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.gender"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.title"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.company_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.email"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.phone_number1"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.phone_number2"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.background"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.acquisition"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.avatar"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.first_seen"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.last_seen"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.has_newsletter"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.status"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.tags"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "contacts"
+                ]
+            },
+            "patch": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.first_name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.last_name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.gender"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.title"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.company_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.email"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.phone_number1"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.phone_number2"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.background"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.acquisition"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.avatar"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.first_seen"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.last_seen"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.has_newsletter"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.status"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.tags"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contacts.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/body.contacts"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "contacts"
+                ]
+            }
+        },
+        "/deals": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.created_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.company_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.contact_ids"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.stage"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.description"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.amount"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.updated_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.start_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.index"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/order"
+                    },
+                    {
+                        "$ref": "#/parameters/range"
+                    },
+                    {
+                        "$ref": "#/parameters/rangeUnit"
+                    },
+                    {
+                        "$ref": "#/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/parameters/preferCount"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/deals"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content"
+                    }
+                },
+                "tags": [
+                    "deals"
+                ]
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/body.deals"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/preferPost"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "tags": [
+                    "deals"
+                ]
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.created_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.company_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.contact_ids"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.stage"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.description"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.amount"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.updated_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.start_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.index"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "deals"
+                ]
+            },
+            "patch": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.created_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.company_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.contact_ids"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.stage"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.description"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.amount"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.updated_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.start_at"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.index"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.deals.fts"
+                    },
+                    {
+                        "$ref": "#/parameters/body.deals"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "deals"
+                ]
+            }
+        },
+        "/tags": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.color"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/order"
+                    },
+                    {
+                        "$ref": "#/parameters/range"
+                    },
+                    {
+                        "$ref": "#/parameters/rangeUnit"
+                    },
+                    {
+                        "$ref": "#/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/parameters/preferCount"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/tags"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content"
+                    }
+                },
+                "tags": [
+                    "tags"
+                ]
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/body.tags"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/preferPost"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "tags": [
+                    "tags"
+                ]
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.color"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "tags"
+                ]
+            },
+            "patch": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tags.color"
+                    },
+                    {
+                        "$ref": "#/parameters/body.tags"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "tags"
+                ]
+            }
+        },
+        "/tasks": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.due_date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.contact_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.text"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.done_date"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/order"
+                    },
+                    {
+                        "$ref": "#/parameters/range"
+                    },
+                    {
+                        "$ref": "#/parameters/rangeUnit"
+                    },
+                    {
+                        "$ref": "#/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/parameters/preferCount"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/tasks"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content"
+                    }
+                },
+                "tags": [
+                    "tasks"
+                ]
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/body.tasks"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/preferPost"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "tags": [
+                    "tasks"
+                ]
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.due_date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.contact_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.text"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.done_date"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "tasks"
+                ]
+            },
+            "patch": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.due_date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.contact_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.text"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.tasks.done_date"
+                    },
+                    {
+                        "$ref": "#/parameters/body.tasks"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "tasks"
+                ]
+            }
+        },
+        "/dealNotes": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.deal_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.text"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/order"
+                    },
+                    {
+                        "$ref": "#/parameters/range"
+                    },
+                    {
+                        "$ref": "#/parameters/rangeUnit"
+                    },
+                    {
+                        "$ref": "#/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/parameters/preferCount"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/dealNotes"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content"
+                    }
+                },
+                "tags": [
+                    "dealNotes"
+                ]
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/body.dealNotes"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/preferPost"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "tags": [
+                    "dealNotes"
+                ]
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.deal_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.text"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "dealNotes"
+                ]
+            },
+            "patch": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.deal_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.type"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.dealNotes.text"
+                    },
+                    {
+                        "$ref": "#/parameters/body.dealNotes"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "dealNotes"
+                ]
+            }
+        },
+        "/contactNotes": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.text"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.status"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.contact_id"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/order"
+                    },
+                    {
+                        "$ref": "#/parameters/range"
+                    },
+                    {
+                        "$ref": "#/parameters/rangeUnit"
+                    },
+                    {
+                        "$ref": "#/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/parameters/preferCount"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/contactNotes"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content"
+                    }
+                },
+                "tags": [
+                    "contactNotes"
+                ]
+            },
+            "post": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/body.contactNotes"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/preferPost"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "tags": [
+                    "contactNotes"
+                ]
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.text"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.status"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.contact_id"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "contactNotes"
+                ]
+            },
+            "patch": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.date"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.text"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.sales_id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.status"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.contactNotes.contact_id"
+                    },
+                    {
+                        "$ref": "#/parameters/body.contactNotes"
+                    },
+                    {
+                        "$ref": "#/parameters/preferReturn"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "tags": [
+                    "contactNotes"
+                ]
+            }
+        },
+        "/sales": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/rowFilter.sales.id"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.sales.first_name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.sales.last_name"
+                    },
+                    {
+                        "$ref": "#/parameters/rowFilter.sales.email"
+                    },
+                    {
+                        "$ref": "#/parameters/select"
+                    },
+                    {
+                        "$ref": "#/parameters/order"
+                    },
+                    {
+                        "$ref": "#/parameters/range"
+                    },
+                    {
+                        "$ref": "#/parameters/rangeUnit"
+                    },
+                    {
+                        "$ref": "#/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/parameters/preferCount"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "items": {
+                                "$ref": "#/definitions/sales"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "206": {
+                        "description": "Partial Content"
+                    }
+                },
+                "tags": [
+                    "sales"
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "companies": {
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Note:\nThis is a Primary Key.<pk/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "name": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "logo": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "sector": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "size": {
+                    "format": "smallint",
+                    "type": "integer"
+                },
+                "linkedIn": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "website": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "phone_number": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "address": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "zipcode": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "city": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "stateAbbr": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "sales_id": {
+                    "description": "Note:\nThis is a Foreign Key to `sales.id`.<fk table='sales' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "created_at": {
+                    "format": "timestamp without time zone",
+                    "type": "string"
+                },
+                "fts": {
+                    "format": "tsvector",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "contacts": {
+            "required": [
+                "id",
+                "first_name",
+                "last_name",
+                "company_id",
+                "has_newsletter",
+                "tags"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Note:\nThis is a Primary Key.<pk/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "first_name": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "last_name": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "gender": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "title": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "company_id": {
+                    "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "email": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "phone_number1": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "phone_number2": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "background": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "acquisition": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "avatar": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "first_seen": {
+                    "format": "timestamp without time zone",
+                    "type": "string"
+                },
+                "last_seen": {
+                    "format": "timestamp without time zone",
+                    "type": "string"
+                },
+                "has_newsletter": {
+                    "format": "boolean",
+                    "type": "boolean"
+                },
+                "status": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "tags": {
+                    "format": "bigint[]",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array"
+                },
+                "sales_id": {
+                    "description": "Note:\nThis is a Foreign Key to `sales.id`.<fk table='sales' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "fts": {
+                    "format": "tsvector",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "deals": {
+            "required": [
+                "id",
+                "name",
+                "company_id",
+                "stage",
+                "index"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Note:\nThis is a Primary Key.<pk/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "created_at": {
+                    "format": "timestamp without time zone",
+                    "type": "string"
+                },
+                "name": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "company_id": {
+                    "description": "Note:\nThis is a Foreign Key to `companies.id`.<fk table='companies' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "contact_ids": {
+                    "format": "bigint[]",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "stage": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "description": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "amount": {
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "format": "timestamp without time zone",
+                    "type": "string"
+                },
+                "start_at": {
+                    "format": "timestamp without time zone",
+                    "type": "string"
+                },
+                "sales_id": {
+                    "description": "Note:\nThis is a Foreign Key to `sales.id`.<fk table='sales' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "index": {
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "fts": {
+                    "format": "tsvector",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "tags": {
+            "required": [
+                "id",
+                "name",
+                "color"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Note:\nThis is a Primary Key.<pk/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "name": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "color": {
+                    "format": "character varying",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "tasks": {
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Note:\nThis is a Primary Key.<pk/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "due_date": {
+                    "format": "timestamp with time zone",
+                    "type": "string"
+                },
+                "contact_id": {
+                    "description": "Note:\nThis is a Foreign Key to `contacts.id`.<fk table='contacts' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "sales_id": {
+                    "description": "Note:\nThis is a Foreign Key to `sales.id`.<fk table='sales' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "text": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "type": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "done_date": {
+                    "format": "timestamp with time zone",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "dealNotes": {
+            "required": [
+                "id",
+                "date",
+                "deal_id",
+                "sales_id",
+                "type",
+                "text"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Note:\nThis is a Primary Key.<pk/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "date": {
+                    "default": "now()",
+                    "format": "timestamp with time zone",
+                    "type": "string"
+                },
+                "deal_id": {
+                    "description": "Note:\nThis is a Foreign Key to `deals.id`.<fk table='deals' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "sales_id": {
+                    "description": "Note:\nThis is a Foreign Key to `sales.id`.<fk table='sales' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "type": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "text": {
+                    "format": "character varying",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "contactNotes": {
+            "required": [
+                "id",
+                "date",
+                "text",
+                "sales_id",
+                "status"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Note:\nThis is a Primary Key.<pk/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "date": {
+                    "default": "now()",
+                    "format": "timestamp with time zone",
+                    "type": "string"
+                },
+                "text": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "sales_id": {
+                    "description": "Note:\nThis is a Foreign Key to `sales.id`.<fk table='sales' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "status": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "contact_id": {
+                    "description": "Note:\nThis is a Foreign Key to `contacts.id`.<fk table='contacts' column='id'/>",
+                    "format": "bigint",
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "sales": {
+            "required": [
+                "id",
+                "first_name",
+                "last_name",
+                "email"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Note:\nThis is a Primary Key.<pk/>",
+                    "format": "bigint",
+                    "type": "integer"
+                },
+                "first_name": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "last_name": {
+                    "format": "character varying",
+                    "type": "string"
+                },
+                "email": {
+                    "format": "character varying",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "parameters": {
+        "preferParams": {
+            "name": "Prefer",
+            "description": "Preference",
+            "required": false,
+            "enum": [
+                "params=single-object"
+            ],
+            "in": "header",
+            "type": "string"
+        },
+        "preferReturn": {
+            "name": "Prefer",
+            "description": "Preference",
+            "required": false,
+            "enum": [
+                "return=representation",
+                "return=minimal",
+                "return=none"
+            ],
+            "in": "header",
+            "type": "string"
+        },
+        "preferCount": {
+            "name": "Prefer",
+            "description": "Preference",
+            "required": false,
+            "enum": [
+                "count=none"
+            ],
+            "in": "header",
+            "type": "string"
+        },
+        "preferPost": {
+            "name": "Prefer",
+            "description": "Preference",
+            "required": false,
+            "enum": [
+                "return=representation",
+                "return=minimal",
+                "return=none",
+                "resolution=ignore-duplicates",
+                "resolution=merge-duplicates"
+            ],
+            "in": "header",
+            "type": "string"
+        },
+        "select": {
+            "name": "select",
+            "description": "Filtering Columns",
+            "required": false,
+            "in": "query",
+            "type": "string"
+        },
+        "on_conflict": {
+            "name": "on_conflict",
+            "description": "On Conflict",
+            "required": false,
+            "in": "query",
+            "type": "string"
+        },
+        "order": {
+            "name": "order",
+            "description": "Ordering",
+            "required": false,
+            "in": "query",
+            "type": "string"
+        },
+        "range": {
+            "name": "Range",
+            "description": "Limiting and Pagination",
+            "required": false,
+            "in": "header",
+            "type": "string"
+        },
+        "rangeUnit": {
+            "name": "Range-Unit",
+            "description": "Limiting and Pagination",
+            "required": false,
+            "default": "items",
+            "in": "header",
+            "type": "string"
+        },
+        "offset": {
+            "name": "offset",
+            "description": "Limiting and Pagination",
+            "required": false,
+            "in": "query",
+            "type": "string"
+        },
+        "limit": {
+            "name": "limit",
+            "description": "Limiting and Pagination",
+            "required": false,
+            "in": "query",
+            "type": "string"
+        },
+        "body.companies": {
+            "name": "companies",
+            "description": "companies",
+            "required": false,
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/companies"
+            }
+        },
+        "rowFilter.companies.id": {
+            "name": "id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.name": {
+            "name": "name",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.logo": {
+            "name": "logo",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.sector": {
+            "name": "sector",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.size": {
+            "name": "size",
+            "required": false,
+            "format": "smallint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.linkedIn": {
+            "name": "linkedIn",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.website": {
+            "name": "website",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.phone_number": {
+            "name": "phone_number",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.address": {
+            "name": "address",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.zipcode": {
+            "name": "zipcode",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.city": {
+            "name": "city",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.stateAbbr": {
+            "name": "stateAbbr",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.sales_id": {
+            "name": "sales_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.created_at": {
+            "name": "created_at",
+            "required": false,
+            "format": "timestamp without time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.companies.fts": {
+            "name": "fts",
+            "required": false,
+            "format": "tsvector",
+            "in": "query",
+            "type": "string"
+        },
+        "body.contacts": {
+            "name": "contacts",
+            "description": "contacts",
+            "required": false,
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/contacts"
+            }
+        },
+        "rowFilter.contacts.id": {
+            "name": "id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.first_name": {
+            "name": "first_name",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.last_name": {
+            "name": "last_name",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.gender": {
+            "name": "gender",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.title": {
+            "name": "title",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.company_id": {
+            "name": "company_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.email": {
+            "name": "email",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.phone_number1": {
+            "name": "phone_number1",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.phone_number2": {
+            "name": "phone_number2",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.background": {
+            "name": "background",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.acquisition": {
+            "name": "acquisition",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.avatar": {
+            "name": "avatar",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.first_seen": {
+            "name": "first_seen",
+            "required": false,
+            "format": "timestamp without time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.last_seen": {
+            "name": "last_seen",
+            "required": false,
+            "format": "timestamp without time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.has_newsletter": {
+            "name": "has_newsletter",
+            "required": false,
+            "format": "boolean",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.status": {
+            "name": "status",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.tags": {
+            "name": "tags",
+            "required": false,
+            "format": "bigint[]",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.sales_id": {
+            "name": "sales_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contacts.fts": {
+            "name": "fts",
+            "required": false,
+            "format": "tsvector",
+            "in": "query",
+            "type": "string"
+        },
+        "body.deals": {
+            "name": "deals",
+            "description": "deals",
+            "required": false,
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/deals"
+            }
+        },
+        "rowFilter.deals.id": {
+            "name": "id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.created_at": {
+            "name": "created_at",
+            "required": false,
+            "format": "timestamp without time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.name": {
+            "name": "name",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.company_id": {
+            "name": "company_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.contact_ids": {
+            "name": "contact_ids",
+            "required": false,
+            "format": "bigint[]",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.type": {
+            "name": "type",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.stage": {
+            "name": "stage",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.description": {
+            "name": "description",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.amount": {
+            "name": "amount",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.updated_at": {
+            "name": "updated_at",
+            "required": false,
+            "format": "timestamp without time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.start_at": {
+            "name": "start_at",
+            "required": false,
+            "format": "timestamp without time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.sales_id": {
+            "name": "sales_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.index": {
+            "name": "index",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.deals.fts": {
+            "name": "fts",
+            "required": false,
+            "format": "tsvector",
+            "in": "query",
+            "type": "string"
+        },
+        "body.tags": {
+            "name": "tags",
+            "description": "tags",
+            "required": false,
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/tags"
+            }
+        },
+        "rowFilter.tags.id": {
+            "name": "id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.tags.name": {
+            "name": "name",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.tags.color": {
+            "name": "color",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "body.tasks": {
+            "name": "tasks",
+            "description": "tasks",
+            "required": false,
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/tasks"
+            }
+        },
+        "rowFilter.tasks.id": {
+            "name": "id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.tasks.due_date": {
+            "name": "due_date",
+            "required": false,
+            "format": "timestamp with time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.tasks.contact_id": {
+            "name": "contact_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.tasks.sales_id": {
+            "name": "sales_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.tasks.text": {
+            "name": "text",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.tasks.type": {
+            "name": "type",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.tasks.done_date": {
+            "name": "done_date",
+            "required": false,
+            "format": "timestamp with time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "body.dealNotes": {
+            "name": "dealNotes",
+            "description": "dealNotes",
+            "required": false,
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/dealNotes"
+            }
+        },
+        "rowFilter.dealNotes.id": {
+            "name": "id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.dealNotes.date": {
+            "name": "date",
+            "required": false,
+            "format": "timestamp with time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.dealNotes.deal_id": {
+            "name": "deal_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.dealNotes.sales_id": {
+            "name": "sales_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.dealNotes.type": {
+            "name": "type",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.dealNotes.text": {
+            "name": "text",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "body.contactNotes": {
+            "name": "contactNotes",
+            "description": "contactNotes",
+            "required": false,
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/contactNotes"
+            }
+        },
+        "rowFilter.contactNotes.id": {
+            "name": "id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contactNotes.date": {
+            "name": "date",
+            "required": false,
+            "format": "timestamp with time zone",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contactNotes.text": {
+            "name": "text",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contactNotes.sales_id": {
+            "name": "sales_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contactNotes.status": {
+            "name": "status",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.contactNotes.contact_id": {
+            "name": "contact_id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "body.sales": {
+            "name": "sales",
+            "description": "sales",
+            "required": false,
+            "in": "body",
+            "schema": {
+                "$ref": "#/definitions/sales"
+            }
+        },
+        "rowFilter.sales.id": {
+            "name": "id",
+            "required": false,
+            "format": "bigint",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.sales.first_name": {
+            "name": "first_name",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.sales.last_name": {
+            "name": "last_name",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        },
+        "rowFilter.sales.email": {
+            "name": "email",
+            "required": false,
+            "format": "character varying",
+            "in": "query",
+            "type": "string"
+        }
+    },
+    "externalDocs": {
+        "description": "PostgREST Documentation",
+        "url": "https://postgrest.org/en/v12.0/api.html"
+    }
+}

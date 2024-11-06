@@ -13,26 +13,15 @@ export const useCrudGuesser = () => {
         if (isPending || error) {
             return [];
         }
-        let edit, show, create, list;
         const resourceNames = Object.keys(schema.definitions!);
         return resourceNames.map(name => {
             const resourcePaths = schema.paths[`/${name}`] ?? {};
-            if (resourcePaths.get) {
-                list = ListGuesser;
-                show = ShowGuesser;
-            }
-            if (resourcePaths.post) {
-                create = CreateGuesser;
-            }
-            if (resourcePaths.patch) {
-                edit = EditGuesser;
-            }
             return {
                 name,
-                list,
-                show,
-                edit,
-                create,
+                list: resourcePaths.get ? ListGuesser : undefined,
+                show: resourcePaths.get ? ShowGuesser : undefined,
+                edit: resourcePaths.patch ? EditGuesser : undefined,
+                create: resourcePaths.post ? CreateGuesser : undefined,
             };
         });
     }, [schema, isPending, error]);
