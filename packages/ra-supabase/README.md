@@ -34,7 +34,18 @@ const App = () => (
 export default App;
 ```
 
-This generates an admin with CRUD routes for all the resources exposed by Supabase.
+This generates an admin app with working CRUD for all resources.
+
+![Demo](./assets/demo.png)
+
+The generated admin is fully functional:
+
+- All public tables are listed in the sidebar
+- Lists are sortable and paginated
+- Creating, editing, and deleting records is possible
+- Forms use the correct input component based on the field type
+- Relationships are displayed as links in show views and as autocomplete inputs in edit views
+- Authentication is handled by Supabase
 
 To start customizing the app, open the browser console, and copy the guessed admin code. You can then paste it into your own app and start customizing it.
 
@@ -88,7 +99,7 @@ export const App = () => (
 );
 ```
 
-By default, `<AdminGuesser>` uses a `<BrowserRouter>` as supabase use hash parameters for passing authentication tokens. If you want to use a `<HashRouter>`, check out the [Using Hash Router](#using-hash-router) section.
+**Note**: By default, `<AdminGuesser>` uses a `<BrowserRouter>` because Supabase email links require it. If you want to use a `<HashRouter>`, check out the [Using Hash Router](#using-hash-router) section.
 
 ### Filters operators
 
