@@ -1,8 +1,6 @@
 # ra-supabase
 
-This package provides a dataProvider, an authProvider, hooks and components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
-
-It leverages [ra-supabase-core](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-core) and [ra-supabase-ui-materialui](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase-ui-materialui).
+This package integrates [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin). It provides a dataProvider, an authProvider, specialized hooks and components to get the most out of Supabase in your react-admin application.
 
 ## Installation
 
@@ -12,91 +10,85 @@ yarn add ra-supabase
 npm install ra-supabase
 ```
 
-## Email Provider Setup
+`ra-supabase` leverage the authentication mechanisms of Supabase. If you don't need to support [the invitations workflow](#invitation-handling) **and** you only enabled [third party OAuth authentication](#oauth-authentication), you're done with the installation.
 
-`ra-supabase` leverage the authentication mechanisms of Supabase. If you don't need to support [the invitations workflow](#invitation-handling) **and** you only enabled [third party OAuth authentication](#oauth-authentication), you can skip this section. However, if you do want to support [the invitations workflow](#invitation-handling) or use the default email/password authentication, you have two options:
+If you do want to support [the invitations workflow](#invitation-handling) or use the default email/password authentication, you must do one of the following:
 
-- [configure Supabase with a custom SMTP provider](https://supabase.com/docs/guides/auth/auth-smtp#how-to-set-up-smtp)
-- [set up an authentication hook to send the emails yourself](https://supabase.com/docs/guides/auth/auth-hooks/send-email-hook)
+- [Configure Supabase with a custom SMTP provider](https://supabase.com/docs/guides/auth/auth-smtp#how-to-set-up-smtp)
+- [Set up an authentication hook to send the emails yourself](https://supabase.com/docs/guides/auth/auth-hooks/send-email-hook)
 
 ## Usage
 
-```jsx
-// in supabase.js
-import { createClient } from '@supabase/supabase-js';
+`ra-supabase` provides an `<AdminGuesser>` component that takes advantage of Supabase's OpenAPI schema to guess the resources and their fields. You can use it as a replacement for react-admin's `<Admin>` component to bootstrap your admin quickly:
 
-export const supabaseClient = createClient(
-    'YOUR_SUPABASE_URL',
-    'YOUR_SUPABASE_ANON_KEY'
+```jsx
+import { AdminGuesser } from 'ra-supabase';
+
+const App = () => (
+    <AdminGuesser
+        apiUrl={YOUR_SUPABASE_URL}
+        apiKey={YOUR_SUPABASE_API_KEY}
+    />
 );
 
-// in dataProvider.js
-import { supabaseDataProvider } from 'ra-supabase';
-import { supabaseClient } from './supabase';
+export default App;
+```
 
-export const dataProvider = supabaseDataProvider({
-    instanceUrl: 'YOUR_SUPABASE_URL',
-    apiKey: 'YOUR_SUPABASE_ANON_KEY',
-    supabaseClient,
-});
+This generates an admin with CRUD routes for all the resources exposed by Supabase.
 
-// in authProvider.js
-import { supabaseAuthProvider } from 'ra-supabase';
-import { supabaseClient } from './supabase';
+To start customizing the app, open the browser console, and copy the guessed admin code. You can then paste it into your own app and start customizing it.
 
-export const authProvider = supabaseAuthProvider(supabaseClient, {
-    getIdentity: async user => {
-        const { data, error } = await supabaseClient
-            .from('userProfiles')
-            .select('id, first_name, last_name')
-            .match({ email: user.email })
-            .single();
+The generated code will look like this:
 
-        if (!data || error) {
-            throw new Error();
-        }
-
-        return {
-            id: data.id,
-            fullName: `${data.first_name} ${data.last_name}`,
-        };
-    },
-});
-
-// in App.js
-import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
-import { LoginPage, SetPasswordPage, ForgotPasswordPage } from 'ra-supabase';
+```jsx
+import { Admin, Resource, CustomRoutes } from 'react-admin';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { dataProvider } from './dataProvider';
-import { authProvider } from './authProvider';
+import { createClient } from '@supabase/supabase-js';
+import {
+    CreateGuesser,
+    EditGuesser,
+    ForgotPasswordPage,
+    ListGuesser,
+    LoginPage,
+    SetPasswordPage,
+    ShowGuesser,
+    defaultI18nProvider,
+    supabaseDataProvider,
+    supabaseAuthProvider
+} from 'ra-supabase';   
 
-export const MyAdmin = () => (
+const instanceUrl = YOUR_SUPABASE_URL;
+const apiKey = YOUR_SUPABASE_API_KEY;
+const supabaseClient = createClient(instanceUrl, apiKey);
+const dataProvider = supabaseDataProvider({ instanceUrl, apiKey, supabaseClient });
+const authProvider = supabaseAuthProvider(supabaseClient, {});
+
+export const App = () => (
     <BrowserRouter>
         <Admin
             dataProvider={dataProvider}
             authProvider={authProvider}
+            i18nProvider={defaultI18nProvider}
             loginPage={LoginPage}
         >
+            <Resource name="companies" list={ListGuesser} edit={EditGuesser} create={CreateGuesser} show={ShowGuesser} />
+            <Resource name="contacts" list={ListGuesser} edit={EditGuesser} create={CreateGuesser} show={ShowGuesser} />
+            <Resource name="deals" list={ListGuesser} edit={EditGuesser} create={CreateGuesser} show={ShowGuesser} />
+            <Resource name="tags" list={ListGuesser} edit={EditGuesser} create={CreateGuesser} show={ShowGuesser} />
+            <Resource name="tasks" list={ListGuesser} edit={EditGuesser} create={CreateGuesser} show={ShowGuesser} />
+            <Resource name="dealNotes" list={ListGuesser} edit={EditGuesser} create={CreateGuesser} show={ShowGuesser} />
+            <Resource name="contactNotes" list={ListGuesser} edit={EditGuesser} create={CreateGuesser} show={ShowGuesser} />
+            <Resource name="sales" list={ListGuesser} edit={EditGuesser} create={CreateGuesser} show={ShowGuesser} />
             <CustomRoutes noLayout>
-                <Route
-                    path={SetPasswordPage.path}
-                    element={<SetPasswordPage />}
-                />
-                <Route
-                    path={ForgotPasswordPage.path}
-                    element={<ForgotPasswordPage />}
-                />
+                <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
+                <Route path={ForgotPasswordPage.path} element={<ForgotPasswordPage />} />
             </CustomRoutes>
-            <Resource name="posts" list={ListGuesser} />
-            <Resource name="authors" list={ListGuesser} />
         </Admin>
     </BrowserRouter>
 );
 ```
 
-You must wrap your `<Admin>` inside a `<BrowserRouter>` as supabase use hash parameters for passing authentication tokens.
-
-`ra-supabase` is built on [`ra-data-postgrest`](https://github.com/raphiniert-com/ra-data-postgrest/tree/v2.0.0) that leverages [PostgREST](https://postgrest.org/en/stable/). 
+By default, `<AdminGuesser>` uses a `<BrowserRouter>` as supabase use hash parameters for passing authentication tokens. If you want to use a `<HashRouter>`, check out the [Using Hash Router](#using-hash-router) section.
 
 ### Filters operators
 
