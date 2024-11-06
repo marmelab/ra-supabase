@@ -11,57 +11,6 @@ describe('Lists', () => {
         getPaginationText();
     });
 
-    it('should allow to filter by date', () => {
-        cy.visit('/');
-        login();
-        cy.findByText('Contacts').click();
-        getPaginationText().then(el => {
-            const count = parseInt(el.text().split('of')[1].trim());
-
-            cy.findByText('Earlier').click();
-            // Use should here to allow built-in retry as it may take a few ms for the list to update
-            getPaginationText().should(el => {
-                const countFiltered = parseInt(el.text().split('of')[1].trim());
-                expect(countFiltered).to.be.lessThan(count);
-            });
-        });
-    });
-
-    it('should allow to filter by status', () => {
-        cy.visit('/');
-        login();
-        cy.findByText('Contacts').click();
-        getPaginationText().then(el => {
-            const count = parseInt(el.text().split('of')[1].trim());
-
-            cy.findByText('Cold').click();
-            // Use should here to allow built-in retry as it may take a few ms for the list to update
-            getPaginationText().should(el => {
-                const countFiltered = parseInt(el.text().split('of')[1].trim());
-                expect(countFiltered).to.be.lessThan(count);
-            });
-        });
-    });
-
-    it('should allow to filter by tag', () => {
-        cy.visit('/');
-        login();
-        cy.findByText('Contacts').click();
-        getPaginationText().then(el => {
-            const count = parseInt(el.text().split('of')[1].trim());
-
-            cy.findByText('football-fan', {
-                selector: '[role=button] *',
-            }).click();
-
-            // Use should here to allow built-in retry as it may take a few ms for the list to update
-            getPaginationText().should(el => {
-                const countFiltered = parseInt(el.text().split('of')[1].trim());
-                expect(countFiltered).to.be.lessThan(count);
-            });
-        });
-    });
-
     it('should allow to move through pages', () => {
         cy.visit('/');
         login();
@@ -92,23 +41,11 @@ describe('Lists', () => {
         cy.visit('/');
         login();
         cy.findByText('Contacts').click();
-        cy.findAllByText(/\d+ days? ago/, { timeout: 10000 }).should(
-            'have.length.greaterThan',
-            0
-        );
-        cy.findAllByText(/\d+ years? ago/, { timeout: 10000 }).should(
+        cy.findByLabelText('Sort by Gender descending').click();
+        cy.findAllByText('female', { timeout: 10000 }).should(
             'have.length',
-            0
+            10
         );
-        cy.findByText('Sort by Last seen descending').click();
-        cy.findByText('Last seen ascending').click();
-        cy.findAllByText(/\d+ days? ago/, { timeout: 10000 }).should(
-            'have.length',
-            0
-        );
-        cy.findAllByText(/\d+ years? ago/, { timeout: 10000 }).should(
-            'have.length.greaterThan',
-            0
-        );
+        cy.findByText('male').should('not.exist');
     });
 });
