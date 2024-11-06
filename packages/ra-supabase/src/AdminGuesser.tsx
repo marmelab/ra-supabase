@@ -7,7 +7,7 @@ import {
     CustomRoutes,
 } from 'react-admin';
 import type { AdminProps, AdminUIProps } from 'react-admin';
-import { Route } from 'react-router-dom';
+import { Route, BrowserRouter } from 'react-router-dom';
 
 import { supabaseDataProvider, supabaseAuthProvider } from 'ra-supabase-core';
 import {
@@ -54,33 +54,35 @@ export const AdminGuesser = (
             : undefined;
 
     return (
-        <AdminContext
-            authProvider={authProvider ?? defaultAuthProvider}
-            basename={basename}
-            darkTheme={darkTheme}
-            dataProvider={dataProvider ?? defaultDataProvider}
-            defaultTheme={defaultTheme}
-            i18nProvider={i18nProvider}
-            lightTheme={lightTheme}
-            queryClient={queryClient}
-            store={store}
-            theme={theme}
-        >
-            <AdminUIGuesser {...rest} />
-        </AdminContext>
+        <BrowserRouter>
+            <AdminContext
+                authProvider={authProvider ?? defaultAuthProvider}
+                basename={basename}
+                darkTheme={darkTheme}
+                dataProvider={dataProvider ?? defaultDataProvider}
+                defaultTheme={defaultTheme}
+                i18nProvider={i18nProvider}
+                lightTheme={lightTheme}
+                queryClient={queryClient}
+                store={store}
+                theme={theme}
+            >
+                <AdminUIGuesser {...rest} />
+            </AdminContext>
+        </BrowserRouter>
     );
 };
 
 const AdminUIGuesser = (props: AdminUIProps) => {
     const resourceDefinitions = useCrudGuesser();
-    const hasLogged = React.useRef(false);
     const { children, ...rest } = props;
-    if (!children && resourceDefinitions.length > 0 && !hasLogged.current) {
-        console.log(
-            `Guessed Admin:
+    React.useEffect(() => {
+        if (!children && resourceDefinitions.length > 0) {
+            console.log(
+                `Guessed Admin:
 
 import { Admin, Resource, CustomRoutes } from 'react-admin';
-import { Route } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import {
     CreateGuesser,
@@ -102,30 +104,32 @@ const dataProvider = supabaseDataProvider({ instanceUrl, apiKey, supabaseClient 
 const authProvider = supabaseAuthProvider(supabaseClient, {});
 
 export const App = () => (
-    <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
-        i18nProvider={defaultI18nProvider}
-        loginPage={LoginPage}
-    >${resourceDefinitions
-        .map(
-            def => `
-        <Resource name="${def.name}"${def.list ? ' list={ListGuesser}' : ''}${
-                def.edit ? ' edit={EditGuesser}' : ''
-            }${def.create ? ' create={CreateGuesser}' : ''}${
-                def.show ? ' show={ShowGuesser}' : ''
-            } />`
-        )
-        .join('')}
-        <CustomRoutes noLayout>
-            <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
-            <Route path={ForgotPasswordPage.path} element={<ForgotPasswordPage />} />
-        </CustomRoutes>
-    </Admin>
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            i18nProvider={defaultI18nProvider}
+            loginPage={LoginPage}
+        >${resourceDefinitions
+            .map(
+                def => `
+            <Resource name="${def.name}"${
+                    def.list ? ' list={ListGuesser}' : ''
+                }${def.edit ? ' edit={EditGuesser}' : ''}${
+                    def.create ? ' create={CreateGuesser}' : ''
+                }${def.show ? ' show={ShowGuesser}' : ''} />`
+            )
+            .join('')}
+            <CustomRoutes noLayout>
+                <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
+                <Route path={ForgotPasswordPage.path} element={<ForgotPasswordPage />} />
+            </CustomRoutes>
+        </Admin>
+    </BrowserRouter>
 );`
-        );
-        hasLogged.current = true;
-    }
+            );
+        }
+    }, [resourceDefinitions, children]);
 
     const resourceElements = resourceDefinitions.map(resourceDefinition => (
         <Resource key={resourceDefinition.name} {...resourceDefinition} />
