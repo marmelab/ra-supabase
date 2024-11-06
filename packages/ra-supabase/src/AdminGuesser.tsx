@@ -20,10 +20,10 @@ import { createClient } from '@supabase/supabase-js';
 import { defaultI18nProvider } from './defaultI18nProvider';
 
 export const AdminGuesser = (
-    props: AdminProps & { apiUrl?: string; apiKey?: string }
+    props: AdminProps & { instanceUrl?: string; apiKey?: string }
 ) => {
     const {
-        apiUrl,
+        instanceUrl,
         apiKey,
         dataProvider,
         authProvider,
@@ -39,17 +39,17 @@ export const AdminGuesser = (
     } = props;
 
     const defaultSupabaseClient =
-        apiUrl && apiKey ? createClient(apiUrl, apiKey) : null;
+        instanceUrl && apiKey ? createClient(instanceUrl, apiKey) : null;
     const defaultDataProvider =
-        apiUrl && apiKey && defaultSupabaseClient
+        instanceUrl && apiKey && defaultSupabaseClient
             ? supabaseDataProvider({
-                  instanceUrl: apiUrl,
+                  instanceUrl,
                   apiKey,
                   supabaseClient: defaultSupabaseClient,
               })
             : undefined;
     const defaultAuthProvider =
-        apiUrl && apiKey && defaultSupabaseClient
+        instanceUrl && apiKey && defaultSupabaseClient
             ? supabaseAuthProvider(defaultSupabaseClient, {})
             : undefined;
 
@@ -76,6 +76,10 @@ export const AdminGuesser = (
 const AdminUIGuesser = (props: AdminUIProps) => {
     const resourceDefinitions = useCrudGuesser();
     const { children, ...rest } = props;
+    // while we're guessing, we don't want to show the not found page
+    const [CatchAll, setCatchAll] = React.useState<
+        React.ComponentType | undefined
+    >(() => Loading);
     React.useEffect(() => {
         if (!children && resourceDefinitions.length > 0) {
             console.log(
@@ -131,11 +135,25 @@ export const App = () => (
         }
     }, [resourceDefinitions, children]);
 
+    React.useEffect(() => {
+        // once we have guessed all the resources, we can show the not found page for unknown paths
+        if (!children && resourceDefinitions.length > 0) {
+            setCatchAll(undefined);
+        }
+    }, [resourceDefinitions, children]);
+
     const resourceElements = resourceDefinitions.map(resourceDefinition => (
         <Resource key={resourceDefinition.name} {...resourceDefinition} />
     )) as any;
+
     return (
-        <AdminUI ready={Loading} loginPage={LoginPage} {...rest}>
+        <AdminUI
+            ready={Loading}
+            catchAll={CatchAll}
+            loginPage={LoginPage}
+            {...rest}
+        >
+            {children ?? resourceElements}
             <CustomRoutes noLayout>
                 <Route
                     path={SetPasswordPage.path}
@@ -146,7 +164,6 @@ export const App = () => (
                     element={<ForgotPasswordPage />}
                 />
             </CustomRoutes>
-            {children ?? resourceElements}
         </AdminUI>
     );
 };

@@ -26,7 +26,7 @@ import { AdminGuesser } from 'ra-supabase';
 
 const App = () => (
     <AdminGuesser
-        apiUrl={YOUR_SUPABASE_URL}
+        instanceUrl={YOUR_SUPABASE_URL}
         apiKey={YOUR_SUPABASE_API_KEY}
     />
 );
