@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
 import type { ResourceProps } from 'react-admin';
 
@@ -8,11 +9,13 @@ import { ShowGuesser } from './ShowGuesser';
 
 export const useCrudGuesser = () => {
     const { data: schema, error, isPending } = useAPISchema();
-    let resourceDefinitions: ResourceProps[] = [];
-    if (!isPending && !error) {
+    return useMemo<ResourceProps[]>(() => {
+        if (isPending || error) {
+            return [];
+        }
         let edit, show, create, list;
         const resourceNames = Object.keys(schema.definitions!);
-        resourceDefinitions = resourceNames.map(name => {
+        return resourceNames.map(name => {
             const resourcePaths = schema.paths[`/${name}`] ?? {};
             if (resourcePaths.get) {
                 list = ListGuesser;
@@ -32,6 +35,5 @@ export const useCrudGuesser = () => {
                 create,
             };
         });
-    }
-    return resourceDefinitions;
+    }, [schema, isPending, error]);
 };
