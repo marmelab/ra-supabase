@@ -48,7 +48,6 @@ export const ShowGuesserView = (
             return;
         }
         const resourceDefinition = schema.definitions?.[resource];
-        const requiredFields = resourceDefinition?.required || [];
         if (!resourceDefinition || !resourceDefinition.properties) {
             throw new Error(
                 `The resource ${resource} is not defined in the API schema`
@@ -71,7 +70,6 @@ export const ShowGuesserView = (
                         'string'
                         ? resourceDefinition.properties![source].type
                         : 'string') as string,
-                    requiredFields,
                 })
         );
         const inferredLayout = new InferredElement(
