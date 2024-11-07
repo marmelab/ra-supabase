@@ -68,6 +68,10 @@ export const CreateGuesserView = (
         }
         const inferredInputs = Object.keys(resourceDefinition.properties)
             .filter((source: string) => source !== 'id')
+            .filter(
+                source =>
+                    resourceDefinition.properties![source].format !== 'tsvector'
+            )
             .map((source: string) =>
                 inferElementFromType({
                     name: source,

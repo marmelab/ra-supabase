@@ -56,8 +56,12 @@ export const ShowGuesserView = (
         if (!resourceDefinition || !resourceDefinition.properties) {
             return;
         }
-        const inferredFields = Object.keys(resourceDefinition.properties).map(
-            (source: string) =>
+        const inferredFields = Object.keys(resourceDefinition.properties)
+            .filter(
+                source =>
+                    resourceDefinition.properties![source].format !== 'tsvector'
+            )
+            .map((source: string) =>
                 inferElementFromType({
                     name: source,
                     types: showFieldTypes,
@@ -71,7 +75,7 @@ export const ShowGuesserView = (
                         ? resourceDefinition.properties![source].type
                         : 'string') as string,
                 })
-        );
+            );
         const inferredLayout = new InferredElement(
             showFieldTypes.show,
             null,

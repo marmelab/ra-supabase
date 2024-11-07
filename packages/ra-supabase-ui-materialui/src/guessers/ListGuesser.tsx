@@ -9,6 +9,7 @@ import {
     InferredElement,
     listFieldTypes,
     editFieldTypes,
+    SearchInput,
 } from 'react-admin';
 import type { ListProps, ListViewProps } from 'react-admin';
 import { capitalize, singularize } from 'inflection';
@@ -79,8 +80,12 @@ export const ListGuesserView = (
         if (!resourceDefinition || !resourceDefinition.properties) {
             return;
         }
-        const inferredFields = Object.keys(resourceDefinition.properties).map(
-            (source: string) =>
+        const inferredFields = Object.keys(resourceDefinition.properties)
+            .filter(
+                source =>
+                    resourceDefinition.properties![source].format !== 'tsvector'
+            )
+            .map((source: string) =>
                 inferElementFromType({
                     name: source,
                     types: listFieldTypes,
@@ -94,7 +99,7 @@ export const ListGuesserView = (
                         ? resourceDefinition.properties![source].type
                         : 'string') as string,
                 })
-        );
+            );
         const inferredTable = new InferredElement(
             listFieldTypes.table,
             null,
@@ -108,16 +113,49 @@ export const ListGuesserView = (
                     obj['$ref'].includes('rowFilter')
                 )
                 .map(obj => obj['$ref'].split('.').pop()) ?? [];
-        const inferredInputsForFilters = rowFilters.map(source => {
-            const field = resourceDefinition.properties![source];
-            return inferElementFromType({
-                name: source,
-                types: editFieldTypes,
-                description: field.description,
-                format: field.format,
-                type: field.type as string,
+        const inferredInputsForFilters = rowFilters
+            .filter(
+                source =>
+                    resourceDefinition.properties![source].format !== 'tsvector'
+            )
+            .map(source => {
+                const field = resourceDefinition.properties![source];
+                return inferElementFromType({
+                    name: source,
+                    types: editFieldTypes,
+                    description: field.description,
+                    format: field.format,
+                    type: field.type as string,
+                });
             });
-        });
+        if (
+            rowFilters.some(
+                source =>
+                    resourceDefinition.properties![source].format === 'tsvector'
+            )
+        ) {
+            const fullTextSearchSource = rowFilters.find(
+                source =>
+                    resourceDefinition.properties![source].format === 'tsvector'
+            );
+            const field = resourceDefinition.properties![fullTextSearchSource!];
+            inferredInputsForFilters.push(
+                inferElementFromType({
+                    name: `${fullTextSearchSource!}@fts`,
+                    types: {
+                        string: {
+                            component: SearchInput,
+                            representation: props =>
+                                `<SearchInput alwaysOn source="${props.source}" />`,
+                        },
+                    },
+                    description: field.description,
+                    format: 'tsvector',
+                    props: { alwaysOn: true },
+                    type: field.type as string,
+                })
+            );
+        }
         if (inferredInputsForFilters.length > 0) {
             const filterElements = inferredInputsForFilters
                 .map(inferredInput => inferredInput.getElement())

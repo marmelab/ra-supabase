@@ -11,6 +11,7 @@ export const inferElementFromType = ({
     type,
     requiredFields,
     types,
+    props,
 }: {
     name: string;
     types: InferredTypeMap;
@@ -18,6 +19,7 @@ export const inferElementFromType = ({
     format?: string;
     type?: string;
     requiredFields?: string[];
+    props?: any;
 }) => {
     if (name === 'id' && hasType('id', types)) {
         return new InferredElement(types.id, { source: 'id' });
@@ -31,6 +33,7 @@ export const inferElementFromType = ({
         return new InferredElement(types.reference, {
             source: name,
             reference,
+            ...props,
         });
     }
     if (
@@ -41,6 +44,7 @@ export const inferElementFromType = ({
         return new InferredElement(types.referenceArray, {
             source: name,
             reference,
+            ...props,
         });
     }
     if (type === 'array') {
@@ -55,12 +59,14 @@ export const inferElementFromType = ({
             return new InferredElement(types.email, {
                 source: name,
                 validate,
+                ...props,
             });
         }
         if (['url', 'website'].includes(name) && hasType('url', types)) {
             return new InferredElement(types.url, {
                 source: name,
                 validate,
+                ...props,
             });
         }
         if (
@@ -74,6 +80,7 @@ export const inferElementFromType = ({
             return new InferredElement(types.date, {
                 source: name,
                 validate,
+                ...props,
             });
         }
     }
@@ -81,16 +88,19 @@ export const inferElementFromType = ({
         return new InferredElement(types.number, {
             source: name,
             validate,
+            ...props,
         });
     }
     if (type && hasType(type, types)) {
         return new InferredElement(types[type], {
             source: name,
             validate,
+            ...props,
         });
     }
     return new InferredElement(types.string, {
         source: name,
         validate,
+        ...props,
     });
 };
