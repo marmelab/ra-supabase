@@ -122,7 +122,9 @@ export const ListGuesserView = (
             const filterElements = inferredInputsForFilters.map(inferredInput =>
                 inferredInput.getElement()
             );
-            setFilters(filterElements.filter(el => el != null));
+            setFilters(
+                filterElements.filter(el => el != null) as React.ReactElement[]
+            );
         }
 
         if (!enableLog) return;
