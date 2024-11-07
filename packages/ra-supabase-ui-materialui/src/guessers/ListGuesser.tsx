@@ -119,12 +119,10 @@ export const ListGuesserView = (
             });
         });
         if (inferredInputsForFilters.length > 0) {
-            const filterElements = inferredInputsForFilters.map(inferredInput =>
-                inferredInput.getElement()
-            );
-            setFilters(
-                filterElements.filter(el => el != null) as React.ReactElement[]
-            );
+            const filterElements = inferredInputsForFilters
+                .map(inferredInput => inferredInput.getElement())
+                .filter(el => el != null) as React.ReactElement[];
+            setFilters(filterElements);
         }
 
         if (!enableLog) return;
