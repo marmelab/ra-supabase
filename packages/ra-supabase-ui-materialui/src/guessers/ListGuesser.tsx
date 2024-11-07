@@ -148,7 +148,12 @@ export const ListGuesserView = (
                     },
                     description: field.description,
                     format: 'tsvector',
-                    props: { alwaysOn: true },
+                    props: {
+                        alwaysOn: true,
+                        parse: value => (value ? `${value}:*` : undefined),
+                        format: value =>
+                            value ? value.substring(0, value.length - 2) : '',
+                    },
                     type: field.type as string,
                 })
             );
