@@ -8,6 +8,7 @@ import {
     ListView,
     InferredElement,
     listFieldTypes,
+    editFieldTypes,
 } from 'react-admin';
 import type { ListProps, ListViewProps } from 'react-admin';
 import { capitalize, singularize } from 'inflection';
@@ -56,6 +57,9 @@ export const ListGuesserView = (
     const { data: schema, error, isPending } = useAPISchema();
     const resource = useResourceContext();
     const [child, setChild] = React.useState<ReactNode>(null);
+    const [filters, setFilters] = React.useState<
+        React.ReactElement[] | undefined
+    >(undefined);
     if (!resource) {
         throw new Error('ListGuesser must be used withing a ResourceContext');
     }
@@ -67,7 +71,6 @@ export const ListGuesserView = (
             return;
         }
         const resourceDefinition = schema.definitions?.[resource];
-        const requiredFields = resourceDefinition?.required || [];
         if (!resourceDefinition || !resourceDefinition.properties) {
             throw new Error(
                 `The resource ${resource} is not defined in the API schema`
@@ -76,7 +79,7 @@ export const ListGuesserView = (
         if (!resourceDefinition || !resourceDefinition.properties) {
             return;
         }
-        const inferredInputs = Object.keys(resourceDefinition.properties).map(
+        const inferredFields = Object.keys(resourceDefinition.properties).map(
             (source: string) =>
                 inferElementFromType({
                     name: source,
@@ -90,40 +93,76 @@ export const ListGuesserView = (
                         'string'
                         ? resourceDefinition.properties![source].type
                         : 'string') as string,
-                    requiredFields,
                 })
         );
-        const inferredForm = new InferredElement(
+        const inferredTable = new InferredElement(
             listFieldTypes.table,
             null,
-            inferredInputs
+            inferredFields
         );
-        setChild(inferredForm.getElement());
+        setChild(inferredTable.getElement());
+
+        const rowFilters =
+            schema!
+                .paths![`/${resource}`].get!.parameters?.filter(obj =>
+                    obj['$ref'].includes('rowFilter')
+                )
+                .map(obj => obj['$ref'].split('.').pop()) ?? [];
+        const inferredInputsForFilters = rowFilters.map(source => {
+            const field = resourceDefinition.properties![source];
+            return inferElementFromType({
+                name: source,
+                types: editFieldTypes,
+                description: field.description,
+                format: field.format,
+                type: field.type as string,
+            });
+        });
+        if (inferredInputsForFilters.length > 0) {
+            const filterElements = inferredInputsForFilters.map(inferredInput =>
+                inferredInput.getElement()
+            );
+            setFilters(filterElements.filter(el => el != null));
+        }
+
         if (!enableLog) return;
 
-        const representation = inferredForm.getRepresentation();
+        const tableRepresentation = inferredTable.getRepresentation();
 
-        const components = ['List']
-            .concat(
-                Array.from(
-                    new Set(
-                        Array.from(representation.matchAll(/<([^/\s>]+)/g))
-                            .map(match => match[1])
-                            .filter(component => component !== 'span')
-                    )
-                )
-            )
-            .sort();
+        const filterRepresentation =
+            inferredInputsForFilters.length > 0
+                ? `const filters = [
+${inferredInputsForFilters
+    .map(inferredInput => '    ' + inferredInput.getRepresentation())
+    .join(',\n')}
+];
+`
+                : '';
+
+        const fieldComponents = Array.from(
+            tableRepresentation.matchAll(/<([^/\s>]+)/g)
+        )
+            .map(match => match[1])
+            .filter(component => component !== 'span');
+        const filterComponents = Array.from(
+            filterRepresentation.matchAll(/<([^/\s>]+)/g)
+        )
+            .map(match => match[1])
+            .filter(component => component !== 'span');
+        const components = Array.from(
+            new Set(['List', ...fieldComponents, ...filterComponents])
+        ).sort();
 
         // eslint-disable-next-line no-console
         console.log(
             `Guessed List:
             
 import { ${components.join(', ')} } from 'react-admin';
-            
+
+${filterRepresentation}
 export const ${capitalize(singularize(resource))}List = () => (
-    <List>
-${representation}
+    <List${filterRepresentation ? ' filters={filters}' : ''}>
+${tableRepresentation}
     </List>
 );`
         );
@@ -132,5 +171,9 @@ ${representation}
     if (isPending) return <Loading />;
     if (error) return <p>Error: {error.message}</p>;
 
-    return <ListView {...rest}>{child}</ListView>;
+    return (
+        <ListView filters={filters} {...rest}>
+            {child}
+        </ListView>
+    );
 };

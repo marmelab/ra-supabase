@@ -57,7 +57,7 @@ export const ShowGuesserView = (
         if (!resourceDefinition || !resourceDefinition.properties) {
             return;
         }
-        const inferredInputs = Object.keys(resourceDefinition.properties).map(
+        const inferredFields = Object.keys(resourceDefinition.properties).map(
             (source: string) =>
                 inferElementFromType({
                     name: source,
@@ -74,15 +74,15 @@ export const ShowGuesserView = (
                     requiredFields,
                 })
         );
-        const inferredForm = new InferredElement(
+        const inferredLayout = new InferredElement(
             showFieldTypes.show,
             null,
-            inferredInputs
+            inferredFields
         );
-        setChild(inferredForm.getElement());
+        setChild(inferredLayout.getElement());
         if (!enableLog) return;
 
-        const representation = inferredForm.getRepresentation();
+        const representation = inferredLayout.getRepresentation();
 
         const components = ['Show']
             .concat(

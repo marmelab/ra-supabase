@@ -34,14 +34,14 @@ const App = () => (
 export default App;
 ```
 
-This generates an admin app with working CRUD for all resources.
+This generates a dataProvider, and authProvider, and an admin app with working CRUD for all resources.
 
 ![Demo](./assets/demo.png)
 
 The generated admin is fully functional:
 
 - All public tables are listed in the sidebar
-- Lists are sortable and paginated
+- Lists are paginated, sortable, and filterable
 - Creating, editing, and deleting records is possible
 - Forms use the correct input component based on the field type
 - Relationships are displayed as links in show views and as autocomplete inputs in edit views
