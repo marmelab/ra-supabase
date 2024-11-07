@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.0
+
+- Add `<AdminGuesser>` for a zero-config application scaffolding based on the OpenAPI Schema ([#80](https://github.com/marmelab/ra-supabase/pull/80)) ([fzaninotto](https://github.com/fzaninotto))
+- Add `<ListGuesser>`, `<ShowGuesser>`, `<EditGuesser>`, and `<CreateGuesser>` to automatically generate page components based on the OpenAPI Schema ([#80](https://github.com/marmelab/ra-supabase/pull/80)) ([fzaninotto](https://github.com/fzaninotto))
+
 ## 3.2.1
 
 * Fix `authProvider.getPermissions()` should not throw error when not logged in ([#79](https://github.com/marmelab/ra-supabase/pull/79)) ([fzaninotto](https://github.com/fzaninotto))
