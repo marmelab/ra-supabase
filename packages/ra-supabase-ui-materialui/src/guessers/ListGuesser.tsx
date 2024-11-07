@@ -77,9 +77,6 @@ export const ListGuesserView = (
                 `The resource ${resource} is not defined in the API schema`
             );
         }
-        if (!resourceDefinition || !resourceDefinition.properties) {
-            return;
-        }
         const inferredFields = Object.keys(resourceDefinition.properties)
             .filter(
                 source =>
@@ -139,7 +136,7 @@ export const ListGuesserView = (
                     resourceDefinition.properties![source].format === 'tsvector'
             );
             const field = resourceDefinition.properties![fullTextSearchSource!];
-            inferredInputsForFilters.push(
+            inferredInputsForFilters.unshift(
                 inferElementFromType({
                     name: `${fullTextSearchSource!}@fts`,
                     types: {

@@ -67,9 +67,6 @@ export const EditGuesserView = (
                 `The resource ${resource} is not defined in the API schema`
             );
         }
-        if (!resourceDefinition || !resourceDefinition.properties) {
-            return;
-        }
         const inferredInputs = Object.keys(resourceDefinition.properties)
             .filter((source: string) => source !== 'id')
             .filter(
