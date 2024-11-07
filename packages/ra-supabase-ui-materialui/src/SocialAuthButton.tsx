@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Provider } from '@supabase/supabase-js';
 import { Button, ButtonProps } from '@mui/material';
-import { useLogin, useNotify, useTranslate } from 'ra-core';
+import { useLogin, useNotify, useTranslate } from 'react-admin';
+
 import {
     AppleIcon,
     AzureIcon,

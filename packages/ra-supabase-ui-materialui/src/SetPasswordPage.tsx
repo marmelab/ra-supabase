@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+
 import { AuthLayout } from './AuthLayout';
 import { SetPasswordForm } from './SetPasswordForm';
 

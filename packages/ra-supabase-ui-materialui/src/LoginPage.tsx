@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { ReactNode } from 'react';
-
-import { AuthLayout } from './AuthLayout';
-import { LoginForm } from './LoginForm';
+import type { ReactNode } from 'react';
 import { Provider } from '@supabase/supabase-js';
 import { Divider, Stack } from '@mui/material';
+
 import {
     AppleButton,
     AzureButton,
@@ -23,6 +21,8 @@ import {
     TwitterButton,
     WorkosButton,
 } from './SocialAuthButton';
+import { AuthLayout } from './AuthLayout';
+import { LoginForm } from './LoginForm';
 
 /**
  * A component that renders a login page to login to the application through Supabase. It renders a LoginForm by default. It support social login providers.

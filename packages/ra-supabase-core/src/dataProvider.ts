@@ -6,6 +6,7 @@ import postgrestRestProvider, {
 } from '@raphiniert/ra-data-postgrest';
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { OpenAPIV2 } from 'openapi-types';
 
 /**
  * A function that returns a dataProvider for Supabase.
@@ -40,7 +41,18 @@ export const supabaseDataProvider = ({
         schema,
         ...rest,
     };
-    return postgrestRestProvider(config);
+    return {
+        supabaseClient: (url: string, options?: any) =>
+            httpClient(`${config.apiUrl}/${url}`, options),
+        getSchema: async (): Promise<OpenAPIV2.Document> => {
+            const { json } = await httpClient(`${config.apiUrl}/`, {});
+            if (!json || !json.swagger) {
+                throw new Error('The Open API schema is not readable');
+            }
+            return json;
+        },
+        ...postgrestRestProvider(config),
+    };
 };
 
 /**
