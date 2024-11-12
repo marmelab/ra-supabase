@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.1
+
+- Fix `<AdminGuesser>` type is missing the required API connection strings ([fzaninotto](https://github.com/fzaninotto))
+- Fix `@raphiniert/ra-data-postgrest` and `@supabase/supabase-js` dependencies are missing ([fzaninotto](https://github.com/fzaninotto))
+
 ## 3.3.0
 
 - Add `<AdminGuesser>` for a zero-config application scaffolding based on the OpenAPI Schema ([#80](https://github.com/marmelab/ra-supabase/pull/80)) ([fzaninotto](https://github.com/fzaninotto))
