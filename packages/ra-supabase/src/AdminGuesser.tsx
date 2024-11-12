@@ -20,7 +20,7 @@ import { createClient } from '@supabase/supabase-js';
 import { defaultI18nProvider } from './defaultI18nProvider';
 
 export const AdminGuesser = (
-    props: AdminProps & { instanceUrl?: string; apiKey?: string }
+    props: AdminProps & { instanceUrl: string; apiKey: string }
 ) => {
     const {
         instanceUrl,
