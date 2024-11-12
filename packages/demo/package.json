@@ -1,12 +1,12 @@
 {
     "name": "react-admin-crm",
-    "version": "3.3.0",
+    "version": "3.3.1",
     "private": true,
     "dependencies": {
         "@vitejs/plugin-react": "^2.2.0",
         "date-fns": "^2.19.0",
         "faker": "~5.4.0",
-        "ra-supabase": "^3.3.0",
+        "ra-supabase": "^3.3.1",
         "react": "^18.2.0",
         "react-admin": "^5.0.0",
         "react-dom": "^18.2.0",
