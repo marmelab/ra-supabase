@@ -2,8 +2,6 @@
 
 This package integrates [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin). It provides a dataProvider, an authProvider, specialized hooks and components to get the most out of Supabase in your react-admin application.
 
-**Tip**: Watch the [video tutorial about react-admin with supabase](https://youtu.be/zV-Ty7VeIvo).
-
 ## Installation
 
 ```sh
@@ -20,6 +18,8 @@ If you do want to support [the invitations workflow](#invitation-handling) or us
 - [Set up an authentication hook to send the emails yourself](https://supabase.com/docs/guides/auth/auth-hooks/send-email-hook)
 
 ## Usage
+
+**Quick Start**: Watch the [video tutorial about react-admin with supabase](https://youtu.be/zV-Ty7VeIvo).
 
 `ra-supabase` provides an `<AdminGuesser>` component that takes advantage of Supabase's OpenAPI schema to guess the resources and their fields. You can use it as a replacement for react-admin's `<Admin>` component to bootstrap your admin quickly:
 
