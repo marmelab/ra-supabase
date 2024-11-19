@@ -2,12 +2,15 @@
 
 This package provides a dataProvider, an authProvider, hooks and components to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin) when using its default UI ([ra-ui-materialui](https://github.com/marmelab/react-admin/tree/master/packages/ra-ui-materialui)).
 
+[![Video]][VideoLink] 
 [![Documentation]][DocumentationLink] 
 [![Source Code]][SourceCodeLink] 
 
+[Video]: https://img.shields.io/badge/Video-darkmagenta?style=for-the-badge
 [Documentation]: https://img.shields.io/badge/Documentation-darkgreen?style=for-the-badge
 [Source Code]: https://img.shields.io/badge/Source_Code-blue?style=for-the-badge
 
+[VideoLink]: https://youtu.be/zV-Ty7VeIvo 'Video'
 [DocumentationLink]: ./packages/ra-supabase/README.md 'Documentation'
 [SourceCodeLink]: https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase 'Source Code'
 
