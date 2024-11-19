@@ -11,6 +11,8 @@ This package provides a dataProvider, an authProvider, hooks and components to i
 [DocumentationLink]: ./packages/ra-supabase/README.md 'Documentation'
 [SourceCodeLink]: https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase 'Source Code'
 
+[![Video tutorial about react-admin with supabase](./assets/video.jpg)](https://youtu.be/zV-Ty7VeIvo)
+
 ## Projects
 
 - [ra-supabase](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase): Umbrella project that re-export the others.
