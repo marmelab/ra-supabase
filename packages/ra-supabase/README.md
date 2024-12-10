@@ -2,6 +2,8 @@
 
 This package integrates [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin). It provides a dataProvider, an authProvider, specialized hooks and components to get the most out of Supabase in your react-admin application.
 
+[![Video tutorial about react-admin with supabase](./assets/video.jpg)](https://youtu.be/zV-Ty7VeIvo)
+
 ## Installation
 
 ```sh
