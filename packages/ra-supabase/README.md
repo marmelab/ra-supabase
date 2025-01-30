@@ -191,7 +191,7 @@ The last example will return all columns from the `contact` table and all column
 }
 ```
 
-Tou can leverage this feature to access related data in `Field` component:
+You can leverage this feature to access related data in `Field` component:
 
 ```jsx
 const ContactShow = () => (
