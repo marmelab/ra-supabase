@@ -91,13 +91,6 @@ export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
     );
 };
 
-AuthLayout.propTypes = {
-    backgroundImage: PropTypes.string,
-    children: PropTypes.node,
-    classes: PropTypes.object,
-    className: PropTypes.string,
-    theme: PropTypes.object,
-};
 export interface LoginProps
     extends Omit<HtmlHTMLAttributes<HTMLDivElement>, 'title'> {
     backgroundImage?: string;
