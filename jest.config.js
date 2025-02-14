@@ -11,6 +11,9 @@ module.exports = {
     transformIgnorePatterns: [
         '[/\\\\]node_modules[/\\\\](?!(@hookform)/).+\\.(js|jsx|mjs|ts|tsx)$',
     ],
+    testEnvironmentOptions: {
+        customExportConditions: [], // don't load "browser" field
+    },
     transform: {
         // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
         '^.+\\.[tj]sx?$': [
