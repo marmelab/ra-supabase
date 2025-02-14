@@ -12708,6 +12708,7 @@ __metadata:
     react-admin: "npm:^5.5.3"
     react-dom: "npm:^18.2.0"
     source-map-explorer: "npm:^2.0.0"
+    supabase: "npm:^2.12.1"
     tsx: "npm:^3.12.2"
     typescript: "npm:^5.7.3"
     vite: "npm:^3.2.0"
