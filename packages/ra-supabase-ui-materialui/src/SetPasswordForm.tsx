@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { CardActions, styled, Typography } from '@mui/material';
-import {
-    Form,
-    required,
-    useNotify,
-    useTranslate,
-    PasswordInput,
-    SaveButton,
-} from 'react-admin';
+import { Form, required, useNotify, useTranslate } from 'ra-core';
+import { PasswordInput, SaveButton } from 'ra-ui-materialui';
 import { useSetPassword, useSupabaseAccessToken } from 'ra-supabase-core';
 
 /**

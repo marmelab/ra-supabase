@@ -1,5 +1,4 @@
-import { InferredElement, required } from 'react-admin';
-import type { InferredTypeMap } from 'react-admin';
+import { InferredElement, required, type InferredTypeMap } from 'ra-core';
 import { pluralize } from 'inflection';
 
 const hasType = (type, types) => typeof types[type] !== 'undefined';

@@ -6,7 +6,9 @@ import type { OpenAPIV2 } from 'openapi-types';
 export const useAPISchema = ({
     options,
 }: {
-    options?: Partial<Omit<UseQueryOptions<OpenAPIV2.Document>, 'queryKey' | 'queryFn'>>;
+    options?: Partial<
+        Omit<UseQueryOptions<OpenAPIV2.Document>, 'queryKey' | 'queryFn'>
+    >;
 } = {}) => {
     const dataProvider = useDataProvider();
     if (!dataProvider.getSchema) {

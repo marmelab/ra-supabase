@@ -1,17 +1,16 @@
 import * as React from 'react';
 import type { ReactNode } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
+import { InferredElement, ListBase, useResourceContext } from 'ra-core';
 import {
-    useResourceContext,
-    Loading,
-    ListBase,
-    ListView,
-    InferredElement,
-    listFieldTypes,
     editFieldTypes,
+    listFieldTypes,
+    type ListProps,
+    ListView,
+    type ListViewProps,
+    Loading,
     SearchInput,
-} from 'react-admin';
-import type { ListProps, ListViewProps } from 'react-admin';
+} from 'ra-ui-materialui';
 import { capitalize, singularize } from 'inflection';
 
 import { inferElementFromType } from './inferElementFromType';

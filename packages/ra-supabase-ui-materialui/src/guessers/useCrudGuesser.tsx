@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
-import type { ResourceProps } from 'react-admin';
+import type { ResourceProps } from 'ra-core';
 
 import { ListGuesser } from './ListGuesser';
 import { CreateGuesser } from './CreateGuesser';

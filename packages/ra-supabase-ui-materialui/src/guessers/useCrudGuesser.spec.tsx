@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DataProviderContext, TestMemoryRouter } from 'react-admin';
+import { DataProviderContext, TestMemoryRouter } from 'ra-core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, within } from '@testing-library/react';
 
