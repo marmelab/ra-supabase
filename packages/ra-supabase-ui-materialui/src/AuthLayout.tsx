@@ -39,12 +39,12 @@ import { defaultTheme, Notification } from 'ra-ui-materialui';
  */
 export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
     const {
-        theme,
+        theme = defaultTheme,
         title,
         classes: classesOverride,
         className,
         children,
-        notification,
+        notification = Notification,
         backgroundImage,
         ...rest
     } = props;
@@ -98,12 +98,6 @@ AuthLayout.propTypes = {
     className: PropTypes.string,
     theme: PropTypes.object,
 };
-
-AuthLayout.defaultProps = {
-    theme: defaultTheme,
-    notification: Notification,
-};
-
 export interface LoginProps
     extends Omit<HtmlHTMLAttributes<HTMLDivElement>, 'title'> {
     backgroundImage?: string;
