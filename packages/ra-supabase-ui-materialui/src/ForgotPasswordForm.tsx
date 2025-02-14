@@ -52,7 +52,7 @@ export const ForgotPasswordForm = () => {
 
                     <Typography
                         variant="body2"
-                        color="GrayText"
+                        color="textSecondary"
                         textAlign="center"
                     >
                         {translate(
