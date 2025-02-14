@@ -7,7 +7,6 @@ import React, {
     useEffect,
     useMemo,
 } from 'react';
-import PropTypes from 'prop-types';
 import {
     Card,
     Avatar,
