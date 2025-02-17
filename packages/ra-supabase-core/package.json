@@ -15,7 +15,7 @@
     "types": "esm/index.d.ts",
     "sideEffects": false,
     "peerDependencies": {
-        "ra-core": "^5.0.1"
+        "ra-core": "^5.5.3"
     },
     "dependencies": {
         "@raphiniert/ra-data-postgrest": "^2.4.1",
