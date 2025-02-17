@@ -1,14 +1,14 @@
 import * as React from 'react';
 import type { ReactNode } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
-import { InferredElement, ShowBase, useResourceContext } from 'react-admin';
+import { InferredElement, ShowBase, useResourceContext } from 'ra-core';
 import {
     Loading,
     showFieldTypes,
     type ShowProps,
     ShowView,
     type ShowViewProps,
-} from 'react-admin';
+} from 'ra-ui-materialui';
 import { capitalize, singularize } from 'inflection';
 
 import { inferElementFromType } from './inferElementFromType';
