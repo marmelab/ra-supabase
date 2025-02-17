@@ -12559,7 +12559,7 @@ __metadata:
     rimraf: "npm:^6.0.1"
     typescript: "npm:^5.7.3"
   peerDependencies:
-    ra-core: ^5.0.1
+    ra-core: ^5.5.3
   languageName: unknown
   linkType: soft
 
