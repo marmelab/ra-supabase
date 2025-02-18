@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.4.0
+
+- Add support for React 19, react-router v7 and MUI v6, and update react-admin peer dependency to v5.5 ([#83](https://github.com/marmelab/ra-supabase/pull/83)) ([djhi](https://github.com/djhi))
+
 ## 3.3.1
 
 - Fix `<AdminGuesser>` type is missing the required API connection strings ([fzaninotto](https://github.com/fzaninotto))
