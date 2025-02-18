@@ -1,17 +1,8 @@
 import * as React from 'react';
 import type { ComponentProps } from 'react';
 import { CardActions, styled } from '@mui/material';
-import {
-    Form,
-    required,
-    useLogin,
-    useNotify,
-    useTranslate,
-    Link,
-    PasswordInput,
-    SaveButton,
-    TextInput,
-} from 'react-admin';
+import { Form, required, useLogin, useNotify, useTranslate } from 'ra-core';
+import { Link, PasswordInput, SaveButton, TextInput } from 'ra-ui-materialui';
 
 import { ForgotPasswordPage } from './ForgotPasswordPage';
 

@@ -41,7 +41,7 @@ describe('Lists', () => {
         cy.visit('/');
         login();
         cy.findByText('Contacts').click();
-        cy.findByLabelText('Sort by Gender descending').click();
+        cy.findByLabelText('Sort by gender ascending').click();
         cy.findAllByText('female', { timeout: 10000 }).should(
             'have.length',
             10

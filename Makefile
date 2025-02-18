@@ -17,61 +17,61 @@ install: setup-env package.json ## install dependencies
 	fi
 
 run: ## run the demo
-	@yarn -s run-demo
+	@yarn run-demo
 
 run-prod: ## run the demo in prod
-	@yarn -s run-demo-prod
+	@yarn run-demo-prod
 
 build-demo: ## compile the demo to static js
-	@yarn -s build-demo
+	@yarn build-demo
 
 build-ra-supabase-core:
 	@echo "Transpiling ra-supabase-core files...";
-	@cd ./packages/ra-supabase-core && yarn -s build
+	@cd ./packages/ra-supabase-core && yarn build
 
 build-ra-supabase-language-english:
 	@echo "Transpiling ra-supabase-language-english files...";
-	@cd ./packages/ra-supabase-language-english && yarn -s build
+	@cd ./packages/ra-supabase-language-english && yarn build
 
 build-ra-supabase-language-french:
 	@echo "Transpiling ra-supabase-language-french files...";
-	@cd ./packages/ra-supabase-language-french && yarn -s build
+	@cd ./packages/ra-supabase-language-french && yarn build
 
 build-ra-supabase-ui-materialui:
 	@echo "Transpiling ra-supabase-ui-materialui files...";
-	@cd ./packages/ra-supabase-ui-materialui && yarn -s build
+	@cd ./packages/ra-supabase-ui-materialui && yarn build
 
 build-ra-supabase:
 	@echo "Transpiling ra-supabase files...";
-	@cd ./packages/ra-supabase && yarn -s build
+	@cd ./packages/ra-supabase && yarn build
 
 build: build-ra-supabase-core build-ra-supabase-ui-materialui build-ra-supabase-language-english build-ra-supabase-language-french build-ra-supabase ## compile ES6 files to JS
 
 lint: ## lint the code and check coding conventions
 	@echo "Running linter..."
-	@yarn -s lint
+	@yarn lint
 
 prettier: ## prettify the source code using prettier
 	@echo "Running prettier..."
-	@yarn -s prettier
+	@yarn prettier
 
 test: build test-unit lint ## launch all tests
 
 test-unit: ## launch unit tests
 	@echo "Running unit tests...";
-	@yarn -s test-unit;
+	@yarn test-unit;
 
 test-unit-watch: ## launch unit tests and watch for changes
 	@echo "Running unit tests..."; 
-	@yarn -s test-unit --watch;
+	@yarn test-unit --watch;
 
 test-e2e: ## launch e2e tests
 	@echo "Running e2e tests...";
-	@yarn -s test-e2e;
+	@yarn test-e2e;
 
 test-e2e-local: ## launch e2e tests
 	@echo "Running e2e tests...";
-	@yarn -s test-e2e-local;
+	@yarn test-e2e-local;
 
 supabase-start: ## start the supabase server
 	@echo "Starting supabase server..."
@@ -83,10 +83,10 @@ supabase-stop: ## stop the supabase server
 
 db-migrate: ## migrate the database
 	@echo "Apply migrations on the database..."
-	@yarn -s db-migrate
+	@yarn db-migrate
 
 db-seed: ## seed the database
 	@echo "Seeding the database..."
-	@yarn -s db-seed
+	@yarn db-seed
 
 db-setup: db-migrate db-seed ## setup the database

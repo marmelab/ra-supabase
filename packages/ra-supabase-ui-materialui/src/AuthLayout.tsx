@@ -7,7 +7,6 @@ import React, {
     useEffect,
     useMemo,
 } from 'react';
-import PropTypes from 'prop-types';
 import {
     Card,
     Avatar,
@@ -16,7 +15,8 @@ import {
     styled,
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import { defaultTheme, Notification, TitleComponent } from 'react-admin';
+import { TitleComponent } from 'ra-core';
+import { defaultTheme, Notification } from 'ra-ui-materialui';
 
 /**
  * A standalone login page, to serve as authentication gate to the admin
@@ -38,12 +38,12 @@ import { defaultTheme, Notification, TitleComponent } from 'react-admin';
  */
 export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
     const {
-        theme,
+        theme = defaultTheme,
         title,
         classes: classesOverride,
         className,
         children,
-        notification,
+        notification = Notification,
         backgroundImage,
         ...rest
     } = props;
@@ -88,19 +88,6 @@ export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
             </Root>
         </ThemeProvider>
     );
-};
-
-AuthLayout.propTypes = {
-    backgroundImage: PropTypes.string,
-    children: PropTypes.node,
-    classes: PropTypes.object,
-    className: PropTypes.string,
-    theme: PropTypes.object,
-};
-
-AuthLayout.defaultProps = {
-    theme: defaultTheme,
-    notification: Notification,
 };
 
 export interface LoginProps

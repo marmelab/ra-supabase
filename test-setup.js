@@ -1,6 +1,8 @@
 // Ignore warnings about act()
 // See https://github.com/testing-library/react-testing-library/issues/281,
 // https://github.com/facebook/react/issues/14769
+import { TextEncoder, TextDecoder } from 'util';
+
 const originalError = console.error;
 jest.spyOn(console, 'error').mockImplementation((...args) => {
     if (/Warning.*not wrapped in act/.test(args[0])) {
@@ -17,3 +19,5 @@ const { Response, Headers, Request } = require('whatwg-fetch');
 global.Response = Response;
 global.Headers = Headers;
 global.Request = Request;
+
+Object.assign(global, { TextDecoder, TextEncoder });

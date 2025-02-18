@@ -1,5 +1,5 @@
 {
-    "name": "ra-supabase",
+    "name": "ra-supabase-monorepo",
     "private": true,
     "version": "1.0.0",
     "repository": "git@github.com:marmelab/ra-supabase.git",
@@ -38,10 +38,13 @@
         "lerna": "^6.6.2",
         "prettier": "~2.8.8",
         "raf": "^3.4.1",
-        "supabase": "^1.178.2",
-        "typescript": "^4.9.5",
+        "supabase": "^2.12.1",
         "ts-jest": "^29.1.0",
+        "typescript": "^5.7.3",
         "whatwg-fetch": "^3.0.0"
+    },
+    "resolutions": {
+        "esbuild": "^0.24.2"
     },
     "scripts": {
         "build": "lerna run build",
@@ -60,5 +63,6 @@
     },
     "workspaces": [
         "packages/*"
-    ]
+    ],
+    "packageManager": "yarn@4.6.0"
 }
