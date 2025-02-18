@@ -22,7 +22,7 @@ jobs:
             - name: Enable corepack
               run: corepack enable
             - name: Yarn install
-              run: yarn install --frozen-lockfile
+              run: yarn install --immutable
             - name: Build
               run: make build
             - name: Lint
@@ -46,7 +46,7 @@ jobs:
         - name: Enable corepack
           run: corepack enable
         - name: Yarn install
-          run: yarn install --frozen-lockfile
+          run: yarn install --immutable
         - name: Prepare env
           run: cp -n ./packages/demo/.env.local-example ./packages/demo/.env
         - name: Build
