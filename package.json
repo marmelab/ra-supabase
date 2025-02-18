@@ -43,6 +43,9 @@
         "typescript": "^5.7.3",
         "whatwg-fetch": "^3.0.0"
     },
+    "resolutions": {
+        "esbuild": "^0.24.2"
+    },
     "scripts": {
         "build": "lerna run build",
         "build-demo": "cd packages/demo && yarn build",
