@@ -4,41 +4,43 @@ This package integrates [Supabase](https://supabase.io/) with [react-admin](http
 
 [![Video tutorial about react-admin with supabase](../../assets/video.jpg)](https://youtu.be/zV-Ty7VeIvo)
 
-## Installation
+## Quick Start
 
-```sh
-yarn add ra-supabase
-# or
-npm install ra-supabase
+Use the `create-react-admin` command and the `supabase` template to create a new React-Admin app that uses Supabase as a backend, both for the data and the authentication.
+
+```bash
+npx create-react-admin my-admin --data-provider supabase
 ```
 
-`ra-supabase` leverage the authentication mechanisms of Supabase. If you don't need to support [the invitations workflow](#invitation-handling) **and** you only enabled [third party OAuth authentication](#oauth-authentication), you're done with the installation.
+Edit `.env` and populate it with your Supabase connection variables:
 
-If you do want to support [the invitations workflow](#invitation-handling) or use the default email/password authentication, you must do one of the following:
-
-- [Configure Supabase with a custom SMTP provider](https://supabase.com/docs/guides/auth/auth-smtp#how-to-set-up-smtp)
-- [Set up an authentication hook to send the emails yourself](https://supabase.com/docs/guides/auth/auth-hooks/send-email-hook)
-
-## Usage
-
-**Quick Start**: Watch the [video tutorial about react-admin with supabase](https://youtu.be/zV-Ty7VeIvo).
-
-`ra-supabase` provides an `<AdminGuesser>` component that takes advantage of Supabase's OpenAPI schema to guess the resources and their fields. You can use it as a replacement for react-admin's `<Admin>` component to bootstrap your admin quickly:
-
-```jsx
-import { AdminGuesser } from 'ra-supabase';
-
-const App = () => (
-    <AdminGuesser
-        instanceUrl={YOUR_SUPABASE_URL}
-        apiKey={YOUR_SUPABASE_API_KEY}
-    />
-);
-
-export default App;
+```env
+VITE_SUPABASE_URL=<SUBSTITUTE_SUPABASE_URL>
+VITE_SUPABASE_API_KEY=<SUBSTITUTE_SUPABASE_ANON_KEY>
 ```
 
-This generates a dataProvider, and authProvider, and an admin app with working CRUD for all resources.
+Make the data in your database readable by authenticated users by adding an RLS policy:
+
+```sql
+create policy "Authenticated can read and write data"
+on "public"."*"
+as PERMISSIVE
+for ALL
+to authenticated
+using (true);
+```
+
+Add a new user in your project's [Users list](https://supabase.com/dashboard/project/_/auth/users) with an email and password. 
+
+Run the development server, then go to [http://localhost:5173/](http://localhost:5173/) in a browser.
+
+```bash
+npm run dev
+```
+
+You should see a login screen: Log in using the credentials of the user you created earlier.
+
+Now the app is ready to use.
 
 ![Demo](./assets/demo.png)
 
@@ -50,6 +52,39 @@ The generated admin is fully functional:
 - Forms use the correct input component based on the field type
 - Relationships are displayed as links in show views and as autocomplete inputs in edit views
 - Authentication is handled by Supabase
+
+## Installation
+
+You can also install `ra-supabase` in an existing project:
+
+```sh
+yarn add ra-supabase
+# or
+npm install ra-supabase
+```
+
+`ra-supabase` leverages the Supabase authentication. If you don't need to support [the invitations workflow](#invitation-handling) **and** you only enabled [third party OAuth authentication](#oauth-authentication), you're done with the installation.
+
+If you do want to support [the invitations workflow](#invitation-handling) or use the default email/password authentication, you must do one of the following:
+
+- [Configure Supabase with a custom SMTP provider](https://supabase.com/docs/guides/auth/auth-smtp#how-to-set-up-smtp)
+- [Set up an authentication hook to send the emails yourself](https://supabase.com/docs/guides/auth/auth-hooks/send-email-hook)
+
+## Usage
+
+`ra-supabase` provides an `<AdminGuesser>` component that takes advantage of Supabase's OpenAPI schema to guess the resources and their fields. The initial project root for a react-admin app with Supabase typically looks like this:
+
+```jsx
+// in src/App.tsx
+import { AdminGuesser } from 'ra-supabase';
+
+export const App = () => (
+    <AdminGuesser
+        instanceUrl={YOUR_SUPABASE_URL}
+        apiKey={YOUR_SUPABASE_API_KEY}
+    />
+);
+```
 
 To start customizing the app, open the browser console, and copy the guessed admin code. You can then paste it into your own app and start customizing it.
 
