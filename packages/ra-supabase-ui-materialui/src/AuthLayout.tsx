@@ -35,6 +35,8 @@ import { defaultTheme, Notification } from 'ra-ui-materialui';
  *             ...
  *        </Admin>
  *     );
+ *
+ * @deprecated Use the <Login> component from ra-ui-materialui instead
  */
 export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
     const {
