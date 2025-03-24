@@ -5,18 +5,11 @@ import React, {
     ReactNode,
     useRef,
     useEffect,
-    useMemo,
 } from 'react';
-import {
-    Card,
-    Avatar,
-    ThemeProvider,
-    createTheme,
-    styled,
-} from '@mui/material';
+import { Card, Avatar, styled } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import { TitleComponent } from 'ra-core';
-import { defaultTheme, Notification } from 'ra-ui-materialui';
+import { Notification } from 'ra-ui-materialui';
 
 /**
  * A standalone login page, to serve as authentication gate to the admin
@@ -35,12 +28,9 @@ import { defaultTheme, Notification } from 'ra-ui-materialui';
  *             ...
  *        </Admin>
  *     );
- *
- * @deprecated Use the <Login> component from ra-ui-materialui instead
  */
 export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
     const {
-        theme = defaultTheme,
         title,
         classes: classesOverride,
         className,
@@ -50,7 +40,6 @@ export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
         ...rest
     } = props;
     const containerRef = useRef<HTMLDivElement>(null);
-    const muiTheme = useMemo(() => createTheme(theme), [theme]);
     let backgroundImageLoaded = false;
 
     const updateBackgroundImage = () => {
@@ -76,19 +65,17 @@ export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
     });
 
     return (
-        <ThemeProvider theme={muiTheme}>
-            <Root {...rest} ref={containerRef}>
-                <Card className={AuthLayoutClasses.card}>
-                    <div className={AuthLayoutClasses.avatar}>
-                        <Avatar className={AuthLayoutClasses.icon}>
-                            <LockIcon />
-                        </Avatar>
-                    </div>
-                    {children}
-                </Card>
-                {notification ? createElement(notification) : null}
-            </Root>
-        </ThemeProvider>
+        <Root {...rest} ref={containerRef}>
+            <Card className={AuthLayoutClasses.card}>
+                <div className={AuthLayoutClasses.avatar}>
+                    <Avatar className={AuthLayoutClasses.icon}>
+                        <LockIcon />
+                    </Avatar>
+                </div>
+                {children}
+            </Card>
+            {notification ? createElement(notification) : null}
+        </Root>
     );
 };
 
@@ -99,7 +86,6 @@ export interface LoginProps
     classes?: object;
     className?: string;
     notification?: ComponentType;
-    theme?: object;
     title?: TitleComponent;
 }
 
