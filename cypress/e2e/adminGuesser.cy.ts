@@ -1,8 +1,5 @@
 import { login } from './login';
 
-const getPaginationText = () =>
-    cy.findByText(/\d+-\d+ of \d+/, { timeout: 10000 });
-
 describe('AdminGuesser', () => {
     it('should render one menu item per resource', () => {
         cy.visit('/');
