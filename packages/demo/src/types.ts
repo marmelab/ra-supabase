@@ -34,7 +34,7 @@ export interface Contact extends RaRecord {
     first_seen: string;
     last_seen: string;
     has_newsletter: Boolean;
-    tags: Identifier[];
+    tag_ids: Identifier[];
     gender: string;
     sales_id: Identifier;
     status: string;
