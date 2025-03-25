@@ -82,6 +82,7 @@ export const CreateGuesserView = (
                         ? resourceDefinition.properties![source].type
                         : 'string') as string,
                     requiredFields,
+                    schema,
                 })
             );
         const inferredForm = new InferredElement(

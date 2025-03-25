@@ -296,6 +296,40 @@ export const MyAdmin = () => (
 );
 ```
 
+## AutocompleteInput With References
+
+By default, React Admin `<AutocompleteInput>` component inside a `<ReferenceInput>` will query the dataProvider with a filter on the `q` field. This doesn't work with Supabase.
+You must set the `filterToQuery` prop so that it filters the references correctly. For instance, for a list of contacts having a company that has a `name` prop:
+
+```tsx
+import { AutocompleteInput, Datagrid, List, ReferenceField, ReferenceInput, TextField } from 'react-admin';
+
+const filters = [
+    <ReferenceInput source="company_id" reference="companies">
+        <AutocompleteInput filterToQuery={searchText => ({ 'name@ilike': `%${searchText}%` })} />
+    </ReferenceInput>
+];
+
+export const ContactList = () => (
+    <List filters={filters}>
+        <Datagrid>
+            <TextField source="id" />
+            <TextField source="first_name" />
+            <TextField source="last_name" />
+            <ReferenceField source="company_id" reference="companies" />
+        </Datagrid>
+    </List>
+);
+```
+
+The [guessers](#guessers) will try their best to infer commonly used fields for filtering. If the referenced resource contains any of these fields, it will be targeted for filtering:
+
+- `name`
+- `title`
+- `label`
+- `reference`
+- `email`
+
 ## Using Hash Router
 
 Supabase uses URL hash links for its redirections. This can cause conflicts if you use a HashRouter. For this reason, we recommend using the BrowserRouter.

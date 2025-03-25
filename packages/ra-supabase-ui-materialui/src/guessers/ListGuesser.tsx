@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
 import { InferredElement, ListBase, useResourceContext } from 'ra-core';
 import {
-    editFieldTypes,
     listFieldTypes,
     type ListProps,
     ListView,
@@ -14,6 +13,7 @@ import {
 import { capitalize, singularize } from 'inflection';
 
 import { inferElementFromType } from './inferElementFromType';
+import { editFieldTypes } from './editFieldTypes';
 
 export const ListGuesser = (props: ListProps & { enableLog?: boolean }) => {
     const {
@@ -94,6 +94,7 @@ export const ListGuesserView = (
                         'string'
                         ? resourceDefinition.properties![source].type
                         : 'string') as string,
+                    schema,
                 })
             );
         const inferredTable = new InferredElement(
@@ -122,6 +123,7 @@ export const ListGuesserView = (
                     description: field.description,
                     format: field.format,
                     type: field.type as string,
+                    schema,
                 });
             });
         if (
@@ -154,6 +156,7 @@ export const ListGuesserView = (
                             value ? value.substring(0, value.length - 2) : '',
                     },
                     type: field.type as string,
+                    schema,
                 })
             );
         }

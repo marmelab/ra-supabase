@@ -70,6 +70,7 @@ export const ShowGuesserView = (
                         'string'
                         ? resourceDefinition.properties![source].type
                         : 'string') as string,
+                    schema,
                 })
             );
         const inferredLayout = new InferredElement(

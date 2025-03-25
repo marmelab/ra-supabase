@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
 import { EditBase, InferredElement, useResourceContext } from 'ra-core';
 import {
-    editFieldTypes,
     type EditProps,
     EditView,
     type EditViewProps,
@@ -12,6 +11,7 @@ import {
 import { capitalize, singularize } from 'inflection';
 
 import { inferElementFromType } from './inferElementFromType';
+import { editFieldTypes } from './editFieldTypes';
 
 export const EditGuesser = (props: EditProps & { enableLogs?: boolean }) => {
     const {
@@ -86,6 +86,7 @@ export const EditGuesserView = (
                         ? resourceDefinition.properties![source].type
                         : 'string') as string,
                     requiredFields,
+                    schema,
                 })
             );
         const inferredForm = new InferredElement(
