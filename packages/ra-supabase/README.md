@@ -296,9 +296,10 @@ export const MyAdmin = () => (
 );
 ```
 
-## AutocompleteInput With References
+## References Inputs
 
-By default, React Admin `<AutocompleteInput>` component inside a `<ReferenceInput>` will query the dataProvider with a filter on the `q` field. This doesn't work with Supabase.
+By default, React Admin adds an `<AutocompleteInput>` component inside all `<ReferenceInput>` and it will query the dataProvider with a filter on the `q` field. This doesn't work with Supabase. This is also true for `<ReferenceArrayInput>` and its `<AutocompleteArrayInput>` child.
+
 You must set the `filterToQuery` prop so that it filters the references correctly. For instance, for a list of contacts having a company that has a `name` prop:
 
 ```tsx
@@ -328,7 +329,6 @@ The [guessers](#guessers) will try their best to infer commonly used fields for 
 - `title`
 - `label`
 - `reference`
-- `email`
 
 ## Using Hash Router
 
