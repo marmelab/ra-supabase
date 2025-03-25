@@ -64,7 +64,7 @@ export const editFieldTypes: InferredTypeMap = {
                   }">\n${children
                       .map(child => `\t\t${child.getRepresentation()}`)
                       .join('\n')}\n\t</ReferenceArrayInput>`
-                : `<ReferenceArrayInput source="${props.source}" reference="${props.reference}">\n\t\t<TextInput source="id" />\n\t</ReferenceArrayInput>`,
+                : `<ReferenceArrayInput source="${props.source}" reference="${props.reference}" />`,
     },
     autocompleteArrayInput: {
         component: (props: AutocompleteArrayInputProps) =>
