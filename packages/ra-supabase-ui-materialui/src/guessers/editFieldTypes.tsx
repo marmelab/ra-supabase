@@ -32,20 +32,25 @@ export const editFieldTypes: InferredTypeMap = {
                 : `<ReferenceInput source="${props.source}" reference="${props.reference}" />`,
     },
     autocompleteInput: {
-        component: (props: AutocompleteInputProps) => (
-            <AutocompleteInput
-                filterToQuery={searchText => ({
-                    [`${props.optionText}@ilike`]: `%${searchText}%`,
-                })}
-                {...props}
-            />
-        ),
+        component: (props: AutocompleteInputProps) =>
+            props.optionText ? (
+                <AutocompleteInput
+                    filterToQuery={searchText => ({
+                        [`${props.optionText}@ilike`]: `%${searchText}%`,
+                    })}
+                    {...props}
+                />
+            ) : (
+                <AutocompleteInput {...props} />
+            ),
         representation: (props: AutocompleteInputProps) =>
             `<AutocompleteInput${
                 props.source ? ` source="${props.source}"` : ''
-            } filterToQuery={searchText => ({ ${
+            }${
                 props.optionText
-            }@ilike: \`%\${searchText}%\` })} />`,
+                    ? ` filterToQuery={searchText => ({ ${props.optionText}@ilike: \`%\${searchText}%\` })}`
+                    : ''
+            } />`,
     },
     referenceArray: {
         component: ReferenceArrayInput,
@@ -62,19 +67,24 @@ export const editFieldTypes: InferredTypeMap = {
                 : `<ReferenceArrayInput source="${props.source}" reference="${props.reference}">\n\t\t<TextInput source="id" />\n\t</ReferenceArrayInput>`,
     },
     autocompleteArrayInput: {
-        component: (props: AutocompleteArrayInputProps) => (
-            <AutocompleteArrayInput
-                filterToQuery={searchText => ({
-                    [`${props.optionText}@ilike`]: `%${searchText}%`,
-                })}
-                {...props}
-            />
-        ),
+        component: (props: AutocompleteArrayInputProps) =>
+            props.optionText ? (
+                <AutocompleteArrayInput
+                    filterToQuery={searchText => ({
+                        [`${props.optionText}@ilike`]: `%${searchText}%`,
+                    })}
+                    {...props}
+                />
+            ) : (
+                <AutocompleteArrayInput {...props} />
+            ),
         representation: (props: AutocompleteInputProps) =>
             `<AutocompleteArrayInput${
                 props.source ? ` source="${props.source}"` : ''
-            } filterToQuery={searchText => ({ '${
+            }${
                 props.optionText
-            }@ilike': \`%\${searchText}%\` })} />`,
+                    ? ` filterToQuery={searchText => ({ ${props.optionText}@ilike: \`%\${searchText}%\` })}`
+                    : ''
+            } />`,
     },
 };

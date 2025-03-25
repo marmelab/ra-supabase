@@ -52,15 +52,9 @@ export const inferElementFromType = ({
             hasType('autocompleteInput', types) &&
             referenceRecordRepresentationField
                 ? [
-                      new InferredElement(
-                          types.autocompleteInput,
-                          referenceRecordRepresentationField
-                              ? {
-                                    optionText:
-                                        referenceRecordRepresentationField,
-                                }
-                              : {}
-                      ),
+                      new InferredElement(types.autocompleteInput, {
+                          optionText: referenceRecordRepresentationField,
+                      }),
                   ]
                 : undefined,
             hasType('autocompleteInput', types) &&
@@ -71,7 +65,7 @@ export const inferElementFromType = ({
     }
     if (
         name.substring(name.length - 4) === '_ids' &&
-        hasType('reference', types)
+        hasType('referenceArray', types)
     ) {
         const reference = pluralize(name.substr(0, name.length - 4));
         const referenceResourceDefinition = schema.definitions?.[reference];
@@ -93,15 +87,9 @@ export const inferElementFromType = ({
             hasType('autocompleteArrayInput', types) &&
             referenceRecordRepresentationField
                 ? [
-                      new InferredElement(
-                          types.autocompleteArrayInput,
-                          referenceRecordRepresentationField
-                              ? {
-                                    optionText:
-                                        referenceRecordRepresentationField,
-                                }
-                              : {}
-                      ),
+                      new InferredElement(types.autocompleteArrayInput, {
+                          optionText: referenceRecordRepresentationField,
+                      }),
                   ]
                 : undefined,
             hasType('autocompleteArrayInput', types) &&
