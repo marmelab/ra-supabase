@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { ReactNode } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
-import { InferredElement, ShowBase, useResourceContext } from 'ra-core';
+import { ShowBase, useResourceContext } from 'ra-core';
 import {
     Loading,
     showFieldTypes,
@@ -12,6 +12,7 @@ import {
 import { capitalize, singularize } from 'inflection';
 
 import { inferElementFromType } from './inferElementFromType';
+import { InferredElement } from './InferredElement';
 
 export const ShowGuesser = (props: ShowProps & { enableLog?: boolean }) => {
     const { id, disableAuthentication, queryOptions, resource, ...rest } =
@@ -95,6 +96,10 @@ export const ShowGuesserView = (
             )
             .sort();
 
+        const warnings = inferredFields
+            .map(inferredInput => inferredInput.getWarning())
+            .filter(warning => warning != null);
+
         // eslint-disable-next-line no-console
         console.log(
             `Guessed Show:
@@ -105,7 +110,11 @@ export const ${capitalize(singularize(resource))}Show = () => (
     <Show>
 ${representation}
     </Show>
-);`
+);${
+                warnings.length > 0
+                    ? warnings.map(warning => `\n\n${warning}`).join('')
+                    : ''
+            }`
         );
     }, [resource, isPending, error, schema, enableLog]);
 

@@ -1,6 +1,7 @@
-import { InferredElement, required, type InferredTypeMap } from 'ra-core';
+import { required, type InferredTypeMap } from 'ra-core';
 import { pluralize } from 'inflection';
 import type { OpenAPIV2 } from 'openapi-types';
+import { InferredElement } from './InferredElement';
 
 const hasType = (type, types) => typeof types[type] !== 'undefined';
 
@@ -48,16 +49,24 @@ export const inferElementFromType = ({
                 reference,
                 ...props,
             },
-            [
-                new InferredElement(
-                    types.autocompleteInput,
-                    referenceRecordRepresentationField
-                        ? {
-                              optionText: referenceRecordRepresentationField,
-                          }
-                        : {}
-                ),
-            ]
+            hasType('autocompleteInput', types) &&
+            referenceRecordRepresentationField
+                ? [
+                      new InferredElement(
+                          types.autocompleteInput,
+                          referenceRecordRepresentationField
+                              ? {
+                                    optionText:
+                                        referenceRecordRepresentationField,
+                                }
+                              : {}
+                      ),
+                  ]
+                : undefined,
+            hasType('autocompleteInput', types) &&
+            !referenceRecordRepresentationField
+                ? `Could not infer the field to use to filter referenced ${reference} records. Please provide the \`filterToQuery\` prop to the <AutocompleteInput> component. See https://github.com/marmelab/ra-supabase/blob/main/packages/ra-supabase/README.md#autocompleteinput-with-references`
+                : undefined
         );
     }
     if (
@@ -81,16 +90,24 @@ export const inferElementFromType = ({
                 reference,
                 ...props,
             },
-            [
-                new InferredElement(
-                    types.autocompleteArrayInput,
-                    referenceRecordRepresentationField
-                        ? {
-                              optionText: referenceRecordRepresentationField,
-                          }
-                        : {}
-                ),
-            ]
+            hasType('autocompleteArrayInput', types) &&
+            referenceRecordRepresentationField
+                ? [
+                      new InferredElement(
+                          types.autocompleteArrayInput,
+                          referenceRecordRepresentationField
+                              ? {
+                                    optionText:
+                                        referenceRecordRepresentationField,
+                                }
+                              : {}
+                      ),
+                  ]
+                : undefined,
+            hasType('autocompleteArrayInput', types) &&
+            !referenceRecordRepresentationField
+                ? `Could not infer the field to use to filter referenced ${reference} records. Please provide the \`filterToQuery\` prop to the <AutocompleteArrayInput> component. See https://github.com/marmelab/ra-supabase/blob/main/packages/ra-supabase/README.md#autocompleteinput-with-references`
+                : undefined
         );
     }
     if (type === 'array') {
@@ -165,8 +182,5 @@ const inferRecordRepresentationField = (
     }
     if (referenceResourceDefinition.properties?.reference != null) {
         return 'reference';
-    }
-    if (referenceResourceDefinition.properties?.email != null) {
-        return 'email';
     }
 };

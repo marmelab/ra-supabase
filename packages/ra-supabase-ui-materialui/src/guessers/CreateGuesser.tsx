@@ -2,16 +2,12 @@ import * as React from 'react';
 import type { ReactNode } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
 import { CreateBase, useResourceContext } from 'ra-core';
-import {
-    CreateView,
-    editFieldTypes,
-    InferredElement,
-    Loading,
-} from 'react-admin';
+import { CreateView, editFieldTypes, Loading } from 'react-admin';
 import type { CreateProps, CreateViewProps } from 'ra-ui-materialui';
 import { capitalize, singularize } from 'inflection';
 
 import { inferElementFromType } from './inferElementFromType';
+import { InferredElement } from './InferredElement';
 
 export const CreateGuesser = (props: CreateProps & { enableLog?: boolean }) => {
     const {
@@ -107,6 +103,10 @@ export const CreateGuesserView = (
             )
             .sort();
 
+        const warnings = inferredInputs
+            .map(inferredInput => inferredInput.getWarning())
+            .filter(warning => warning != null);
+
         // eslint-disable-next-line no-console
         console.log(
             `Guessed Create:
@@ -117,7 +117,11 @@ export const ${capitalize(singularize(resource))}Create = () => (
     <Create>
 ${representation}
     </Create>
-);`
+);${
+                warnings.length > 0
+                    ? warnings.map(warning => `\n\n${warning}`).join('')
+                    : ''
+            }`
         );
     }, [resource, isPending, error, schema, enableLog]);
 

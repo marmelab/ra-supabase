@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { ReactNode } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
-import { InferredElement, ListBase, useResourceContext } from 'ra-core';
+import { ListBase, useResourceContext } from 'ra-core';
 import {
     listFieldTypes,
     type ListProps,
@@ -13,6 +13,7 @@ import {
 import { capitalize, singularize } from 'inflection';
 
 import { inferElementFromType } from './inferElementFromType';
+import { InferredElement } from './InferredElement';
 import { editFieldTypes } from './editFieldTypes';
 
 export const ListGuesser = (props: ListProps & { enableLog?: boolean }) => {
@@ -195,6 +196,11 @@ ${inferredInputsForFilters
             new Set(['List', ...fieldComponents, ...filterComponents])
         ).sort();
 
+        const warnings = inferredInputsForFilters
+            .map(inferredInput => inferredInput.getWarning())
+            .concat(inferredFields.map(field => field.getWarning()))
+            .filter(warning => warning != null);
+
         // eslint-disable-next-line no-console
         console.log(
             `Guessed List:
@@ -206,7 +212,11 @@ export const ${capitalize(singularize(resource))}List = () => (
     <List${filterRepresentation ? ' filters={filters}' : ''}>
 ${tableRepresentation}
     </List>
-);`
+);${
+                warnings.length > 0
+                    ? warnings.map(warning => `\n\n${warning}`).join('')
+                    : ''
+            }`
         );
     }, [resource, isPending, error, schema, enableLog]);
 
