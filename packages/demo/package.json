@@ -3,6 +3,7 @@
     "version": "3.4.0",
     "private": true,
     "dependencies": {
+        "@react-admin/ra-form-layout": "^5.10.1",
         "date-fns": "^3.6.0",
         "faker": "~5.4.0",
         "ra-supabase": "^3.4.0",
