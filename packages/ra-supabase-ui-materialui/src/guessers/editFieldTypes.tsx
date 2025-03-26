@@ -48,7 +48,7 @@ export const editFieldTypes: InferredTypeMap = {
                 props.source ? ` source="${props.source}"` : ''
             }${
                 props.optionText
-                    ? ` filterToQuery={searchText => ({ ${props.optionText}@ilike: \`%\${searchText}%\` })}`
+                    ? ` filterToQuery={searchText => ({ '${props.optionText}@ilike': \`%\${searchText}%\` })}`
                     : ''
             } />`,
     },
@@ -83,7 +83,7 @@ export const editFieldTypes: InferredTypeMap = {
                 props.source ? ` source="${props.source}"` : ''
             }${
                 props.optionText
-                    ? ` filterToQuery={searchText => ({ ${props.optionText}@ilike: \`%\${searchText}%\` })}`
+                    ? ` filterToQuery={searchText => ({ '${props.optionText}@ilike': \`%\${searchText}%\` })}`
                     : ''
             } />`,
     },
