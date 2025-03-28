@@ -1,8 +1,13 @@
 import * as React from 'react';
 import type { ComponentProps } from 'react';
-import { CardActions, styled } from '@mui/material';
-import { Form, required, useLogin, useNotify, useTranslate } from 'ra-core';
-import { Link, PasswordInput, SaveButton, TextInput } from 'ra-ui-materialui';
+import { Box, styled } from '@mui/material';
+import { required, useTranslate } from 'ra-core';
+import {
+    Link,
+    LoginForm as RaLoginForm,
+    PasswordInput,
+    TextInput,
+} from 'ra-ui-materialui';
 
 import { ForgotPasswordPage } from './ForgotPasswordPage';
 
@@ -13,76 +18,39 @@ export const LoginForm = ({
     disableForgotPassword,
     ...props
 }: LoginFormProps) => {
-    const login = useLogin();
-    const notify = useNotify();
     const translate = useTranslate();
 
-    const submit = (values: FormData) => {
-        return login(values).catch(error => {
-            notify(
-                typeof error === 'string'
-                    ? error
-                    : typeof error === 'undefined' || !error.message
-                    ? 'ra.auth.sign_in_error'
-                    : error.message,
-                {
-                    type: 'warning',
-                    messageArgs: {
-                        _:
-                            typeof error === 'string'
-                                ? error
-                                : error && error.message
-                                ? error.message
-                                : undefined,
-                    },
-                }
-            );
-        });
-    };
-
     return (
-        <Root onSubmit={submit} {...props}>
-            <div className={SupabaseLoginFormClasses.container}>
-                <div className={SupabaseLoginFormClasses.input}>
-                    <TextInput
-                        autoFocus
-                        source="email"
-                        type="email"
-                        label={translate('ra-supabase.auth.email', {
-                            _: 'Email',
-                        })}
-                        fullWidth
-                        validate={required()}
-                    />
-                </div>
-                <div>
-                    <PasswordInput
-                        source="password"
-                        label={translate('ra.auth.password', {
-                            _: 'Password',
-                        })}
-                        autoComplete="current-password"
-                        fullWidth
-                        validate={required()}
-                    />
-                </div>
-            </div>
-            <CardActions sx={{ flexDirection: 'column', gap: 1 }}>
-                <SaveButton
-                    variant="contained"
-                    type="submit"
-                    className={SupabaseLoginFormClasses.button}
-                    label={translate('ra.auth.sign_in')}
-                    icon={<></>}
+        <Root>
+            <RaLoginForm {...props}>
+                <TextInput
+                    autoFocus
+                    source="email"
+                    type="email"
+                    label={translate('ra.auth.email', {
+                        _: 'Email',
+                    })}
+                    autoComplete="email"
+                    validate={required()}
                 />
-                {!disableForgotPassword ? (
+                <PasswordInput
+                    source="password"
+                    label={translate('ra.auth.password', {
+                        _: 'Password',
+                    })}
+                    autoComplete="current-password"
+                    validate={required()}
+                />
+            </RaLoginForm>
+            {!disableForgotPassword ? (
+                <Box textAlign="center" mb={1}>
                     <Link to={ForgotPasswordPage.path} variant="body2">
                         {translate('ra-supabase.auth.forgot_password', {
                             _: 'Forgot password?',
                         })}
                     </Link>
-                ) : null}
-            </CardActions>
+                </Box>
+            ) : null}
         </Root>
     );
 };
@@ -92,30 +60,9 @@ export interface LoginFormProps
     disableForgotPassword?: boolean;
 }
 
-interface FormData {
-    email?: string;
-    password?: string;
-}
-
 const PREFIX = 'RaSupabaseLoginForm';
 
-const SupabaseLoginFormClasses = {
-    container: `${PREFIX}-container`,
-    input: `${PREFIX}-input`,
-    button: `${PREFIX}-button`,
-};
-
-const Root = styled(Form, {
+const Root = styled('div', {
     name: PREFIX,
     overridesResolver: (props, styles) => styles.root,
-})(({ theme }) => ({
-    [`& .${SupabaseLoginFormClasses.container}`]: {
-        padding: '0 1em 1em 1em',
-    },
-    [`& .${SupabaseLoginFormClasses.input}`]: {
-        marginTop: '1em',
-    },
-    [`& .${SupabaseLoginFormClasses.button}`]: {
-        width: '100%',
-    },
-}));
+})(() => ({}));

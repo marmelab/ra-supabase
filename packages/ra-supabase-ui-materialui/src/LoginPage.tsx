@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type { ReactNode } from 'react';
+import { Login } from 'ra-ui-materialui';
 import { Provider } from '@supabase/supabase-js';
 import { Divider, Stack } from '@mui/material';
 
@@ -21,7 +22,6 @@ import {
     TwitterButton,
     WorkosButton,
 } from './SocialAuthButton';
-import { AuthLayout } from './AuthLayout';
 import { LoginForm } from './LoginForm';
 
 /**
@@ -79,7 +79,7 @@ export const LoginPage = (props: LoginPageProps) => {
     } = props;
 
     return (
-        <AuthLayout>
+        <Login>
             {children ?? (
                 <>
                     {disableEmailPassword ? null : (
@@ -146,7 +146,7 @@ export const LoginPage = (props: LoginPageProps) => {
                     ) : null}
                 </>
             )}
-        </AuthLayout>
+        </Login>
     );
 };
 
