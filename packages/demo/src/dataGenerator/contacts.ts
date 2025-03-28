@@ -74,7 +74,7 @@ export const generateContacts = (
             last_seen: last_seen,
             has_newsletter: weightedBoolean(30),
             status: random.arrayElement(status),
-            tags: random
+            tag_ids: random
                 .arrayElements(db.tags, random.arrayElement([0, 0, 0, 1, 1, 2]))
                 .map(tag => tag.id), // finalize
             sales_id: company.sales_id,

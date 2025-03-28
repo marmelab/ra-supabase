@@ -7,14 +7,12 @@ describe('Lists', () => {
     it('should render a list', () => {
         cy.visit('/');
         login();
-        cy.findByText('Contacts', { selector: 'a' }).click();
         getPaginationText();
     });
 
     it('should allow to move through pages', () => {
         cy.visit('/');
         login();
-        cy.findByText('Contacts', { selector: 'a' }).click();
         getPaginationText().then(el => {
             const page = parseInt(el.text().split('-')[0].trim());
             cy.findByLabelText('Go to page 4').click();
@@ -40,7 +38,6 @@ describe('Lists', () => {
     it('should allow to sort data', () => {
         cy.visit('/');
         login();
-        cy.findByText('Contacts', { selector: 'a' }).click();
         cy.findByLabelText('Sort by gender ascending').click();
         cy.findAllByText('female', { timeout: 10000 }).should(
             'have.length',
