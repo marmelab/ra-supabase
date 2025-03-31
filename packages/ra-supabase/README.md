@@ -296,7 +296,7 @@ export const MyAdmin = () => (
 );
 ```
 
-## References Inputs
+## Reference Inputs
 
 By default, React Admin adds an `<AutocompleteInput>` component inside all `<ReferenceInput>` and it will query the dataProvider with a filter on the `q` field. This doesn't work with Supabase. This is also true for `<ReferenceArrayInput>` and its `<AutocompleteArrayInput>` child.
 
