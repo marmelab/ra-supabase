@@ -16,7 +16,7 @@ export const SetPasswordForm = () => {
 
     const notify = useNotify();
     const translate = useTranslate();
-    const [setPassword] = useSetPassword({
+    const [, { mutateAsync: setPassword }] = useSetPassword({
         onError: error => {
             notify(
                 typeof error === 'string'
@@ -62,12 +62,16 @@ export const SetPasswordForm = () => {
         );
     }
 
-    const submit = (values: FormData) => {
-        return setPassword({
-            access_token,
-            refresh_token,
-            password: values.password,
-        });
+    const submit = async (values: FormData) => {
+        try {
+            await setPassword({
+                access_token,
+                refresh_token,
+                password: values.password,
+            });
+        } catch (error) {
+            notify(error?.message ?? 'ra.notification.http_error');
+        }
     };
 
     return (
