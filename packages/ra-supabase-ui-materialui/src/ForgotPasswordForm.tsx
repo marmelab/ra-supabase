@@ -10,8 +10,14 @@ import { Link, SaveButton, TextInput } from 'ra-ui-materialui';
 export const ForgotPasswordForm = () => {
     const notify = useNotify();
     const translate = useTranslate();
-    const [, { mutateAsync: resetPassword }] = useResetPassword({
-        onError: error => {
+    const [, { mutateAsync: resetPassword }] = useResetPassword();
+
+    const submit = async (values: FormData) => {
+        try {
+            await resetPassword({
+                email: values.email,
+            });
+        } catch (error) {
             notify(
                 typeof error === 'string'
                     ? error
@@ -30,16 +36,6 @@ export const ForgotPasswordForm = () => {
                     },
                 }
             );
-        },
-    });
-
-    const submit = async (values: FormData) => {
-        try {
-            await resetPassword({
-                email: values.email,
-            });
-        } catch (error) {
-            notify(error?.message ?? 'ra.notification.http_error');
         }
     };
 

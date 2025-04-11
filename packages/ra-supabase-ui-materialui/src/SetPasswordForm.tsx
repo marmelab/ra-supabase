@@ -16,28 +16,7 @@ export const SetPasswordForm = () => {
 
     const notify = useNotify();
     const translate = useTranslate();
-    const [, { mutateAsync: setPassword }] = useSetPassword({
-        onError: error => {
-            notify(
-                typeof error === 'string'
-                    ? error
-                    : typeof error === 'undefined' || !error.message
-                    ? 'ra.auth.sign_in_error'
-                    : error.message,
-                {
-                    type: 'warning',
-                    messageArgs: {
-                        _:
-                            typeof error === 'string'
-                                ? error
-                                : error && error.message
-                                ? error.message
-                                : undefined,
-                    },
-                }
-            );
-        },
-    });
+    const [, { mutateAsync: setPassword }] = useSetPassword();
 
     const validate = (values: FormData) => {
         if (values.password !== values.confirmPassword) {
@@ -70,7 +49,24 @@ export const SetPasswordForm = () => {
                 password: values.password,
             });
         } catch (error) {
-            notify(error?.message ?? 'ra.notification.http_error');
+            notify(
+                typeof error === 'string'
+                    ? error
+                    : typeof error === 'undefined' || !error.message
+                    ? 'ra.auth.sign_in_error'
+                    : error.message,
+                {
+                    type: 'warning',
+                    messageArgs: {
+                        _:
+                            typeof error === 'string'
+                                ? error
+                                : error && error.message
+                                ? error.message
+                                : undefined,
+                    },
+                }
+            );
         }
     };
 
