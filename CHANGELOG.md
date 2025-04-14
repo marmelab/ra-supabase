@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.4.1
+
+- Improve authentication related pages UX by showing the loading state ([#88](https://github.com/marmelab/ra-supabase/pull/88)) ([djhi](https://github.com/djhi))
+- Fix generated representation for `<AutocompleteInput>` and `<AutocompleteArrayInput>` ([#86](https://github.com/marmelab/ra-supabase/pull/86)) ([slax57](https://github.com/slax57))
+- Improve Reference inputs guessers ([#85](https://github.com/marmelab/ra-supabase/pull/85)) ([djhi](https://github.com/djhi))
+- Update `LoginPage` to use React admin Login component ([#84](https://github.com/marmelab/ra-supabase/pull/84)) ([fzaninotto](https://github.com/fzaninotto))
+
 ## 3.4.0
 
 - Add support for React 19, react-router v7 and MUI v6, and update react-admin peer dependency to v5.5 ([#83](https://github.com/marmelab/ra-supabase/pull/83)) ([djhi](https://github.com/djhi))
