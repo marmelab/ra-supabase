@@ -16,28 +16,7 @@ export const SetPasswordForm = () => {
 
     const notify = useNotify();
     const translate = useTranslate();
-    const [setPassword] = useSetPassword({
-        onError: error => {
-            notify(
-                typeof error === 'string'
-                    ? error
-                    : typeof error === 'undefined' || !error.message
-                    ? 'ra.auth.sign_in_error'
-                    : error.message,
-                {
-                    type: 'warning',
-                    messageArgs: {
-                        _:
-                            typeof error === 'string'
-                                ? error
-                                : error && error.message
-                                ? error.message
-                                : undefined,
-                    },
-                }
-            );
-        },
-    });
+    const [, { mutateAsync: setPassword }] = useSetPassword();
 
     const validate = (values: FormData) => {
         if (values.password !== values.confirmPassword) {
@@ -62,12 +41,33 @@ export const SetPasswordForm = () => {
         );
     }
 
-    const submit = (values: FormData) => {
-        return setPassword({
-            access_token,
-            refresh_token,
-            password: values.password,
-        });
+    const submit = async (values: FormData) => {
+        try {
+            await setPassword({
+                access_token,
+                refresh_token,
+                password: values.password,
+            });
+        } catch (error) {
+            notify(
+                typeof error === 'string'
+                    ? error
+                    : typeof error === 'undefined' || !error.message
+                    ? 'ra.auth.sign_in_error'
+                    : error.message,
+                {
+                    type: 'warning',
+                    messageArgs: {
+                        _:
+                            typeof error === 'string'
+                                ? error
+                                : error && error.message
+                                ? error.message
+                                : undefined,
+                    },
+                }
+            );
+        }
     };
 
     return (
