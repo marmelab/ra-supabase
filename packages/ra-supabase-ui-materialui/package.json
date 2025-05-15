@@ -20,6 +20,7 @@
     "devDependencies": {
         "@mui/icons-material": "^5.16.12",
         "@mui/material": "^5.16.12",
+        "@mui/system": "^5.16.12",
         "@supabase/supabase-js": "^2.48.1",
         "ra-core": "^5.8.0",
         "ra-ui-materialui": "^5.8.0",

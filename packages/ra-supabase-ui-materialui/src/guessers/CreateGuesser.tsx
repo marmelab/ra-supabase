@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { ReactNode } from 'react';
 import { useAPISchema } from 'ra-supabase-core';
 import { CreateBase, useResourceContext } from 'ra-core';
-import { CreateView, Loading } from 'react-admin';
+import { CreateView, Loading } from 'ra-ui-materialui';
 import type { CreateProps, CreateViewProps } from 'ra-ui-materialui';
 import { capitalize, singularize } from 'inflection';
 
