@@ -43,7 +43,12 @@ export const LoginForm = ({
                 />
             </RaLoginForm>
             {!disableForgotPassword ? (
-                <Box textAlign="center" mb={1}>
+                <Box
+                    sx={{
+                        textAlign: 'center',
+                        mb: 1,
+                    }}
+                >
                     <Link to={ForgotPasswordPage.path} variant="body2">
                         {translate('ra-supabase.auth.forgot_password', {
                             _: 'Forgot password?',
