@@ -121,6 +121,6 @@ const Root = styled('div', {
         justifyContent: 'center',
     },
     [`& .${AuthLayoutClasses.icon}`]: {
-        backgroundColor: theme.palette.grey[500],
+        backgroundColor: (theme.vars || theme).palette.grey[500],
     },
 }));
