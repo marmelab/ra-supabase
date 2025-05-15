@@ -15,7 +15,7 @@
     "types": "esm/index.d.ts",
     "sideEffects": false,
     "peerDependencies": {
-        "ra-core": "^5.6.2"
+        "ra-core": "^5.8.0"
     },
     "dependencies": {
         "@raphiniert/ra-data-postgrest": "^2.4.1",
@@ -26,7 +26,7 @@
         "@testing-library/jest-dom": "^6.4.5",
         "@testing-library/react": "^15.0.7",
         "@testing-library/user-event": "^14.5.2",
-        "ra-core": "^5.6.2",
+        "ra-core": "^5.8.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router": "^6.28.1",
