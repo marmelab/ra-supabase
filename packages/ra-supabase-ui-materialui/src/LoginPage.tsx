@@ -92,7 +92,12 @@ export const LoginPage = (props: LoginPageProps) => {
                     )}
                     {providers && providers.length > 0 ? (
                         <>
-                            <Stack gap={1} padding={1}>
+                            <Stack
+                                sx={{
+                                    gap: 1,
+                                    padding: 1,
+                                }}
+                            >
                                 {providers.includes('apple') ? (
                                     <AppleButton />
                                 ) : null}

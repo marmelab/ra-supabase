@@ -43,7 +43,12 @@ export const ForgotPasswordForm = () => {
         <Root onSubmit={submit}>
             <div className={SupabaseLoginFormClasses.container}>
                 <Stack spacing={1}>
-                    <Typography variant="h5" textAlign="center">
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            textAlign: 'center',
+                        }}
+                    >
                         {translate(
                             'ra-supabase.reset_password.forgot_password',
                             { _: 'Forgot password?' }
@@ -53,7 +58,9 @@ export const ForgotPasswordForm = () => {
                     <Typography
                         variant="body2"
                         color="textSecondary"
-                        textAlign="center"
+                        sx={{
+                            textAlign: 'center',
+                        }}
                     >
                         {translate(
                             'ra-supabase.reset_password.forgot_password_details',

@@ -73,7 +73,13 @@ export const SetPasswordForm = () => {
     return (
         <Root onSubmit={submit} validate={validate}>
             <div className={SupabaseLoginFormClasses.container}>
-                <Typography variant="h5" textAlign="center" gutterBottom>
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{
+                        textAlign: 'center',
+                    }}
+                >
                     {translate('ra-supabase.set_password.new_password', {
                         _: 'Choose your password',
                     })}
