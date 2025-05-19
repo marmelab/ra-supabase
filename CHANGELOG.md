@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.0
+
+* Upgrade to react-admin v5.8 and add support for MUI v7 ([#90](https://github.com/marmelab/ra-supabase/pull/90)) ([slax57](https://github.com/slax57))
+
 ## 3.4.1
 
 - Improve authentication related pages UX by showing the loading state ([#88](https://github.com/marmelab/ra-supabase/pull/88)) ([djhi](https://github.com/djhi))
