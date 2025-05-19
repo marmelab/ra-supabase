@@ -12090,7 +12090,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ra-supabase-core@npm:^3.4.1, ra-supabase-core@workspace:packages/ra-supabase-core":
+"ra-supabase-core@npm:^3.5.0, ra-supabase-core@workspace:packages/ra-supabase-core":
   version: 0.0.0-use.local
   resolution: "ra-supabase-core@workspace:packages/ra-supabase-core"
   dependencies:
@@ -12112,7 +12112,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"ra-supabase-language-english@npm:^3.4.1, ra-supabase-language-english@workspace:packages/ra-supabase-language-english":
+"ra-supabase-language-english@npm:^3.5.0, ra-supabase-language-english@workspace:packages/ra-supabase-language-english":
   version: 0.0.0-use.local
   resolution: "ra-supabase-language-english@workspace:packages/ra-supabase-language-english"
   dependencies:
@@ -12163,7 +12163,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"ra-supabase-ui-materialui@npm:^3.4.1, ra-supabase-ui-materialui@workspace:packages/ra-supabase-ui-materialui":
+"ra-supabase-ui-materialui@npm:^3.5.0, ra-supabase-ui-materialui@workspace:packages/ra-supabase-ui-materialui":
   version: 0.0.0-use.local
   resolution: "ra-supabase-ui-materialui@workspace:packages/ra-supabase-ui-materialui"
   dependencies:
@@ -12172,7 +12172,7 @@ __metadata:
     "@mui/system": "npm:^5.16.12"
     "@supabase/supabase-js": "npm:^2.48.1"
     ra-core: "npm:^5.8.0"
-    ra-supabase-core: "npm:^3.4.1"
+    ra-supabase-core: "npm:^3.5.0"
     ra-ui-materialui: "npm:^5.8.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -12191,13 +12191,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"ra-supabase@npm:^3.4.1, ra-supabase@workspace:packages/ra-supabase":
+"ra-supabase@npm:^3.5.0, ra-supabase@workspace:packages/ra-supabase":
   version: 0.0.0-use.local
   resolution: "ra-supabase@workspace:packages/ra-supabase"
   dependencies:
-    ra-supabase-core: "npm:^3.4.1"
-    ra-supabase-language-english: "npm:^3.4.1"
-    ra-supabase-ui-materialui: "npm:^3.4.1"
+    ra-supabase-core: "npm:^3.5.0"
+    ra-supabase-language-english: "npm:^3.5.0"
+    ra-supabase-ui-materialui: "npm:^3.5.0"
     rimraf: "npm:^6.0.1"
     typescript: "npm:^5.7.3"
   languageName: unknown
@@ -12255,7 +12255,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.3.4"
     date-fns: "npm:^3.6.0"
     faker: "npm:~5.4.0"
-    ra-supabase: "npm:^3.4.1"
+    ra-supabase: "npm:^3.5.0"
     react: "npm:^18.2.0"
     react-admin: "npm:^5.8.0"
     react-dom: "npm:^18.2.0"

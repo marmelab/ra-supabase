@@ -1,11 +1,11 @@
 {
     "name": "react-admin-crm",
-    "version": "3.4.1",
+    "version": "3.5.0",
     "private": true,
     "dependencies": {
         "date-fns": "^3.6.0",
         "faker": "~5.4.0",
-        "ra-supabase": "^3.4.1",
+        "ra-supabase": "^3.5.0",
         "react": "^18.2.0",
         "react-admin": "^5.8.0",
         "react-dom": "^18.2.0"
