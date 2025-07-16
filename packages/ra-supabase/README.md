@@ -343,7 +343,7 @@ If you want to use the HashRouter, you'll need to modify the code.
 
 3. Go to your Supabase dashboard **Authentication** section
 4. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback.html`
-5. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback.html"`
+5. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}auth-callback.html"`
 
 ### Configuring a local Supabase instance
 
@@ -364,7 +364,7 @@ In `{TYPE}.html` set the `auth-callback` redirection
 <html>
   <body>
     <h2>{TYPE_MESSAGE}</h2>
-    <p><a href="{{ .ConfirmationURL }}/auth-callback.html">{TYPE_CTA}</a></p>
+    <p><a href="{{ .ConfirmationURL }}auth-callback.html">{TYPE_CTA}</a></p>
   </body>
 </html>
 ```
@@ -452,7 +452,7 @@ This requires you to configure your supabase instance:
 
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
-3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback"]`
+3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{{APPLICATION_URL}}/auth-callback"]`
 4. Add an `[auth.email.template.invite]` section with the following option
 
 ```
@@ -468,7 +468,7 @@ In `invite.html` set the `auth-callback` redirection
   <body>
     <h2>You have been invited</h2>
     <p>You have been invited to create a user on {{ .SiteURL }}. Follow this link to accept the invite:</p>
-    <p><a href="{{ .ConfirmationURL }}/auth-callback">Accept the invite</a></p>
+    <p><a href="{{ .ConfirmationURL }}auth-callback">Accept the invite</a></p>
   </body>
 </html>
 ```
@@ -478,7 +478,7 @@ In `invite.html` set the `auth-callback` redirection
 1. Go to your dashboard **Authentication** section
 1. In **URL Configuration**, set **Site URL** to your application URL
 1. In **URL Configuration**, add the following URL in the **Redirect URLs** section: `YOUR_APPLICATION_URL/auth-callback`
-1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}/auth-callback"`
+1. In **Email Templates**, change the `"{{ .ConfirmationURL }}"` to `"{{ .ConfirmationURL }}auth-callback"`
 
 You can now add the `/set-password` custom route:
 
@@ -522,7 +522,7 @@ This requires you to configure your supabase instance:
 
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
-3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback"]`
+3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{{APPLICATION_URL}}/auth-callback"]`
 4. Add an `[auth.email.template.recovery]` section with the following option
 
 ```
@@ -537,7 +537,7 @@ In `recovery.html` set the `auth-callback` redirection
 <html>
   <body>
     <h2>Reset Password</h2>
-    <p><a href="{{ .ConfirmationURL }}/auth-callback">Reset your password</a></p>
+    <p><a href="{{ .ConfirmationURL }}auth-callback">Reset your password</a></p>
   </body>
 </html>
 ```
@@ -622,7 +622,7 @@ This also requires you to configure the redirect URLS on your supabase instance:
 
 1. Go to your `config.toml` file
 2. In `[auth]` section set `site_url` to your application URL
-3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{APPLICATION_URL}}/auth-callback"]`
+3. In `[auth]`, add the following URL in the `additional_redirect_urls = [{{APPLICATION_URL}}/auth-callback"]`
 
 #### Configuring an hosted Supabase instance
 
