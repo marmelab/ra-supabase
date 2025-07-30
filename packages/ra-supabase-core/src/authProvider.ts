@@ -130,6 +130,27 @@ export const supabaseAuthProvider = (
             ) {
                 return;
             }
+            // Users are on the mfa-enroll page, nothing to do
+            if (
+                window.location.pathname === '/mfa-enroll' ||
+                window.location.hash.includes('#/mfa-enroll')
+            ) {
+                return;
+            }
+            // Users are on the mfa-challenge page, nothing to do
+            if (
+                window.location.pathname === '/mfa-challenge' ||
+                window.location.hash.includes('#/mfa-challenge')
+            ) {
+                return;
+            }
+            // Users are on the mfa-unenroll page, nothing to do
+            if (
+                window.location.pathname === '/mfa-unenroll' ||
+                window.location.hash.includes('#/mfa-unenroll')
+            ) {
+                return;
+            }
 
             const { access_token, refresh_token, type } = getUrlParams();
             // Users have reset their password or have just been invited and must set a new password
@@ -171,11 +192,9 @@ export const supabaseAuthProvider = (
                         // User has not yet enrolled in MFA
                         // eslint-disable-next-line no-throw-literal
                         throw {
-                            redirectTo: () => ({
-                                pathname: redirectTo
-                                    ? `${redirectTo}/mfa-enroll`
-                                    : '/mfa-enroll',
-                            }),
+                            redirectTo: redirectTo
+                                ? `${redirectTo}/mfa-enroll`
+                                : '/mfa-enroll',
                             message: false,
                         };
                     }
@@ -183,11 +202,9 @@ export const supabaseAuthProvider = (
                         // User has an MFA factor enrolled but has not verified it.
                         // eslint-disable-next-line no-throw-literal
                         throw {
-                            redirectTo: () => ({
-                                pathname: redirectTo
-                                    ? `${redirectTo}/mfa-challenge`
-                                    : '/mfa-challenge',
-                            }),
+                            redirectTo: redirectTo
+                                ? `${redirectTo}/mfa-challenge`
+                                : '/mfa-challenge',
                             message: false,
                         };
                     }
@@ -206,7 +223,13 @@ export const supabaseAuthProvider = (
                 window.location.pathname === '/set-password' ||
                 window.location.hash.includes('#/set-password') ||
                 window.location.pathname === '/forgot-password' ||
-                window.location.hash.includes('#/forgot-password')
+                window.location.hash.includes('#/forgot-password') ||
+                window.location.pathname === '/mfa-enroll' ||
+                window.location.hash.includes('#/mfa-enroll') ||
+                window.location.pathname === '/mfa-challenge' ||
+                window.location.hash.includes('#/mfa-challenge') ||
+                window.location.pathname === '/mfa-unenroll' ||
+                window.location.hash.includes('#/mfa-unenroll')
             ) {
                 return;
             }
