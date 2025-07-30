@@ -49,7 +49,7 @@ export const useMFAChallengeAndVerify = (
                     ? 'ra.auth.sign_in_error'
                     : error.message,
                 {
-                    type: 'warning',
+                    type: 'error',
                     messageArgs: {
                         _:
                             typeof error === 'string'
