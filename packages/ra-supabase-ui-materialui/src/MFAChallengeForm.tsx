@@ -62,79 +62,74 @@ export const MFAChallengeForm = () => {
     }
 
     return (
-        <>
+        <Root onSubmit={submit}>
             <CardContent
                 sx={theme => ({ maxWidth: theme.breakpoints.values.sm })}
             >
-                <Root onSubmit={submit}>
-                    <div className={SupabaseMFAChallengeFormClasses.container}>
-                        <Typography
-                            variant="h5"
-                            gutterBottom
+                <div className={SupabaseMFAChallengeFormClasses.container}>
+                    <Typography
+                        variant="h5"
+                        gutterBottom
+                        sx={{
+                            textAlign: 'center',
+                        }}
+                    >
+                        {translate('ra-supabase.mfa.totp.challenge-header', {
+                            _: 'Enter your TOTP code',
+                        })}
+                    </Typography>
+
+                    <Typography
+                        sx={{
+                            my: 4,
+                        }}
+                    >
+                        {translate(
+                            'ra-supabase.mfa.totp.challenge-instructions',
+                            {
+                                _: 'Enter the TOTP code from your Authenticator app to verify your identity.',
+                            }
+                        )}
+                    </Typography>
+
+                    <Box
+                        className={SupabaseMFAChallengeFormClasses.input}
+                        sx={{ display: 'flex', justifyContent: 'center' }}
+                    >
+                        <TextInput
+                            source="code"
+                            label={translate('ra-supabase.mfa.totp.code', {
+                                _: 'Code',
+                            })}
+                            autoComplete="one-time-code"
+                            validate={required()}
                             sx={{
-                                textAlign: 'center',
+                                width: 240,
+                                '& input': {
+                                    fontSize: '2rem',
+                                    letterSpacing: '0.5em',
+                                    textAlign: 'center',
+                                    padding: '0.5em 0.2em 0em 0.2em',
+                                },
                             }}
-                        >
-                            {translate(
-                                'ra-supabase.mfa.totp.challenge-header',
-                                {
-                                    _: 'Enter your TOTP code',
-                                }
-                            )}
-                        </Typography>
-
-                        <Typography
-                            sx={{
-                                my: 4,
+                            inputProps={{
+                                inputMode: 'numeric',
+                                pattern: '[0-9]*',
+                                maxLength: 6,
                             }}
-                        >
-                            {translate(
-                                'ra-supabase.mfa.totp.challenge-instructions',
-                                {
-                                    _: 'Enter the TOTP code from your Authenticator app to verify your identity.',
-                                }
-                            )}
+                        />
+                    </Box>
+
+                    {error ? (
+                        <Typography sx={{ color: 'error.main' }}>
+                            {typeof error === 'string'
+                                ? error
+                                : error && error.message
+                                ? error.message
+                                : 'An error occurred'}
                         </Typography>
-
-                        <Box
-                            className={SupabaseMFAChallengeFormClasses.input}
-                            sx={{ display: 'flex', justifyContent: 'center' }}
-                        >
-                            <TextInput
-                                source="code"
-                                label={translate('ra-supabase.mfa.totp.code', {
-                                    _: 'Code',
-                                })}
-                                autoComplete="one-time-code"
-                                validate={required()}
-                                sx={{
-                                    width: 240,
-                                    '& input': {
-                                        fontSize: '2rem',
-                                        letterSpacing: '0.5em',
-                                        textAlign: 'center',
-                                        padding: '0.5em 0.2em 0em 0.2em',
-                                    },
-                                }}
-                                inputProps={{
-                                    inputMode: 'numeric',
-                                    pattern: '[0-9]*',
-                                    maxLength: 6,
-                                }}
-                            />
-                        </Box>
-
-                        {error ? (
-                            <Typography sx={{ color: 'error.main' }}>
-                                {typeof error === 'string'
-                                    ? error
-                                    : error && error.message
-                                    ? error.message
-                                    : 'An error occurred'}
-                            </Typography>
-                        ) : null}
-                    </div>
-                </Root>
+                    ) : null}
+                </div>
             </CardContent>
             <CardActions sx={{ justifyContent: 'end' }}>
                 <Button
@@ -161,7 +156,7 @@ export const MFAChallengeForm = () => {
                     })}
                 </Button>
             </CardActions>
-        </>
+        </Root>
     );
 };
 
