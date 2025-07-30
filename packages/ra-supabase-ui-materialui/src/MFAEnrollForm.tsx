@@ -1,6 +1,7 @@
 import {
     Button,
     CardActions,
+    CardContent,
     CircularProgress,
     Stack,
     Typography,
@@ -26,65 +27,73 @@ export const MFAEnrollForm = () => {
     }, [mutate]);
 
     return (
-        <Stack sx={{ alignItems: 'center', width: '100%' }}>
-            <Typography
-                variant="h5"
-                gutterBottom
-                sx={{
-                    textAlign: 'center',
-                }}
-            >
-                {translate('ra-supabase.mfa.totp.enroll-header', {
-                    _: 'Enable Multi-Factor Authentication (TOTP)',
-                })}
-            </Typography>
-
-            {error ? (
-                <Typography sx={{ color: 'error.main' }}>
-                    {typeof error === 'string'
-                        ? error
-                        : error && error.message
-                        ? error.message
-                        : 'An error occured'}
-                </Typography>
-            ) : isPending ? (
-                <CircularProgress />
-            ) : (
-                <>
-                    <Typography>
-                        {translate('ra-supabase.mfa.totp.enroll-instructions', {
-                            _: 'Use an Authenticator app (such as Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, ...) to scan the QR code below and click Next.',
+        <>
+            <CardContent>
+                <Stack sx={{ alignItems: 'center', width: '100%' }}>
+                    <Typography
+                        variant="h5"
+                        gutterBottom
+                        sx={{
+                            textAlign: 'center',
+                        }}
+                    >
+                        {translate('ra-supabase.mfa.totp.enroll-header', {
+                            _: 'Enable Multi-Factor Authentication (TOTP)',
                         })}
                     </Typography>
 
-                    {qr ? <img src={qr} alt="TOTP QR Code" /> : null}
-                </>
-            )}
+                    {error ? (
+                        <Typography sx={{ color: 'error.main' }}>
+                            {typeof error === 'string'
+                                ? error
+                                : error && error.message
+                                ? error.message
+                                : 'An error occured'}
+                        </Typography>
+                    ) : isPending ? (
+                        <CircularProgress />
+                    ) : (
+                        <>
+                            <Typography>
+                                {translate(
+                                    'ra-supabase.mfa.totp.enroll-instructions',
+                                    {
+                                        _: 'Use an Authenticator app (such as Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, ...) to scan the QR code below and click Next.',
+                                    }
+                                )}
+                            </Typography>
 
-            <CardActions>
-                <Button
-                    variant="outlined"
-                    type="button"
-                    onClick={() => {
-                        redirect('/');
-                    }}
-                >
-                    {translate('ra.action.cancel', {
-                        _: 'Cancel',
-                    })}
-                </Button>
-                <Button
-                    variant="contained"
-                    type="submit"
-                    onClick={() => {
-                        redirect('/mfa-challenge');
-                    }}
-                >
-                    {translate('ra-supabase.action.next', {
-                        _: 'Next',
-                    })}
-                </Button>
-            </CardActions>
-        </Stack>
+                            {qr ? <img src={qr} alt="TOTP QR Code" /> : null}
+                        </>
+                    )}
+                </Stack>
+            </CardContent>
+            {error || isPending ? null : (
+                <CardActions>
+                    <Button
+                        variant="outlined"
+                        type="button"
+                        onClick={() => {
+                            redirect('/');
+                        }}
+                    >
+                        {translate('ra.action.cancel', {
+                            _: 'Cancel',
+                        })}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        type="submit"
+                        onClick={() => {
+                            redirect('/mfa-challenge');
+                        }}
+                    >
+                        {translate('ra-supabase.action.next', {
+                            _: 'Next',
+                        })}
+                    </Button>
+                </CardActions>
+            )}
+        </>
     );
 };

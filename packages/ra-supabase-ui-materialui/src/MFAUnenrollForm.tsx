@@ -1,6 +1,7 @@
 import {
     Button,
     CardActions,
+    CardContent,
     CircularProgress,
     Stack,
     Typography,
@@ -63,35 +64,41 @@ export const MFAUnenrollForm = () => {
     }
 
     return (
-        <Stack sx={{ alignItems: 'center', width: '100%' }}>
-            <Typography
-                variant="h5"
-                gutterBottom
-                sx={{
-                    textAlign: 'center',
-                }}
-            >
-                {translate('ra-supabase.mfa.totp.unenroll-header', {
-                    _: 'Unenroll from Multi-Factor Authentication (TOTP)',
-                })}
-            </Typography>
+        <>
+            <CardContent>
+                <Stack sx={{ alignItems: 'center', width: '100%' }}>
+                    <Typography
+                        variant="h5"
+                        gutterBottom
+                        sx={{
+                            textAlign: 'center',
+                        }}
+                    >
+                        {translate('ra-supabase.mfa.totp.unenroll-header', {
+                            _: 'Unenroll from Multi-Factor Authentication (TOTP)',
+                        })}
+                    </Typography>
 
-            <Typography>
-                {translate('ra-supabase.mfa.totp.unenroll-instructions', {
-                    _: 'Click the button below to unenroll from TOTP MFA. Be warned that you may lose access to some or all features of this application if you do not have another MFA method set up. You can always enroll again later.',
-                })}
-            </Typography>
+                    <Typography>
+                        {translate(
+                            'ra-supabase.mfa.totp.unenroll-instructions',
+                            {
+                                _: 'Click the button below to unenroll from TOTP MFA. Be warned that you may lose access to some or all features of this application if you do not have another MFA method set up. You can always enroll again later.',
+                            }
+                        )}
+                    </Typography>
 
-            {error ? (
-                <Typography sx={{ color: 'error.main' }}>
-                    {typeof error === 'string'
-                        ? error
-                        : error && error.message
-                        ? error.message
-                        : 'An error occured'}
-                </Typography>
-            ) : null}
-
+                    {error ? (
+                        <Typography sx={{ color: 'error.main' }}>
+                            {typeof error === 'string'
+                                ? error
+                                : error && error.message
+                                ? error.message
+                                : 'An error occured'}
+                        </Typography>
+                    ) : null}
+                </Stack>
+            </CardContent>
             <CardActions>
                 <Button
                     variant="outlined"
@@ -118,6 +125,6 @@ export const MFAUnenrollForm = () => {
                     })}
                 </Button>
             </CardActions>
-        </Stack>
+        </>
     );
 };
