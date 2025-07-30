@@ -15,11 +15,7 @@ import * as React from 'react';
 export const MFAChallengeForm = () => {
     const translate = useTranslate();
     const redirect = useRedirect();
-    const {
-        data: factors,
-        isPending: isPendingFactors,
-        error: errorFactors,
-    } = useMFAListFactors();
+    const [, { mutateAsync: fetchFactors }] = useMFAListFactors();
     const [mutate, mutation] = useMFAChallengeAndVerify({
         onSuccess: () => {
             redirect('/');
@@ -27,7 +23,8 @@ export const MFAChallengeForm = () => {
     });
     const { isPending, error } = mutation;
 
-    const submit = (values: FormData) => {
+    const submit = async (values: FormData) => {
+        const factors = await fetchFactors();
         const totpFactor = factors?.all?.filter(
             f => f.factor_type === 'totp'
         )[0]; // TODO handle multiple factors
@@ -44,22 +41,6 @@ export const MFAChallengeForm = () => {
             factorId,
         });
     };
-
-    if (isPendingFactors) {
-        return <CircularProgress />;
-    }
-
-    if (errorFactors) {
-        return (
-            <Typography sx={{ color: 'error.main' }}>
-                {typeof errorFactors === 'string'
-                    ? errorFactors
-                    : errorFactors && errorFactors.message
-                    ? errorFactors.message
-                    : 'An error occurred'}
-            </Typography>
-        );
-    }
 
     return (
         <Root onSubmit={submit}>
