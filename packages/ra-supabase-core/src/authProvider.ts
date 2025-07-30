@@ -9,6 +9,7 @@ export const supabaseAuthProvider = (
         getPermissions,
         redirectTo,
         enforceMFA,
+        mfaAppFriendlyName,
     }: SupabaseAuthProviderOptions
 ): SupabaseAuthProvider => {
     const authProvider: SupabaseAuthProvider = {
@@ -248,6 +249,7 @@ export const supabaseAuthProvider = (
             }
             const { data, error } = await client.auth.mfa.enroll({
                 factorType,
+                friendlyName: mfaAppFriendlyName,
             });
             if (error) {
                 throw error;
@@ -309,6 +311,7 @@ export type SupabaseAuthProviderOptions = {
     getPermissions?: GetPermissions;
     redirectTo?: string;
     enforceMFA?: boolean;
+    mfaAppFriendlyName?: string;
 };
 
 type LoginWithEmailPasswordParams = {
