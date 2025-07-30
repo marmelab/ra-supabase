@@ -14,11 +14,7 @@ export const MFAUnenrollForm = () => {
     const translate = useTranslate();
     const redirect = useRedirect();
     const notify = useNotify();
-    const {
-        data: factors,
-        isPending: isPendingFactors,
-        error: errorFactors,
-    } = useMFAListFactors();
+    const [, { mutateAsync: fetchFactors }] = useMFAListFactors();
     const [mutate, mutation] = useMFAUnenroll({
         onSuccess: data => {
             notify(
@@ -32,7 +28,8 @@ export const MFAUnenrollForm = () => {
     });
     const { isPending, error } = mutation;
 
-    const submit = () => {
+    const submit = async () => {
+        const factors = await fetchFactors();
         const totpFactor = factors?.all?.filter(
             f => f.factor_type === 'totp'
         )[0]; // TODO handle multiple factors
@@ -48,22 +45,6 @@ export const MFAUnenrollForm = () => {
             factorId,
         });
     };
-
-    if (isPendingFactors) {
-        return <CircularProgress />;
-    }
-
-    if (errorFactors) {
-        return (
-            <Typography sx={{ color: 'error.main' }}>
-                {typeof errorFactors === 'string'
-                    ? errorFactors
-                    : errorFactors && errorFactors.message
-                    ? errorFactors.message
-                    : 'An error occurred'}
-            </Typography>
-        );
-    }
 
     return (
         <>
