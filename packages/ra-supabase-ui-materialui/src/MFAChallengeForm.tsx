@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     CardActions,
     CardContent,
@@ -82,7 +83,7 @@ export const MFAChallengeForm = () => {
 
                         <Typography
                             sx={{
-                                my: 2,
+                                my: 4,
                             }}
                         >
                             {translate(
@@ -93,17 +94,33 @@ export const MFAChallengeForm = () => {
                             )}
                         </Typography>
 
-                        <div className={SupabaseMFAChallengeFormClasses.input}>
+                        <Box
+                            className={SupabaseMFAChallengeFormClasses.input}
+                            sx={{ display: 'flex', justifyContent: 'center' }}
+                        >
                             <TextInput
                                 source="code"
                                 label={translate('ra-supabase.mfa.totp.code', {
                                     _: 'Code',
                                 })}
                                 autoComplete="one-time-code"
-                                fullWidth
                                 validate={required()}
+                                sx={{
+                                    width: 240,
+                                    '& input': {
+                                        fontSize: '2rem',
+                                        letterSpacing: '0.5em',
+                                        textAlign: 'center',
+                                        padding: '0.5em 0.2em 0em 0.2em',
+                                    },
+                                }}
+                                inputProps={{
+                                    inputMode: 'numeric',
+                                    pattern: '[0-9]*',
+                                    maxLength: 6,
+                                }}
                             />
-                        </div>
+                        </Box>
 
                         {error ? (
                             <Typography sx={{ color: 'error.main' }}>
