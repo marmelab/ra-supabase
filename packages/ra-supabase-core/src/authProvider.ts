@@ -23,6 +23,33 @@ export const supabaseAuthProvider = (
                     throw error;
                 }
 
+                if (enforceMFA) {
+                    const { data, error } =
+                        await client.auth.mfa.getAuthenticatorAssuranceLevel();
+                    if (error) {
+                        throw error;
+                    }
+                    const { currentLevel, nextLevel } = data;
+                    if (currentLevel === 'aal1') {
+                        if (nextLevel === 'aal1') {
+                            // User has not yet enrolled in MFA
+                            return {
+                                redirectTo: redirectTo
+                                    ? `${redirectTo}/mfa-enroll`
+                                    : '/mfa-enroll',
+                            };
+                        }
+                        if (nextLevel === 'aal2') {
+                            // User has an MFA factor enrolled but has not verified it.
+                            return {
+                                redirectTo: redirectTo
+                                    ? `${redirectTo}/mfa-challenge`
+                                    : '/mfa-challenge',
+                            };
+                        }
+                    }
+                }
+
                 return;
             }
 
@@ -178,37 +205,6 @@ export const supabaseAuthProvider = (
             const { data } = await client.auth.getSession();
             if (data.session == null) {
                 return Promise.reject();
-            }
-
-            if (enforceMFA) {
-                const { data, error } =
-                    await client.auth.mfa.getAuthenticatorAssuranceLevel();
-                if (error) {
-                    throw error;
-                }
-                const { currentLevel, nextLevel } = data;
-                if (currentLevel === 'aal1') {
-                    if (nextLevel === 'aal1') {
-                        // User has not yet enrolled in MFA
-                        // eslint-disable-next-line no-throw-literal
-                        throw {
-                            redirectTo: redirectTo
-                                ? `${redirectTo}/mfa-enroll`
-                                : '/mfa-enroll',
-                            message: false,
-                        };
-                    }
-                    if (nextLevel === 'aal2') {
-                        // User has an MFA factor enrolled but has not verified it.
-                        // eslint-disable-next-line no-throw-literal
-                        throw {
-                            redirectTo: redirectTo
-                                ? `${redirectTo}/mfa-challenge`
-                                : '/mfa-challenge',
-                            message: false,
-                        };
-                    }
-                }
             }
 
             return Promise.resolve();
