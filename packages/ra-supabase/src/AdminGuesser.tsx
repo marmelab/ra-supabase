@@ -60,9 +60,7 @@ export const AdminGuesser = (
             : undefined;
     const defaultAuthProvider =
         instanceUrl && apiKey && defaultSupabaseClient
-            ? supabaseAuthProvider(defaultSupabaseClient, {
-                  enforceMFA: true, // TODO remove (for test purposes only)
-              })
+            ? supabaseAuthProvider(defaultSupabaseClient, {})
             : undefined;
 
     return (
