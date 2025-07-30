@@ -8,3 +8,7 @@ export * from './SetPasswordForm';
 export * from './SetPasswordPage';
 export * from './SocialAuthButton';
 export * from './icons';
+export * from './MFAEnrollForm';
+export * from './MFAEnrollPage';
+export * from './MFAChallengeForm';
+export * from './MFAChallengePage';
