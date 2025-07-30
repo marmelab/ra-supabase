@@ -33,7 +33,9 @@ export const MFAUnenrollForm = () => {
     const { isPending, error } = mutation;
 
     const submit = () => {
-        const totpFactor = factors?.totp[0]; // TODO handle multiple factors
+        const totpFactor = factors?.all?.filter(
+            f => f.factor_type === 'totp'
+        )[0]; // TODO handle multiple factors
         if (!totpFactor) {
             throw new Error(
                 translate('ra-supabase.mfa.totp.no-factor-error', {
