@@ -13,11 +13,13 @@ import { useEffect, useState } from 'react';
 
 export const MFAEnrollForm = () => {
     const [qr, setQR] = useState('');
+    const [secret, setSecret] = useState('');
     const translate = useTranslate();
     const redirect = useRedirect();
     const [mutate, mutation] = useMFAEnroll({
         onSuccess: data => {
             setQR(data.totp.qr_code);
+            setSecret(data.totp.secret);
         },
     });
     const { isPending, error } = mutation;
@@ -70,6 +72,21 @@ export const MFAEnrollForm = () => {
                             </Typography>
 
                             {qr ? <img src={qr} alt="TOTP QR Code" /> : null}
+                            {secret ? (
+                                <Button
+                                    onClick={() =>
+                                        navigator.clipboard.writeText(secret)
+                                    }
+                                    variant="text"
+                                >
+                                    {translate(
+                                        'ra-supabase.mfa.totp.copy-secret-key-to-clipboard',
+                                        {
+                                            _: 'Copy secret key to clipboard',
+                                        }
+                                    )}
+                                </Button>
+                            ) : null}
                         </>
                     )}
                 </Stack>
