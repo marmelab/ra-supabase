@@ -28,7 +28,9 @@ export const MFAEnrollForm = () => {
 
     return (
         <>
-            <CardContent>
+            <CardContent
+                sx={theme => ({ maxWidth: theme.breakpoints.values.sm })}
+            >
                 <Stack sx={{ alignItems: 'center', width: '100%' }}>
                     <Typography
                         variant="h5"
@@ -54,7 +56,11 @@ export const MFAEnrollForm = () => {
                         <CircularProgress />
                     ) : (
                         <>
-                            <Typography>
+                            <Typography
+                                sx={{
+                                    my: 2,
+                                }}
+                            >
                                 {translate(
                                     'ra-supabase.mfa.totp.enroll-instructions',
                                     {
@@ -68,7 +74,7 @@ export const MFAEnrollForm = () => {
                     )}
                 </Stack>
             </CardContent>
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'end' }}>
                 <Button
                     variant="outlined"
                     type="button"
