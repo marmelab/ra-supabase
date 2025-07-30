@@ -78,3 +78,7 @@ redirect_uri = ""
 # Overrides the default auth provider URL. Used to support self-hosted gitlab, single-tenant Azure,
 # or any other third-party OIDC providers.
 url = ""
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
