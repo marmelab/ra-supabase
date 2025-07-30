@@ -10,5 +10,7 @@ export * from './SocialAuthButton';
 export * from './icons';
 export * from './MFAEnrollForm';
 export * from './MFAEnrollPage';
+export * from './MFAUnenrollForm';
+export * from './MFAUnenrollPage';
 export * from './MFAChallengeForm';
 export * from './MFAChallengePage';

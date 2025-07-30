@@ -235,6 +235,17 @@ export const supabaseAuthProvider = (
             }
             return data;
         },
+        async mfaUnenroll({
+            factorId,
+        }: MFAUnenrollParams): Promise<MFAUnenrollResult> {
+            const { data, error } = await client.auth.mfa.unenroll({
+                factorId,
+            });
+            if (error) {
+                throw error;
+            }
+            return data;
+        },
         async mfaChallengeAndVerify({
             factorId,
             code,
@@ -330,6 +341,14 @@ export type MFAEnrollResult = {
         uri: string;
     };
     friendly_name?: string;
+};
+
+export type MFAUnenrollParams = {
+    factorId: string;
+};
+
+export type MFAUnenrollResult = {
+    id: string;
 };
 
 export type MFAChallengeAndVerifyParams = {
