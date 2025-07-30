@@ -60,7 +60,9 @@ export const MFAChallengeForm = () => {
 
     return (
         <>
-            <CardContent>
+            <CardContent
+                sx={theme => ({ maxWidth: theme.breakpoints.values.sm })}
+            >
                 <Root onSubmit={submit}>
                     <div className={SupabaseMFAChallengeFormClasses.container}>
                         <Typography
@@ -78,7 +80,11 @@ export const MFAChallengeForm = () => {
                             )}
                         </Typography>
 
-                        <Typography>
+                        <Typography
+                            sx={{
+                                my: 2,
+                            }}
+                        >
                             {translate(
                                 'ra-supabase.mfa.totp.challenge-instructions',
                                 {
@@ -111,7 +117,7 @@ export const MFAChallengeForm = () => {
                     </div>
                 </Root>
             </CardContent>
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'end' }}>
                 <Button
                     variant="outlined"
                     type="button"
