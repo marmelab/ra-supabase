@@ -68,19 +68,19 @@ export const MFAEnrollForm = () => {
                     )}
                 </Stack>
             </CardContent>
-            {error || isPending ? null : (
-                <CardActions>
-                    <Button
-                        variant="outlined"
-                        type="button"
-                        onClick={() => {
-                            redirect('/');
-                        }}
-                    >
-                        {translate('ra.action.cancel', {
-                            _: 'Cancel',
-                        })}
-                    </Button>
+            <CardActions>
+                <Button
+                    variant="outlined"
+                    type="button"
+                    onClick={() => {
+                        redirect('/');
+                    }}
+                >
+                    {translate('ra.action.cancel', {
+                        _: 'Cancel',
+                    })}
+                </Button>
+                {error || isPending ? null : (
                     <Button
                         variant="contained"
                         type="submit"
@@ -92,8 +92,8 @@ export const MFAEnrollForm = () => {
                             _: 'Next',
                         })}
                     </Button>
-                </CardActions>
-            )}
+                )}
+            </CardActions>
         </>
     );
 };
