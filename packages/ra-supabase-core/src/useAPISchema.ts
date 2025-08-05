@@ -1,7 +1,7 @@
-import { useDataProvider } from 'react-admin';
-import { useQuery } from '@tanstack/react-query';
 import type { UseQueryOptions } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import type { OpenAPIV2 } from 'openapi-types';
+import { useDataProvider } from 'ra-core';
 
 export const useAPISchema = ({
     options,
