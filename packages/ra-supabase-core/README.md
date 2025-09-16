@@ -1,6 +1,6 @@
 # ra-supabase-core
 
-This package provide a dataProvider, an authProvider and hooks to integrate [Supabase](https://supabase.io/) with [react-admin](https://marmelab.com/react-admin).
+This package provide a dataProvider, an authProvider and hooks to integrate [Supabase](https://supabase.io/) with [ra-core](https://marmelab.com/ra-core/).
 
 ## Installation
 
