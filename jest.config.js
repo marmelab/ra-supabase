@@ -9,7 +9,7 @@ module.exports = {
         '/packages/demo',
     ],
     transformIgnorePatterns: [
-        '[/\\\\]node_modules[/\\\\](?!(@hookform)/).+\\.(js|jsx|mjs|ts|tsx)$',
+        '[/\\\\]node_modules[/\\\\](?!(@hookform|react-hotkeys-hook)/).+\\.(js|jsx|mjs|ts|tsx)$',
     ],
     testEnvironmentOptions: {
         customExportConditions: [], // don't load "browser" field

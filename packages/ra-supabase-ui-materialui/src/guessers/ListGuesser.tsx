@@ -192,9 +192,16 @@ ${inferredInputsForFilters
         )
             .map(match => match[1])
             .filter(component => component !== 'span');
+
         const components = Array.from(
             new Set(['List', ...fieldComponents, ...filterComponents])
-        ).sort();
+        )
+            .filter(
+                component =>
+                    component !== 'span' &&
+                    !component.match(/[A-Za-z]+\.[A-Za-z]+/i)
+            )
+            .sort();
 
         const warnings = inferredInputsForFilters
             .map(inferredInput => inferredInput.getWarning())

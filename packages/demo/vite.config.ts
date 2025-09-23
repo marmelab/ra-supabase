@@ -8,14 +8,11 @@ const aliases = packages.reduce((acc, dirName) => {
     if (dirName === 'demo') return acc;
     const packageJson = require(path.resolve(
         __dirname,
-        '../../packages',
+        '..',
         dirName,
         'package.json'
     ));
-    acc[packageJson.name] = path.resolve(
-        __dirname,
-        `${path.resolve('../..')}/packages/${packageJson.name}/src`
-    );
+    acc[packageJson.name] = path.resolve(__dirname, '..', dirName, 'src');
     return acc;
 }, {});
 

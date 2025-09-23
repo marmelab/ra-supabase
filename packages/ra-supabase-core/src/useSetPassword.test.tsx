@@ -85,7 +85,8 @@ describe('useSetPassword', () => {
                     refresh_token: 'refresh',
                     password: 'bazinga',
                 },
-                undefined
+                undefined,
+                { client: {}, meta: undefined, mutationKey: undefined }
             );
         });
     });
