@@ -90,3 +90,7 @@ db-seed: ## seed the database
 	@yarn db-seed
 
 db-setup: db-migrate db-seed ## setup the database
+
+release: build ## release a new version
+	@echo "Releasing a new version..."
+	./node_modules/.bin/lerna publish
