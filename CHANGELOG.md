@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5.1
+
+- [Doc] Fix email template paths ([#94](https://github.com/marmelab/ra-supabase/pull/94)) ([anthonycmain](https://github.com/anthonycmain))
+- [Chore] Fix dependency to react-admin in ra-supabase-core ([#96](https://github.com/marmelab/ra-supabase/pull/96)) ([jonathanarnault](https://github.com/jonathanarnault))
+
 ## 3.5.0
 
 * Upgrade to react-admin v5.8 and add support for MUI v7 ([#90](https://github.com/marmelab/ra-supabase/pull/90)) ([slax57](https://github.com/slax57))
