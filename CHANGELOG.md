@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.2
+
+- Fix `<ListGuesser>` output incorrect imports for `<DataTable.Col>` ([#97](https://github.com/marmelab/ra-supabase/pull/97)) ([djhi](https://github.com/djhi))
+
 ## 3.5.1
 
 - [Doc] Fix email template paths ([#94](https://github.com/marmelab/ra-supabase/pull/94)) ([anthonycmain](https://github.com/anthonycmain))
