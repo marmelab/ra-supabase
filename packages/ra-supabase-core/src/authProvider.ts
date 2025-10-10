@@ -1,10 +1,16 @@
-import { Provider, SupabaseClient, User } from '@supabase/supabase-js';
+import { Factor, Provider, SupabaseClient, User } from '@supabase/supabase-js';
 import { AuthProvider, UserIdentity } from 'ra-core';
 import { getSearchString } from './getSearchString';
 
 export const supabaseAuthProvider = (
     client: SupabaseClient,
-    { getIdentity, getPermissions, redirectTo }: SupabaseAuthProviderOptions
+    {
+        getIdentity,
+        getPermissions,
+        redirectTo,
+        enforceMFA,
+        mfaAppFriendlyName,
+    }: SupabaseAuthProviderOptions
 ): SupabaseAuthProvider => {
     const authProvider: SupabaseAuthProvider = {
         async login(params) {
@@ -16,6 +22,33 @@ export const supabaseAuthProvider = (
 
                 if (error) {
                     throw error;
+                }
+
+                if (enforceMFA) {
+                    const { data, error } =
+                        await client.auth.mfa.getAuthenticatorAssuranceLevel();
+                    if (error) {
+                        throw error;
+                    }
+                    const { currentLevel, nextLevel } = data;
+                    if (currentLevel === 'aal1') {
+                        if (nextLevel === 'aal1') {
+                            // User has not yet enrolled in MFA
+                            return {
+                                redirectTo: redirectTo
+                                    ? `${redirectTo}/mfa-enroll`
+                                    : '/mfa-enroll',
+                            };
+                        }
+                        if (nextLevel === 'aal2') {
+                            // User has an MFA factor enrolled but has not verified it.
+                            return {
+                                redirectTo: redirectTo
+                                    ? `${redirectTo}/mfa-challenge`
+                                    : '/mfa-challenge',
+                            };
+                        }
+                    }
                 }
 
                 return;
@@ -125,6 +158,27 @@ export const supabaseAuthProvider = (
             ) {
                 return;
             }
+            // Users are on the mfa-enroll page, nothing to do
+            if (
+                window.location.pathname === '/mfa-enroll' ||
+                window.location.hash.includes('#/mfa-enroll')
+            ) {
+                return;
+            }
+            // Users are on the mfa-challenge page, nothing to do
+            if (
+                window.location.pathname === '/mfa-challenge' ||
+                window.location.hash.includes('#/mfa-challenge')
+            ) {
+                return;
+            }
+            // Users are on the mfa-unenroll page, nothing to do
+            if (
+                window.location.pathname === '/mfa-unenroll' ||
+                window.location.hash.includes('#/mfa-unenroll')
+            ) {
+                return;
+            }
 
             const { access_token, refresh_token, type } = getUrlParams();
             // Users have reset their password or have just been invited and must set a new password
@@ -166,7 +220,13 @@ export const supabaseAuthProvider = (
                 window.location.pathname === '/set-password' ||
                 window.location.hash.includes('#/set-password') ||
                 window.location.pathname === '/forgot-password' ||
-                window.location.hash.includes('#/forgot-password')
+                window.location.hash.includes('#/forgot-password') ||
+                window.location.pathname === '/mfa-enroll' ||
+                window.location.hash.includes('#/mfa-enroll') ||
+                window.location.pathname === '/mfa-challenge' ||
+                window.location.hash.includes('#/mfa-challenge') ||
+                window.location.pathname === '/mfa-unenroll' ||
+                window.location.hash.includes('#/mfa-unenroll')
             ) {
                 return;
             }
@@ -178,6 +238,54 @@ export const supabaseAuthProvider = (
 
             const permissions = await getPermissions(data.user);
             return permissions;
+        },
+        async mfaEnroll({
+            factorType,
+        }: MFAEnrollParams): Promise<MFAEnrollResult> {
+            if (factorType === 'phone') {
+                throw new Error(
+                    'Phone MFA is not supported yet. Please use TOTP instead.'
+                );
+            }
+            const { data, error } = await client.auth.mfa.enroll({
+                factorType,
+                friendlyName: mfaAppFriendlyName,
+            });
+            if (error) {
+                throw error;
+            }
+            return data;
+        },
+        async mfaUnenroll({
+            factorId,
+        }: MFAUnenrollParams): Promise<MFAUnenrollResult> {
+            const { data, error } = await client.auth.mfa.unenroll({
+                factorId,
+            });
+            if (error) {
+                throw error;
+            }
+            return data;
+        },
+        async mfaChallengeAndVerify({
+            factorId,
+            code,
+        }: MFAChallengeAndVerifyParams): Promise<MFAChallengeAndVerifyResult> {
+            const { data, error } = await client.auth.mfa.challengeAndVerify({
+                factorId,
+                code,
+            });
+            if (error) {
+                throw error;
+            }
+            return data;
+        },
+        async mfaListFactors(): Promise<MFAListFactorsResult> {
+            const { data, error } = await client.auth.mfa.listFactors();
+            if (error) {
+                throw error;
+            }
+            return data;
         },
     };
 
@@ -202,6 +310,8 @@ export type SupabaseAuthProviderOptions = {
     getIdentity?: GetIdentity;
     getPermissions?: GetPermissions;
     redirectTo?: string;
+    enforceMFA?: boolean;
+    mfaAppFriendlyName?: string;
 };
 
 type LoginWithEmailPasswordParams = {
@@ -238,6 +348,48 @@ export type ResetPasswordParams = {
     email: string;
     redirectTo?: string;
     captchaToken?: string;
+};
+
+export type MFAEnrollParams = {
+    factorType: 'totp' | 'phone';
+};
+
+export type MFAEnrollResult = {
+    id: string;
+    type: 'totp';
+    totp: {
+        qr_code: string;
+        secret: string;
+        uri: string;
+    };
+    friendly_name?: string;
+};
+
+export type MFAUnenrollParams = {
+    factorId: string;
+};
+
+export type MFAUnenrollResult = {
+    id: string;
+};
+
+export type MFAChallengeAndVerifyParams = {
+    factorId: string;
+    code: string;
+};
+
+export type MFAChallengeAndVerifyResult = {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    refresh_token: string;
+    user: User;
+};
+
+export type MFAListFactorsResult = {
+    all: Factor[];
+    totp: Factor[];
+    phone: Factor[];
 };
 
 const getUrlParams = () => {

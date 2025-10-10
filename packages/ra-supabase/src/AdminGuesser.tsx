@@ -15,6 +15,9 @@ import {
     LoginPage,
     SetPasswordPage,
     ForgotPasswordPage,
+    MFAEnrollPage,
+    MFAChallengePage,
+    MFAUnenrollPage,
 } from 'ra-supabase-ui-materialui';
 import { createClient } from '@supabase/supabase-js';
 import { defaultI18nProvider } from './defaultI18nProvider';
@@ -94,6 +97,9 @@ import {
     ForgotPasswordPage,
     ListGuesser,
     LoginPage,
+    MFAEnrollPage,
+    MFAChallengePage,
+    MFAUnenrollPage,
     SetPasswordPage,
     ShowGuesser,
     defaultI18nProvider,
@@ -127,6 +133,9 @@ export const App = () => (
             <CustomRoutes noLayout>
                 <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
                 <Route path={ForgotPasswordPage.path} element={<ForgotPasswordPage />} />
+                <Route path={MFAEnrollPage.path} element={<MFAEnrollPage />} />
+                <Route path={MFAChallengePage.path} element={<MFAChallengePage />} />
+                <Route path={MFAUnenrollPage.path} element={<MFAUnenrollPage />} />
             </CustomRoutes>
         </Admin>
     </BrowserRouter>
@@ -162,6 +171,15 @@ export const App = () => (
                 <Route
                     path={ForgotPasswordPage.path}
                     element={<ForgotPasswordPage />}
+                />
+                <Route path={MFAEnrollPage.path} element={<MFAEnrollPage />} />
+                <Route
+                    path={MFAChallengePage.path}
+                    element={<MFAChallengePage />}
+                />
+                <Route
+                    path={MFAUnenrollPage.path}
+                    element={<MFAUnenrollPage />}
                 />
             </CustomRoutes>
         </AdminUI>
