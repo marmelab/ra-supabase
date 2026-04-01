@@ -144,38 +144,12 @@ export const supabaseAuthProvider = (
             }
         },
         async checkAuth() {
-            // Users are on the set-password page, nothing to do
             if (
-                window.location.pathname === '/set-password' ||
-                window.location.hash.includes('#/set-password')
-            ) {
-                return;
-            }
-            // Users are on the forgot-password page, nothing to do
-            if (
-                window.location.pathname === '/forgot-password' ||
-                window.location.hash.includes('#/forgot-password')
-            ) {
-                return;
-            }
-            // Users are on the mfa-enroll page, nothing to do
-            if (
-                window.location.pathname === '/mfa-enroll' ||
-                window.location.hash.includes('#/mfa-enroll')
-            ) {
-                return;
-            }
-            // Users are on the mfa-challenge page, nothing to do
-            if (
-                window.location.pathname === '/mfa-challenge' ||
-                window.location.hash.includes('#/mfa-challenge')
-            ) {
-                return;
-            }
-            // Users are on the mfa-unenroll page, nothing to do
-            if (
-                window.location.pathname === '/mfa-unenroll' ||
-                window.location.hash.includes('#/mfa-unenroll')
+                isOnRoute('/set-password') ||
+                isOnRoute('/forgot-password') ||
+                isOnRoute('/mfa-enroll') ||
+                isOnRoute('/mfa-challenge') ||
+                isOnRoute('/mfa-unenroll')
             ) {
                 return;
             }
@@ -217,16 +191,11 @@ export const supabaseAuthProvider = (
             // No permissions when users are on the set-password page
             // or on the forgot-password page.
             if (
-                window.location.pathname === '/set-password' ||
-                window.location.hash.includes('#/set-password') ||
-                window.location.pathname === '/forgot-password' ||
-                window.location.hash.includes('#/forgot-password') ||
-                window.location.pathname === '/mfa-enroll' ||
-                window.location.hash.includes('#/mfa-enroll') ||
-                window.location.pathname === '/mfa-challenge' ||
-                window.location.hash.includes('#/mfa-challenge') ||
-                window.location.pathname === '/mfa-unenroll' ||
-                window.location.hash.includes('#/mfa-unenroll')
+                isOnRoute('/set-password') ||
+                isOnRoute('/forgot-password') ||
+                isOnRoute('/mfa-enroll') ||
+                isOnRoute('/mfa-challenge') ||
+                isOnRoute('/mfa-unenroll')
             ) {
                 return;
             }
@@ -391,6 +360,10 @@ export type MFAListFactorsResult = {
     totp: Factor[];
     phone: Factor[];
 };
+
+const isOnRoute = (route: string) =>
+    window.location.pathname === route ||
+    window.location.hash.includes(`#${route}`);
 
 const getUrlParams = () => {
     const searchStr = getSearchString();
