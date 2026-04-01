@@ -7,7 +7,7 @@ import {
     Typography,
     styled,
 } from '@mui/material';
-import { Form, required, useRedirect, useTranslate } from 'ra-core';
+import { Form, required, useNotify, useRedirect, useTranslate } from 'ra-core';
 import { useMFAChallengeAndVerify, useMFAListFactors } from 'ra-supabase-core';
 import { TextInput } from 'ra-ui-materialui';
 import * as React from 'react';
@@ -15,6 +15,7 @@ import * as React from 'react';
 export const MFAChallengeForm = () => {
     const translate = useTranslate();
     const redirect = useRedirect();
+    const notify = useNotify();
     const { data: factors } = useMFAListFactors();
     const [mutate, mutation] = useMFAChallengeAndVerify({
         onSuccess: () => {
@@ -28,11 +29,11 @@ export const MFAChallengeForm = () => {
             f => f.factor_type === 'totp'
         )[0]; // TODO handle multiple factors
         if (!totpFactor) {
-            throw new Error(
-                translate('ra-supabase.mfa.totp.no-factor-error', {
-                    _: 'No TOTP factors found!',
-                })
-            );
+            notify('ra-supabase.mfa.totp.no-factor-error', {
+                type: 'error',
+                messageArgs: { _: 'No TOTP factors found!' },
+            });
+            return;
         }
         const factorId = totpFactor.id;
         mutate({

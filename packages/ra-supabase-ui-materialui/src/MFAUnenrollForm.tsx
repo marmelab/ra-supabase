@@ -33,11 +33,11 @@ export const MFAUnenrollForm = () => {
             f => f.factor_type === 'totp'
         )[0]; // TODO handle multiple factors
         if (!totpFactor) {
-            throw new Error(
-                translate('ra-supabase.mfa.totp.no-factor-error', {
-                    _: 'No TOTP factors found!',
-                })
-            );
+            notify('ra-supabase.mfa.totp.no-factor-error', {
+                type: 'error',
+                messageArgs: { _: 'No TOTP factors found!' },
+            });
+            return;
         }
         const factorId = totpFactor.id;
         mutate({
