@@ -62,7 +62,7 @@ export const MFAEnrollForm = () => {
                                 ? error
                                 : error && error.message
                                 ? error.message
-                                : 'An error occured'}
+                                : 'An error occurred'}
                         </Typography>
                     ) : isPending ? (
                         <CircularProgress />

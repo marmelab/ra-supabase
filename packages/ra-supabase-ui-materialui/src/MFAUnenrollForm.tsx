@@ -82,7 +82,7 @@ export const MFAUnenrollForm = () => {
                                 ? error
                                 : error && error.message
                                 ? error.message
-                                : 'An error occured'}
+                                : 'An error occurred'}
                         </Typography>
                     ) : null}
                 </Stack>
