@@ -9,6 +9,7 @@ import {
     MFAChallengeAndVerifyResult,
     SupabaseAuthProvider,
 } from './authProvider';
+import { defaultMFAOnError } from './defaultMFAOnError';
 
 export const useMFAChallengeAndVerify = (
     options?: UseMFAChallengeAndVerifyOptions
@@ -39,28 +40,7 @@ export const useMFAChallengeAndVerify = (
         );
     }
 
-    const {
-        onSuccess,
-        onError = error =>
-            notify(
-                typeof error === 'string'
-                    ? error
-                    : typeof error === 'undefined' || !error.message
-                    ? 'ra.auth.sign_in_error'
-                    : error.message,
-                {
-                    type: 'error',
-                    messageArgs: {
-                        _:
-                            typeof error === 'string'
-                                ? error
-                                : error && error.message
-                                ? error.message
-                                : undefined,
-                    },
-                }
-            ),
-    } = options || {};
+    const { onSuccess, onError = defaultMFAOnError(notify) } = options || {};
 
     const mutation = useMutation<
         MFAChallengeAndVerifyResult,
