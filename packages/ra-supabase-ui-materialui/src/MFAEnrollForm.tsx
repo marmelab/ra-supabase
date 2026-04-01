@@ -7,17 +7,20 @@ import {
     Typography,
 } from '@mui/material';
 import { useRedirect, useTranslate } from 'ra-core';
-import { useMFAEnroll } from 'ra-supabase-core';
+import { useMFAEnroll, useMFAUnenroll } from 'ra-supabase-core';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 export const MFAEnrollForm = () => {
     const [qr, setQR] = useState('');
     const [secret, setSecret] = useState('');
+    const [factorId, setFactorId] = useState<string | null>(null);
     const translate = useTranslate();
     const redirect = useRedirect();
+    const [, { mutateAsync: unenroll }] = useMFAUnenroll();
     const [mutate, mutation] = useMFAEnroll({
         onSuccess: data => {
+            setFactorId(data.id);
             setQR(data.totp.qr_code);
             setSecret(data.totp.secret);
         },
@@ -27,6 +30,13 @@ export const MFAEnrollForm = () => {
     useEffect(() => {
         mutate();
     }, [mutate]);
+
+    const handleCancel = async () => {
+        if (factorId) {
+            await unenroll({ factorId });
+        }
+        redirect('/');
+    };
 
     return (
         <>
@@ -92,13 +102,7 @@ export const MFAEnrollForm = () => {
                 </Stack>
             </CardContent>
             <CardActions sx={{ justifyContent: 'end' }}>
-                <Button
-                    variant="outlined"
-                    type="button"
-                    onClick={() => {
-                        redirect('/');
-                    }}
-                >
+                <Button variant="outlined" type="button" onClick={handleCancel}>
                     {translate('ra.action.cancel', {
                         _: 'Cancel',
                     })}
@@ -107,9 +111,7 @@ export const MFAEnrollForm = () => {
                     <Button
                         variant="contained"
                         type="submit"
-                        onClick={() => {
-                            redirect('/mfa-challenge');
-                        }}
+                        onClick={() => redirect('/mfa-challenge')}
                     >
                         {translate('ra-supabase.action.next', {
                             _: 'Next',
