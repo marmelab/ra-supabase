@@ -6,7 +6,7 @@ import {
     Stack,
     Typography,
 } from '@mui/material';
-import { useRedirect, useTranslate } from 'ra-core';
+import { useNotify, useRedirect, useTranslate } from 'ra-core';
 import { useMFAEnroll, useMFAUnenroll } from 'ra-supabase-core';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -17,6 +17,7 @@ export const MFAEnrollForm = () => {
     const [factorId, setFactorId] = useState<string | null>(null);
     const translate = useTranslate();
     const redirect = useRedirect();
+    const notify = useNotify();
     const [, { mutateAsync: unenroll }] = useMFAUnenroll();
     const [mutate, mutation] = useMFAEnroll({
         onSuccess: data => {
@@ -85,7 +86,19 @@ export const MFAEnrollForm = () => {
                             {secret ? (
                                 <Button
                                     onClick={() =>
-                                        navigator.clipboard.writeText(secret)
+                                        navigator.clipboard
+                                            .writeText(secret)
+                                            .then(() =>
+                                                notify(
+                                                    'ra-supabase.mfa.totp.secret-copied',
+                                                    {
+                                                        type: 'info',
+                                                        messageArgs: {
+                                                            _: 'Secret key copied to clipboard',
+                                                        },
+                                                    }
+                                                )
+                                            )
                                     }
                                     variant="text"
                                 >
