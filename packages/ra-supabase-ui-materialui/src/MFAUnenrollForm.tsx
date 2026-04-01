@@ -14,7 +14,7 @@ export const MFAUnenrollForm = () => {
     const translate = useTranslate();
     const redirect = useRedirect();
     const notify = useNotify();
-    const [, { mutateAsync: fetchFactors }] = useMFAListFactors();
+    const { data: factors } = useMFAListFactors();
     const [mutate, mutation] = useMFAUnenroll({
         onSuccess: data => {
             notify(
@@ -29,7 +29,6 @@ export const MFAUnenrollForm = () => {
     const { isPending, error } = mutation;
 
     const submit = async () => {
-        const factors = await fetchFactors();
         const totpFactor = factors?.all?.filter(
             f => f.factor_type === 'totp'
         )[0]; // TODO handle multiple factors

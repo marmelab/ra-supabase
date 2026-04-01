@@ -15,7 +15,7 @@ import * as React from 'react';
 export const MFAChallengeForm = () => {
     const translate = useTranslate();
     const redirect = useRedirect();
-    const [, { mutateAsync: fetchFactors }] = useMFAListFactors();
+    const { data: factors } = useMFAListFactors();
     const [mutate, mutation] = useMFAChallengeAndVerify({
         onSuccess: () => {
             redirect('/');
@@ -24,7 +24,6 @@ export const MFAChallengeForm = () => {
     const { isPending, error } = mutation;
 
     const submit = async (values: FormData) => {
-        const factors = await fetchFactors();
         const totpFactor = factors?.all?.filter(
             f => f.factor_type === 'totp'
         )[0]; // TODO handle multiple factors
