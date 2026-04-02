@@ -244,7 +244,7 @@ export const supabaseAuthProvider = (
                 );
             }
 
-            // If a friendly name is configured, unenroll any existing unverified
+            // If a friendly name is configured, unenroll any existing
             // factor with the same name to avoid a name conflict error (422).
             if (mfaAppFriendlyName) {
                 const { data: factors } = await client.auth.mfa.listFactors();

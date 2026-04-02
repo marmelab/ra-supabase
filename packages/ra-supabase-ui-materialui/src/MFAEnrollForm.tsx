@@ -9,7 +9,7 @@ import {
 import { useLogout, useNotify, useRedirect, useTranslate } from 'ra-core';
 import { useMFAEnroll, useMFAUnenroll } from 'ra-supabase-core';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const MFAEnrollForm = () => {
     const [qr, setQR] = useState('');
@@ -28,10 +28,6 @@ export const MFAEnrollForm = () => {
         },
     });
     const { isPending, error } = mutation;
-
-    useEffect(() => {
-        mutate();
-    }, [mutate]);
 
     const handleCancel = async () => {
         if (factorId) {
@@ -121,7 +117,7 @@ export const MFAEnrollForm = () => {
                         _: 'Cancel',
                     })}
                 </Button>
-                {error || isPending ? null : (
+                {factorId ? (
                     <Button
                         variant="contained"
                         type="submit"
@@ -131,7 +127,13 @@ export const MFAEnrollForm = () => {
                             _: 'Next',
                         })}
                     </Button>
-                )}
+                ) : !isPending && !error ? (
+                    <Button variant="contained" onClick={() => mutate()}>
+                        {translate('ra-supabase.mfa.totp.enroll-start', {
+                            _: 'Set up',
+                        })}
+                    </Button>
+                ) : null}
             </CardActions>
         </>
     );

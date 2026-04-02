@@ -41,6 +41,7 @@ export const raSupabaseFrenchMessages = {
                 'secret-copied': 'Clé secrète copiée dans le presse-papiers',
                 'copy-secret-key-to-clipboard':
                     'Copier la clé secrète dans le presse-papiers',
+                'enroll-start': 'Configurer',
                 'unenroll-header':
                     "Désactiver l'authentification multi-facteurs (TOTP)",
                 'unenroll-instructions':

@@ -1,9 +1,6 @@
 import { AdminGuesser } from 'ra-supabase';
 import { createClient } from '@supabase/supabase-js';
-import {
-    supabaseDataProvider,
-    supabaseAuthProvider,
-} from 'ra-supabase-core';
+import { supabaseDataProvider, supabaseAuthProvider } from 'ra-supabase-core';
 import { LoginPage, LoginForm } from 'ra-supabase-ui-materialui';
 import { Typography, Box, Alert } from '@mui/material';
 
