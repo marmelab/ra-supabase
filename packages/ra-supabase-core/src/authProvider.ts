@@ -214,6 +214,23 @@ export const supabaseAuthProvider = (
                     'Phone MFA is not supported yet. Please use TOTP instead.'
                 );
             }
+
+            // If a friendly name is configured, unenroll any existing unverified
+            // factor with the same name to avoid a name conflict error (422).
+            if (mfaAppFriendlyName) {
+                const { data: factors } = await client.auth.mfa.listFactors();
+                if (factors) {
+                    const existingFactor = factors.all.find(
+                        f => f.friendly_name === mfaAppFriendlyName
+                    );
+                    if (existingFactor) {
+                        await client.auth.mfa.unenroll({
+                            factorId: existingFactor.id,
+                        });
+                    }
+                }
+            }
+
             const { data, error } = await client.auth.mfa.enroll({
                 factorType,
                 friendlyName: mfaAppFriendlyName,
