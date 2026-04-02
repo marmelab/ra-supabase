@@ -363,7 +363,8 @@ export type MFAListFactorsResult = {
 
 const isOnRoute = (route: string) =>
     window.location.pathname === route ||
-    window.location.hash.includes(`#${route}`);
+    window.location.hash === `#${route}` ||
+    window.location.hash.startsWith(`#${route}?`);
 
 const getUrlParams = () => {
     const searchStr = getSearchString();
