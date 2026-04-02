@@ -148,8 +148,7 @@ export const supabaseAuthProvider = (
                 isOnRoute('/set-password') ||
                 isOnRoute('/forgot-password') ||
                 isOnRoute('/mfa-enroll') ||
-                isOnRoute('/mfa-challenge') ||
-                isOnRoute('/mfa-unenroll')
+                isOnRoute('/mfa-challenge')
             ) {
                 return;
             }
@@ -194,8 +193,7 @@ export const supabaseAuthProvider = (
                 isOnRoute('/set-password') ||
                 isOnRoute('/forgot-password') ||
                 isOnRoute('/mfa-enroll') ||
-                isOnRoute('/mfa-challenge') ||
-                isOnRoute('/mfa-unenroll')
+                isOnRoute('/mfa-challenge')
             ) {
                 return;
             }
