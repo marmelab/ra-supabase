@@ -6,7 +6,7 @@ import {
     Stack,
     Typography,
 } from '@mui/material';
-import { useNotify, useRedirect, useTranslate } from 'ra-core';
+import { useLogout, useNotify, useRedirect, useTranslate } from 'ra-core';
 import { useMFAEnroll, useMFAUnenroll } from 'ra-supabase-core';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ export const MFAEnrollForm = () => {
     const translate = useTranslate();
     const redirect = useRedirect();
     const notify = useNotify();
+    const logout = useLogout();
     const [, { mutateAsync: unenroll }] = useMFAUnenroll();
     const [mutate, mutation] = useMFAEnroll({
         onSuccess: data => {
@@ -36,7 +37,7 @@ export const MFAEnrollForm = () => {
         if (factorId) {
             await unenroll({ factorId });
         }
-        redirect('/');
+        logout();
     };
 
     return (

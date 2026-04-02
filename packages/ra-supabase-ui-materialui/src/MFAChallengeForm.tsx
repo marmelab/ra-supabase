@@ -7,7 +7,7 @@ import {
     Typography,
     styled,
 } from '@mui/material';
-import { Form, required, useNotify, useRedirect, useTranslate } from 'ra-core';
+import { Form, required, useLogout, useNotify, useRedirect, useTranslate } from 'ra-core';
 import { useMFAChallengeAndVerify, useMFAListFactors } from 'ra-supabase-core';
 import { TextInput } from 'ra-ui-materialui';
 import * as React from 'react';
@@ -16,6 +16,7 @@ export const MFAChallengeForm = () => {
     const translate = useTranslate();
     const redirect = useRedirect();
     const notify = useNotify();
+    const logout = useLogout();
     const { data: factors } = useMFAListFactors();
     const [mutate, mutation] = useMFAChallengeAndVerify({
         onSuccess: () => {
@@ -118,7 +119,7 @@ export const MFAChallengeForm = () => {
                     type="button"
                     className={SupabaseMFAChallengeFormClasses.cancelButton}
                     onClick={() => {
-                        redirect('/');
+                        logout();
                     }}
                 >
                     {translate('ra.action.cancel', {

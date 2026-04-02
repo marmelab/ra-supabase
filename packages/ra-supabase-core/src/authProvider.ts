@@ -181,6 +181,35 @@ export const supabaseAuthProvider = (
                 return Promise.reject();
             }
 
+            if (enforceMFA) {
+                const { data: aalData, error: aalError } =
+                    await client.auth.mfa.getAuthenticatorAssuranceLevel();
+                if (aalError) {
+                    throw aalError;
+                }
+                const { currentLevel, nextLevel } = aalData;
+                if (currentLevel === 'aal1') {
+                    if (nextLevel === 'aal1') {
+                        // eslint-disable-next-line no-throw-literal
+                        throw {
+                            redirectTo: redirectTo
+                                ? `${redirectTo}/mfa-enroll`
+                                : '/mfa-enroll',
+                            message: false,
+                        };
+                    }
+                    if (nextLevel === 'aal2') {
+                        // eslint-disable-next-line no-throw-literal
+                        throw {
+                            redirectTo: redirectTo
+                                ? `${redirectTo}/mfa-challenge`
+                                : '/mfa-challenge',
+                            message: false,
+                        };
+                    }
+                }
+            }
+
             return Promise.resolve();
         },
         async getPermissions() {
