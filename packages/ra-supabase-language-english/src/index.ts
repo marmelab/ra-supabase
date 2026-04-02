@@ -21,5 +21,29 @@ export const raSupabaseEnglishMessages = {
         validation: {
             password_mismatch: 'Passwords do not match',
         },
+        action: {
+            verify: 'Verify',
+            next: 'Next',
+            unenroll: 'Unenroll',
+        },
+        mfa: {
+            totp: {
+                'challenge-header': 'Enter your TOTP code',
+                'challenge-instructions':
+                    'Enter the TOTP code from your Authenticator app to verify your identity.',
+                code: 'Code',
+                'no-factor-error': 'No TOTP factors found!',
+                'enroll-header': 'Enable Multi-Factor Authentication (TOTP)',
+                'enroll-instructions':
+                    'Use an Authenticator app (such as Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, ...) to scan the QR code below and click Next.',
+                'secret-copied': 'Secret key copied to clipboard',
+                'copy-secret-key-to-clipboard': 'Copy secret key to clipboard',
+                'unenroll-header':
+                    'Unenroll from Multi-Factor Authentication (TOTP)',
+                'unenroll-instructions':
+                    'Click the button below to unenroll from TOTP MFA. Be warned that you may lose access to some or all features of this application if you do not have another MFA method set up. You can always enroll again later.',
+                'unenroll-success': 'Successfully unenrolled from TOTP MFA',
+            },
+        },
     },
 };
