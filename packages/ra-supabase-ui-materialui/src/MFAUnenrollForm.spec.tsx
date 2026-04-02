@@ -45,18 +45,14 @@ describe('MFAUnenrollForm', () => {
         renderForm();
         await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
         expect(
-            screen.getByText(
-                'ra-supabase.mfa.totp.unenroll-instructions'
-            )
+            screen.getByText('ra-supabase.mfa.totp.unenroll-instructions')
         ).toBeDefined();
     });
 
     it('should render Unenroll and Cancel buttons', async () => {
         renderForm();
         await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
-        expect(
-            screen.getByText('ra-supabase.action.unenroll')
-        ).toBeDefined();
+        expect(screen.getByText('ra-supabase.action.unenroll')).toBeDefined();
         expect(screen.getByText('ra.action.cancel')).toBeDefined();
     });
 
@@ -65,9 +61,7 @@ describe('MFAUnenrollForm', () => {
         renderForm(authProvider);
         await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
 
-        await userEvent.click(
-            screen.getByText('ra-supabase.action.unenroll')
-        );
+        await userEvent.click(screen.getByText('ra-supabase.action.unenroll'));
 
         await waitFor(() => {
             expect(authProvider.mfaUnenroll).toHaveBeenCalledWith({
@@ -88,9 +82,7 @@ describe('MFAUnenrollForm', () => {
         renderForm(authProvider);
         await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
 
-        await userEvent.click(
-            screen.getByText('ra-supabase.action.unenroll')
-        );
+        await userEvent.click(screen.getByText('ra-supabase.action.unenroll'));
 
         await waitFor(() => {
             expect(authProvider.mfaUnenroll).not.toHaveBeenCalled();

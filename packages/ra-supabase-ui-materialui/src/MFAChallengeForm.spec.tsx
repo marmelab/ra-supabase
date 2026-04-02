@@ -62,9 +62,7 @@ describe('MFAChallengeForm', () => {
         renderForm();
         await screen.findByText('ra-supabase.mfa.totp.challenge-header');
         expect(
-            screen.getByText(
-                'ra-supabase.mfa.totp.challenge-instructions'
-            )
+            screen.getByText('ra-supabase.mfa.totp.challenge-instructions')
         ).toBeDefined();
     });
 
@@ -77,9 +75,7 @@ describe('MFAChallengeForm', () => {
     it('should render Verify and Cancel buttons', async () => {
         renderForm();
         await screen.findByText('ra-supabase.mfa.totp.challenge-header');
-        expect(
-            screen.getByText('ra-supabase.action.verify')
-        ).toBeDefined();
+        expect(screen.getByText('ra-supabase.action.verify')).toBeDefined();
         expect(screen.getByText('ra.action.cancel')).toBeDefined();
     });
 
@@ -90,9 +86,7 @@ describe('MFAChallengeForm', () => {
 
         const input = screen.getByRole('textbox');
         await userEvent.type(input, '123456');
-        await userEvent.click(
-            screen.getByText('ra-supabase.action.verify')
-        );
+        await userEvent.click(screen.getByText('ra-supabase.action.verify'));
 
         await waitFor(() => {
             expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
@@ -128,14 +122,10 @@ describe('MFAChallengeForm', () => {
 
         const input = screen.getByRole('textbox');
         await userEvent.type(input, '123456');
-        await userEvent.click(
-            screen.getByText('ra-supabase.action.verify')
-        );
+        await userEvent.click(screen.getByText('ra-supabase.action.verify'));
 
         await waitFor(() => {
-            expect(
-                authProvider.mfaChallengeAndVerify
-            ).not.toHaveBeenCalled();
+            expect(authProvider.mfaChallengeAndVerify).not.toHaveBeenCalled();
         });
     });
 });
