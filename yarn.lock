@@ -2689,6 +2689,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/hashes@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@noble/hashes@npm:2.0.1"
+  checksum: 10c0/e81769ce21c3b1c80141a3b99bd001f17edea09879aa936692ae39525477386d696101cd573928a304806efb2b9fa751e1dd83241c67d0c84d30091e85c79bdb
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -3218,6 +3225,63 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@otplib/core@npm:13.4.0":
+  version: 13.4.0
+  resolution: "@otplib/core@npm:13.4.0"
+  checksum: 10c0/9d3721df328d73a49829b838171aecc18dc54b820795dde3a8644e96d954734a895247790c3f27d1f8023e715dd1c5cbd8264df86dbffe8b401c28164ae0d525
+  languageName: node
+  linkType: hard
+
+"@otplib/hotp@npm:13.4.0":
+  version: 13.4.0
+  resolution: "@otplib/hotp@npm:13.4.0"
+  dependencies:
+    "@otplib/core": "npm:13.4.0"
+    "@otplib/uri": "npm:13.4.0"
+  checksum: 10c0/8bea65184989cc6b6999aadf3a821e7d4168393cb03ae0e3235cd3402f469f783fd09e3740be4b6368044c4705b439dcaa1ffa9fbfd4a6790e698e5b4a32aae9
+  languageName: node
+  linkType: hard
+
+"@otplib/plugin-base32-scure@npm:13.4.0":
+  version: 13.4.0
+  resolution: "@otplib/plugin-base32-scure@npm:13.4.0"
+  dependencies:
+    "@otplib/core": "npm:13.4.0"
+    "@scure/base": "npm:^2.0.0"
+  checksum: 10c0/47c8db336fbcb71f492936f3a8a50c957878af10740757410a7aa2fb858995a64674c93248f6548718d3145eac6f0b88ed456c3231c2255fe58378188b5b458e
+  languageName: node
+  linkType: hard
+
+"@otplib/plugin-crypto-noble@npm:13.4.0":
+  version: 13.4.0
+  resolution: "@otplib/plugin-crypto-noble@npm:13.4.0"
+  dependencies:
+    "@noble/hashes": "npm:^2.0.1"
+    "@otplib/core": "npm:13.4.0"
+  checksum: 10c0/96f65a6b8c466ac4e7a87c07204caafeb863a03be2adc59d2c132a059a2806170b1a46322aaa167ad7a080e315528d1384a9abef85bca34ca36a2ce52d578480
+  languageName: node
+  linkType: hard
+
+"@otplib/totp@npm:13.4.0":
+  version: 13.4.0
+  resolution: "@otplib/totp@npm:13.4.0"
+  dependencies:
+    "@otplib/core": "npm:13.4.0"
+    "@otplib/hotp": "npm:13.4.0"
+    "@otplib/uri": "npm:13.4.0"
+  checksum: 10c0/a0cb4241ff5581e7e299f814303dcb883c509f17228c067cfc17c3c9f50203198d7c3b1ec8efd977b2587cc3bd7b36912b89c5ed8fd6303e587c48080be76449
+  languageName: node
+  linkType: hard
+
+"@otplib/uri@npm:13.4.0":
+  version: 13.4.0
+  resolution: "@otplib/uri@npm:13.4.0"
+  dependencies:
+    "@otplib/core": "npm:13.4.0"
+  checksum: 10c0/ce818377dcf2e8b5fd2fa0aa39d23e4717ab22de9f2ec6ddfde8635db938dabaf3347d0aacbff06fad819de0838da5525679ffa68615a4fc7e4a8ace15cc120e
+  languageName: node
+  linkType: hard
+
 "@parcel/watcher@npm:2.0.4":
   version: 2.0.4
   resolution: "@parcel/watcher@npm:2.0.4"
@@ -3259,13 +3323,6 @@ __metadata:
   version: 1.22.0
   resolution: "@remix-run/router@npm:1.22.0"
   checksum: 10c0/6fbfbdddb485af6bc24635272436fc9884b40d2517581b5cc66ab866279d238ccb11b6f8f67ad99d43ff21c0ea8bc088c96d510a42dcc0cc05a716760fe5a633
-  languageName: node
-  linkType: hard
-
-"@remix-run/router@npm:1.23.2":
-  version: 1.23.2
-  resolution: "@remix-run/router@npm:1.23.2"
-  checksum: 10c0/7096b7f2086b2cd80c9e06873b71a8317e04858c01edc06a6fed187b660408a90f47c8e120e8af4c369cf1fa6b6a316a66b0917f42b6eb8a566e98b277c50449
   languageName: node
   linkType: hard
 
@@ -3406,6 +3463,13 @@ __metadata:
   version: 1.2.0
   resolution: "@rushstack/eslint-patch@npm:1.2.0"
   checksum: 10c0/96c7622ab54b759f9aca2b03ba98acdfae39adb8c7a97b429a8f5c90adb49cc2c38db894c9a02f4ad8088f132575146c091c15b1f10ed34026ffd2491930c3a4
+  languageName: node
+  linkType: hard
+
+"@scure/base@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@scure/base@npm:2.0.0"
+  checksum: 10c0/7d999c7bebf053bb49cb706fdc6c5366737cff0f7f7518f52d32d7f7ad7b898904f03673648a2af5c4f22396f5c05f1d8bddbf010d6595052d07ba8163d506ad
   languageName: node
   linkType: hard
 
@@ -11340,6 +11404,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"otplib@npm:^13.4.0":
+  version: 13.4.0
+  resolution: "otplib@npm:13.4.0"
+  dependencies:
+    "@otplib/core": "npm:13.4.0"
+    "@otplib/hotp": "npm:13.4.0"
+    "@otplib/plugin-base32-scure": "npm:13.4.0"
+    "@otplib/plugin-crypto-noble": "npm:13.4.0"
+    "@otplib/totp": "npm:13.4.0"
+    "@otplib/uri": "npm:13.4.0"
+  checksum: 10c0/98900e47909511188aae7e07bbcdb9107b026ae180ecac9b8f6e9d098ee41546c72a52d0b9a1ad335ff1b2277f04ab46230e062a73e8b4d31424bfd5d3ca434c
+  languageName: node
+  linkType: hard
+
 "p-finally@npm:^1.0.0":
   version: 1.0.0
   resolution: "p-finally@npm:1.0.0"
@@ -12167,6 +12245,7 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     lerna: "npm:^6.6.2"
+    otplib: "npm:^13.4.0"
     prettier: "npm:~2.8.8"
     raf: "npm:^3.4.1"
     supabase: "npm:^2.12.1"
@@ -12274,31 +12353,6 @@ __metadata:
     react: "npm:^18.2.0"
     react-admin: "npm:^5.11.0"
     react-dom: "npm:^18.2.0"
-    source-map-explorer: "npm:^2.0.0"
-    supabase: "npm:^2.12.1"
-    tsx: "npm:^4.19.2"
-    typescript: "npm:^5.7.3"
-    vite: "npm:^6.1.0"
-    web-vitals: "npm:^1.0.1"
-  languageName: unknown
-  linkType: soft
-
-"react-admin-mfa-crm@workspace:packages/mfa-demo":
-  version: 0.0.0-use.local
-  resolution: "react-admin-mfa-crm@workspace:packages/mfa-demo"
-  dependencies:
-    "@supabase/supabase-js": "npm:^2.48.1"
-    "@types/faker": "npm:~5.1.7"
-    "@types/react": "npm:^18.0.0"
-    "@types/react-dom": "npm:^18.0.0"
-    "@vitejs/plugin-react": "npm:^4.3.4"
-    date-fns: "npm:^3.6.0"
-    faker: "npm:~5.4.0"
-    ra-supabase: "npm:^3.5.2"
-    react: "npm:^18.2.0"
-    react-admin: "npm:^5.11.0"
-    react-dom: "npm:^18.2.0"
-    react-router-dom: "npm:^6.0.0"
     source-map-explorer: "npm:^2.0.0"
     supabase: "npm:^2.12.1"
     tsx: "npm:^4.19.2"
@@ -12421,19 +12475,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.0.0":
-  version: 6.30.3
-  resolution: "react-router-dom@npm:6.30.3"
-  dependencies:
-    "@remix-run/router": "npm:1.23.2"
-    react-router: "npm:6.30.3"
-  peerDependencies:
-    react: ">=16.8"
-    react-dom: ">=16.8"
-  checksum: 10c0/e8a1e13c662ed6ee71a785bd3418ba04b700bcd8aff6ea7b32524371e8abb1c85568cd4fe9b9e9d555b8101fd415f6f1796531f593da60be179ce75b37038657
-  languageName: node
-  linkType: hard
-
 "react-router-dom@npm:^6.28.1, react-router-dom@npm:^6.28.1 || ^7.1.1":
   version: 6.29.0
   resolution: "react-router-dom@npm:6.29.0"
@@ -12455,17 +12496,6 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 10c0/0ad27b34e2ccb6db68ef124cd4492ba86b5422ea3e2af01c9de95e372eb3a36fb4727b40488ebc90e5e0cea41bc655c53569a754713554a465ca9423aa233df8
-  languageName: node
-  linkType: hard
-
-"react-router@npm:6.30.3":
-  version: 6.30.3
-  resolution: "react-router@npm:6.30.3"
-  dependencies:
-    "@remix-run/router": "npm:1.23.2"
-  peerDependencies:
-    react: ">=16.8"
-  checksum: 10c0/a0a74bf5a933cf0abd47e0eac1d3a505cd66b866e3ee8f20d8016885d3b4361ba3ba72dee026248c6125e631b191ba6ad109184c892281cea6cb747c71bf5940
   languageName: node
   linkType: hard
 

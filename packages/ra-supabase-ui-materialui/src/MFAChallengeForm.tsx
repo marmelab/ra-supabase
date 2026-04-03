@@ -7,7 +7,14 @@ import {
     Typography,
     styled,
 } from '@mui/material';
-import { Form, required, useLogout, useNotify, useRedirect, useTranslate } from 'ra-core';
+import {
+    Form,
+    required,
+    useLogout,
+    useNotify,
+    useRedirect,
+    useTranslate,
+} from 'ra-core';
 import { useMFAChallengeAndVerify, useMFAListFactors } from 'ra-supabase-core';
 import { TextInput } from 'ra-ui-materialui';
 import * as React from 'react';

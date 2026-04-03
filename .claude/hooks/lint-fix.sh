@@ -15,6 +15,6 @@ if [ ! -f "$FILE_PATH" ]; then
   exit 0
 fi
 
-make lint 2>/dev/null
+npx eslint --fix "$FILE_PATH" 2>/dev/null
 
 exit 0

@@ -2,7 +2,7 @@ import { login } from './login';
 
 describe('AdminGuesser', () => {
     it('should render one menu item per resource', () => {
-        cy.visit('/');
+        cy.visit('/?mode=standard');
         login();
         cy.findAllByText('Contacts');
         cy.findByText('Companies').should('exist');
