@@ -5,9 +5,11 @@ const login = (
     email: string = TEST_EMAIL,
     password: string = TEST_PASSWORD
 ) => {
+    cy.intercept('POST', '**/auth/v1/token*').as('signIn');
     cy.findByLabelText('Email *').type(email);
     cy.findByLabelText('Password *').type(password);
     cy.findByText('Sign in').click();
+    cy.wait('@signIn');
 };
 
 const visitMfaDemo = () => cy.visit('/?mode=mfa');
@@ -61,7 +63,7 @@ describe('MFA Authentication', () => {
 
         visitMfaDemo();
         login();
-        cy.url({ timeout: 10000 }).should('include', '/mfa-enroll');
+        cy.url().should('include', '/mfa-enroll');
 
         // Start enrollment
         cy.findByText('Set up').click();
@@ -99,7 +101,7 @@ describe('MFA Authentication', () => {
             login();
 
             // Should go straight to challenge (already enrolled)
-            cy.url({ timeout: 10000 }).should('include', '/mfa-challenge');
+            cy.url().should('include', '/mfa-challenge');
 
             // Verify with TOTP code
             cy.task('generateTOTP', secret).then(code => {
@@ -144,7 +146,7 @@ describe('MFA Authentication', () => {
         login();
 
         // Should go to challenge
-        cy.url({ timeout: 10000 }).should('include', '/mfa-challenge');
+        cy.url().should('include', '/mfa-challenge');
 
         // Enter an invalid TOTP code
         cy.get('input[name="code"]').type('000000');
