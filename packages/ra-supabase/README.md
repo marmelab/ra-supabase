@@ -585,6 +585,117 @@ export const MyAdmin = () => (
 
 For HashRouter see [Using Hash Router](#using-hash-router).
 
+### Multi-Factor Authentication (TOTP)
+
+`ra-supabase` supports Multi-Factor Authentication using Time-based One-Time Passwords (TOTP). When enabled, users are required to enroll in MFA after their first login, and verify their identity with a TOTP code on subsequent logins.
+
+#### Supabase Configuration
+
+First, enable TOTP MFA in your Supabase instance:
+
+**Local instance** — add the following to your `config.toml`:
+
+```toml
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+```
+
+**Hosted instance** — go to your dashboard **Authentication > Multi Factor Authentication** section and enable TOTP.
+
+#### Auth Provider Configuration
+
+Pass the `enforceMFA` option to the auth provider:
+
+```js
+import { supabaseAuthProvider } from 'ra-supabase';
+
+const authProvider = supabaseAuthProvider(supabaseClient, {
+    enforceMFA: true,
+    // Optional: a friendly name shown in the user's authenticator app
+    mfaAppFriendlyName: 'My Admin App',
+});
+```
+
+When `enforceMFA` is `true`, the auth provider will:
+
+- Redirect unenrolled users to `/mfa-enroll` after login so they can set up TOTP.
+- Redirect enrolled users to `/mfa-challenge` after login so they can verify their identity.
+
+#### Adding MFA Routes
+
+Add the MFA custom routes to your app:
+
+```jsx
+// in App.js
+import { Admin, CustomRoutes, Resource, ListGuesser } from 'react-admin';
+import {
+    LoginPage,
+    SetPasswordPage,
+    ForgotPasswordPage,
+    MFAEnrollPage,
+    MFAChallengePage,
+    MFAUnenrollPage,
+} from 'ra-supabase';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+
+export const MyAdmin = () => (
+    <BrowserRouter>
+        <Admin
+            dataProvider={dataProvider}
+            authProvider={authProvider}
+            loginPage={LoginPage}
+        >
+            <CustomRoutes noLayout>
+                <Route
+                    path={SetPasswordPage.path}
+                    element={<SetPasswordPage />}
+                />
+                <Route
+                    path={ForgotPasswordPage.path}
+                    element={<ForgotPasswordPage />}
+                />
+                <Route
+                    path={MFAEnrollPage.path}
+                    element={<MFAEnrollPage />}
+                />
+                <Route
+                    path={MFAChallengePage.path}
+                    element={<MFAChallengePage />}
+                />
+                <Route
+                    path={MFAUnenrollPage.path}
+                    element={<MFAUnenrollPage />}
+                />
+            </CustomRoutes>
+            <Resource name="posts" list={ListGuesser} />
+            <Resource name="authors" list={ListGuesser} />
+        </Admin>
+    </BrowserRouter>
+);
+```
+
+#### MFA Pages
+
+`ra-supabase` provides three MFA pages, each with a default form that can be overridden via `children`:
+
+- **`<MFAEnrollPage>`** (`/mfa-enroll`) — Displays a QR code for the user to scan with their authenticator app (Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, etc.). Also provides a button to copy the secret key to the clipboard.
+- **`<MFAChallengePage>`** (`/mfa-challenge`) — Prompts the user to enter the 6-digit TOTP code from their authenticator app.
+- **`<MFAUnenrollPage>`** (`/mfa-unenroll`) — Allows the user to unenroll from TOTP MFA. You can link to this page from a settings or profile page.
+
+#### MFA Hooks
+
+For building custom MFA flows, `ra-supabase-core` exposes the following hooks:
+
+- **`useMFAEnroll(options?)`** — Enrolls the current user in TOTP MFA. Returns the QR code and secret.
+- **`useMFAChallengeAndVerify(options?)`** — Challenges and verifies a TOTP code against an enrolled factor.
+- **`useMFAUnenroll(options?)`** — Unenrolls a factor by its ID.
+- **`useMFAListFactors(options?)`** — Lists all MFA factors for the current user.
+
+Each mutation hook returns a `[mutate, mutation]` tuple (like react-admin's mutation hooks), and accepts `onSuccess` and `onError` callbacks.
+
 ### OAuth Authentication
 
 To setup OAuth authentication, you can pass a `LoginPage` element:

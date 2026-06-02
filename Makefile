@@ -69,7 +69,7 @@ test-e2e: ## launch e2e tests
 	@echo "Running e2e tests...";
 	@yarn test-e2e;
 
-test-e2e-local: ## launch e2e tests
+test-e2e-local: ## launch e2e tests interactively
 	@echo "Running e2e tests...";
 	@yarn test-e2e-local;
 

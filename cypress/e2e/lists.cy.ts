@@ -5,13 +5,13 @@ const getPaginationText = () =>
 
 describe('Lists', () => {
     it('should render a list', () => {
-        cy.visit('/');
+        cy.visit('/?mode=standard');
         login();
         getPaginationText();
     });
 
     it('should allow to move through pages', () => {
-        cy.visit('/');
+        cy.visit('/?mode=standard');
         login();
         getPaginationText().then(el => {
             const page = parseInt(el.text().split('-')[0].trim());
@@ -36,7 +36,7 @@ describe('Lists', () => {
     });
 
     it('should allow to sort data', () => {
-        cy.visit('/');
+        cy.visit('/?mode=standard');
         login();
         cy.findByLabelText('Sort by gender ascending').click();
         cy.findAllByText('female', { timeout: 10000 }).should(
