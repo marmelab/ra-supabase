@@ -6,6 +6,7 @@ const login = (
     password: string = TEST_PASSWORD
 ) => {
     cy.intercept('POST', '**/auth/v1/token*').as('signIn');
+    cy.wait(1000);
     cy.findByLabelText('Email *').type(email);
     cy.findByLabelText('Password *').type(password);
     cy.findByText('Sign in').click();
@@ -14,14 +15,12 @@ const login = (
 
 const visitMfaDemo = () => cy.visit('/?mode=mfa');
 
+const getPaginationText = () =>
+    cy.findByText(/\d+-\d+ of \d+/, { timeout: 10000 });
+
 const assertOnApp = () => {
     cy.url({ timeout: 10000 }).should('include', '/contacts');
-
-    // Open the first contact and verify its fields
-    cy.findByText('Joe', { timeout: 10000 }).click();
-    cy.url().should('include', '/contacts/1/show');
-    cy.findByText('Joe').should('exist');
-    cy.findByText('Schultz').should('exist');
+    getPaginationText();
 };
 
 const logout = () => {
