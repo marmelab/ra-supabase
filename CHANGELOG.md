@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.6.0
+
+- [Feat] Add support publishable key ([#100](https://github.com/marmelab/ra-supabase/pull/100)) ([oddmutou](https://github.com/oddmutou))
+- [Fix] Upgrade build target to ES2020 to support the latest versions of Next and Vite ([#102](https://github.com/marmelab/ra-supabase/pull/102)) ([jonathanarnault](https://github.com/jonathanarnault))
+
 ## 3.5.2
 
 - Fix `<ListGuesser>` output incorrect imports for `<DataTable.Col>` ([#97](https://github.com/marmelab/ra-supabase/pull/97)) ([djhi](https://github.com/djhi))
