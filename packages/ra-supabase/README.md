@@ -6,31 +6,63 @@ This package integrates [Supabase](https://supabase.io/) with [react-admin](http
 
 ## Quick Start
 
-Use the `create-react-admin` command and the `supabase` template to create a new React-Admin app that uses Supabase as a backend, both for the data and the authentication.
+This tutorial walks you through creating a Supabase project, adding some sample data, and querying it from a react-admin app.
 
-```bash
-npx create-react-admin my-admin --data-provider supabase
-```
+### 1. Create A Supabase Project
 
-Edit `.env` and populate it with your Supabase connection variables:
+Go to the [Supabase dashboard](https://supabase.com/dashboard/new) and create a new project. If you already have a project with tables and data, skip to [step 2](#2-create-a-react-admin-app).
 
-```env
-VITE_SUPABASE_URL=<SUBSTITUTE_SUPABASE_URL>
-VITE_SUPABASE_API_KEY=<SUBSTITUTE_SUPABASE_ANON_KEY_OR_PUBLISHABLE_KEY>
-```
-
-Make the data in your database readable by authenticated users by adding an RLS policy:
+Once your project is up and running, go to the [Table Editor](https://supabase.com/dashboard/project/_/editor) to create a table and insert some data. Alternatively, run the following snippet in your project's [SQL Editor](https://supabase.com/dashboard/project/_/sql/new) to create an `instruments` table with three sample rows:
 
 ```sql
-create policy "Authenticated can read and write data"
-on "public"."*"
+-- Create the table
+create table instruments (
+  id bigint primary key generated always as identity,
+  name text not null
+);
+
+-- Insert some sample data into the table
+insert into instruments (name)
+values
+  ('violin'),
+  ('viola'),
+  ('cello');
+
+alter table instruments enable row level security;
+```
+
+Make the data readable and writable by authenticated users by adding an RLS policy. Row-Level Security is enforced per table, so repeat this for every table you want to expose:
+
+```sql
+create policy "Authenticated can read and write instruments"
+on "public"."instruments"
 as PERMISSIVE
 for ALL
 to authenticated
 using (true);
 ```
 
-Add a new user in your project's [Users list](https://supabase.com/dashboard/project/_/auth/users) with an email and password. 
+Finally, add a new user in your project's [Users list](https://supabase.com/dashboard/project/_/auth/users) with an email and a password. You will use these credentials to log into the admin.
+
+### 2. Create A React Admin App
+
+Use the `create-react-admin` command and the `supabase` template to create a new React-Admin app that uses Supabase as a backend, both for the data and the authentication.
+
+```bash
+npx create-react-admin my-admin --data-provider supabase
+cd my-admin
+```
+
+### 3. Declare Supabase Environment Variables
+
+Edit `.env` and populate it with your Supabase connection variables, which you can copy from your project's [API settings](https://supabase.com/dashboard/project/_/settings/api):
+
+```env
+VITE_SUPABASE_URL=<SUBSTITUTE_SUPABASE_URL>
+VITE_SUPABASE_API_KEY=<SUBSTITUTE_SUPABASE_ANON_KEY_OR_PUBLISHABLE_KEY>
+```
+
+### 4. Start The App
 
 Run the development server, then go to [http://localhost:5173/](http://localhost:5173/) in a browser.
 
@@ -38,9 +70,7 @@ Run the development server, then go to [http://localhost:5173/](http://localhost
 npm run dev
 ```
 
-You should see a login screen: Log in using the credentials of the user you created earlier.
-
-Now the app is ready to use.
+You should see a login screen: log in using the credentials of the user you created in step 1.
 
 ![Demo](./assets/demo.png)
 
@@ -52,6 +82,14 @@ The generated admin is fully functional:
 - Forms use the correct input component based on the field type
 - Relationships are displayed as links in show views and as autocomplete inputs in edit views
 - Authentication is handled by Supabase
+
+### 5. Customize The App
+
+The pages above are guessed at runtime from the Supabase OpenAPI schema. To start customizing them, open the browser console: react-admin logs the code it has guessed for your tables.
+
+![Guessed admin code logged in the browser console](./assets/guessed-admin.png)
+
+Copy that code and use it to replace the content of `src/App.tsx`. The app looks the same, but the CRUD pages are now yours to edit: you can add custom actions, styles, and components to better fit your needs.
 
 ## Installation
 

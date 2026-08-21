@@ -16,6 +16,10 @@ This package provides a dataProvider, an authProvider, hooks and components to i
 
 [![Video tutorial about react-admin with supabase](./assets/video.jpg)](https://youtu.be/zV-Ty7VeIvo)
 
+## Getting Started
+
+Follow the [Quick Start](./packages/ra-supabase/README.md#quick-start) to create a Supabase project, add some sample data, and query it from a react-admin app.
+
 ## Projects
 
 - [ra-supabase](https://github.com/marmelab/ra-supabase/tree/main/packages/ra-supabase): Umbrella project that re-export the others.
