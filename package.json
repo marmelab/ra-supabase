@@ -54,7 +54,6 @@
         "test-unit": "jest",
         "test-e2e": "cypress run",
         "test-e2e-local": "cypress open",
-        "watch": "lerna run --parallel watch",
         "lint": "eslint --fix --ext .js,.ts,.tsx \"./packages/**/src/**/*.{js,ts,tsx}\"",
         "prettier": "prettier --write \"./packages/**/src/**/*.{js,ts,tsx}\"",
         "db-seed": "cd packages/demo && yarn db-seed",

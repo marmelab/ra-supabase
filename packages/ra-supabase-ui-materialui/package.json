@@ -6,13 +6,29 @@
     "license": "MIT",
     "files": [
         "*.md",
-        "lib",
-        "esm",
+        "dist",
         "src"
     ],
-    "main": "lib/index",
-    "module": "esm/index.js",
-    "types": "esm/index.d.ts",
+    "type": "module",
+    "zshy": {
+        "exports": "./src/index.ts",
+        "noEdit": true
+    },
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.cts",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "require": {
+                "types": "./dist/index.d.cts",
+                "default": "./dist/index.cjs"
+            }
+        }
+    },
     "sideEffects": false,
     "dependencies": {
         "ra-supabase-core": "^3.5.2"
@@ -27,8 +43,8 @@
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router": "^6.23.1",
-        "rimraf": "^6.0.1",
-        "typescript": "^5.7.3"
+        "typescript": "^5.7.3",
+        "zshy": "^0.5.0"
     },
     "peerDependencies": {
         "@mui/icons-material": "^5.16.12 || ^6.0.0 || ^7.0.0",
@@ -41,10 +57,7 @@
         "react-router": "^6.28.1 || ^7.1.1"
     },
     "scripts": {
-        "build": "yarn run build-cjs && yarn run build-esm",
-        "build-cjs": "rimraf ./lib && tsc",
-        "build-esm": "rimraf ./esm && tsc --outDir esm --module es2015",
-        "watch": "tsc --outDir esm --module es2015 --watch",
+        "build": "zshy --silent",
         "lint": "eslint --fix ./src"
     }
 }
