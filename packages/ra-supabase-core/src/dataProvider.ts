@@ -11,11 +11,7 @@ import type { OpenAPIV2 } from 'openapi-types';
 // @raphiniert/ra-data-postgrest is CommonJS only: under Node ESM, its default
 // import is the whole module.exports object, with the factory as `default`.
 const postgrestRestProvider: typeof postgrestRestProviderImport =
-    (
-        postgrestRestProviderImport as unknown as {
-            default?: typeof postgrestRestProviderImport;
-        }
-    ).default ?? postgrestRestProviderImport;
+    (postgrestRestProviderImport as any).default ?? postgrestRestProviderImport;
 
 type WithApiKey = {
     instanceUrl: string;
