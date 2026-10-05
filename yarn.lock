@@ -12142,7 +12142,7 @@ __metadata:
     react-router: "npm:^6.28.1"
     react-router-dom: "npm:^6.28.1"
     typescript: "npm:^5.7.3"
-    zshy: "npm:^0.5.0"
+    zshy: "npm:^0.8.0"
   peerDependencies:
     ra-core: ^5.8.0
   languageName: unknown
@@ -12153,7 +12153,7 @@ __metadata:
   resolution: "ra-supabase-language-english@workspace:packages/ra-supabase-language-english"
   dependencies:
     typescript: "npm:^5.7.3"
-    zshy: "npm:^0.5.0"
+    zshy: "npm:^0.8.0"
   languageName: unknown
   linkType: soft
 
@@ -12162,7 +12162,7 @@ __metadata:
   resolution: "ra-supabase-language-french@workspace:packages/ra-supabase-language-french"
   dependencies:
     typescript: "npm:^5.7.3"
-    zshy: "npm:^0.5.0"
+    zshy: "npm:^0.8.0"
   languageName: unknown
   linkType: soft
 
@@ -12214,7 +12214,7 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-router: "npm:^6.23.1"
     typescript: "npm:^5.7.3"
-    zshy: "npm:^0.5.0"
+    zshy: "npm:^0.8.0"
   peerDependencies:
     "@mui/icons-material": ^5.16.12 || ^6.0.0 || ^7.0.0
     "@mui/material": ^5.16.12 || ^6.0.0 || ^7.0.0
@@ -12235,7 +12235,7 @@ __metadata:
     ra-supabase-language-english: "npm:^3.5.0"
     ra-supabase-ui-materialui: "npm:^3.5.2"
     typescript: "npm:^5.7.3"
-    zshy: "npm:^0.5.0"
+    zshy: "npm:^0.8.0"
   languageName: unknown
   linkType: soft
 
@@ -15069,9 +15069,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zshy@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "zshy@npm:0.5.0"
+"zshy@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "zshy@npm:0.8.0"
   dependencies:
     arg: "npm:^5.0.2"
     fast-glob: "npm:^3.3.2"
@@ -15080,6 +15080,6 @@ __metadata:
     typescript: ">5.5.0"
   bin:
     zshy: dist/index.cjs
-  checksum: 10c0/6ece7ab756ccc63810f73fb4693053630611a18cfeb012beedeca20a690dc4bda94eced9b700e23c7b5ad82fc34e5ea766c9c54d7ed20adb5ecbe0adf7e35115
+  checksum: 10c0/f9ef8fb003de10bd3b08ec3d228409fc84051ffcc06d9c6a94a043acc8b8c14c68b2901c766f0f931b09a1ba52f19f41c1bb6fe815d4ca8e9f5f4e485fb61451
   languageName: node
   linkType: hard

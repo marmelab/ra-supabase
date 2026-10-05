@@ -44,7 +44,7 @@
         "react-dom": "^18.3.1",
         "react-router": "^6.23.1",
         "typescript": "^5.7.3",
-        "zshy": "^0.5.0"
+        "zshy": "^0.8.0"
     },
     "peerDependencies": {
         "@mui/icons-material": "^5.16.12 || ^6.0.0 || ^7.0.0",
@@ -57,7 +57,7 @@
         "react-router": "^6.28.1 || ^7.1.1"
     },
     "scripts": {
-        "build": "zshy --silent",
+        "build": "zshy",
         "lint": "eslint --fix ./src"
     }
 }

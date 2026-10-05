@@ -37,10 +37,10 @@
     },
     "devDependencies": {
         "typescript": "^5.7.3",
-        "zshy": "^0.5.0"
+        "zshy": "^0.8.0"
     },
     "scripts": {
-        "build": "zshy --silent",
+        "build": "zshy",
         "lint": "eslint --fix ./src"
     }
 }
