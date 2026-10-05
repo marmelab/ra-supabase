@@ -1,5 +1,5 @@
 import { DataProvider, fetchUtils } from 'ra-core';
-import postgrestRestProvider, {
+import postgrestRestProviderImport, {
     IDataProviderConfig,
     defaultPrimaryKeys,
     defaultSchema,
@@ -7,6 +7,11 @@ import postgrestRestProvider, {
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { OpenAPIV2 } from 'openapi-types';
+
+// @raphiniert/ra-data-postgrest is CommonJS only: under Node ESM, its default
+// import is the whole module.exports object, with the factory as `default`.
+const postgrestRestProvider: typeof postgrestRestProviderImport =
+    (postgrestRestProviderImport as any).default ?? postgrestRestProviderImport;
 
 type WithApiKey = {
     instanceUrl: string;

@@ -54,9 +54,8 @@
         "test-unit": "jest",
         "test-e2e": "cypress run",
         "test-e2e-local": "cypress open",
-        "watch": "lerna run --parallel watch",
-        "lint": "eslint --fix --ext .js,.ts,.tsx \"./packages/**/src/**/*.{js,ts,tsx}\"",
-        "prettier": "prettier --write \"./packages/**/src/**/*.{js,ts,tsx}\"",
+        "lint": "eslint --fix --ext .js,.ts,.tsx \"./packages/**/src/**/*.{js,ts,tsx}\" test-exports.mjs",
+        "prettier": "prettier --write \"./packages/**/src/**/*.{js,ts,tsx}\" test-exports.mjs",
         "db-seed": "cd packages/demo && yarn db-seed",
         "db-migrate": "cd packages/demo && yarn supabase db reset",
         "cypress:open": "cypress open"
