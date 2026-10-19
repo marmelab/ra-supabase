@@ -10,7 +10,7 @@ This tutorial walks you through creating a Supabase project, adding some sample 
 
 ### 1. Create A Supabase Project
 
-Go to the [Supabase dashboard](https://supabase.com/dashboard/new) and create a new project. If you already have a project with tables and data, skip to [step 2](#2-create-a-react-admin-app).
+Go to the [Supabase dashboard](https://supabase.com/dashboard/new) and create a new project. If you already have a project with tables, data, RLS policies, and a user, skip to [step 2](#2-create-a-react-admin-app).
 
 Once your project is up and running, go to the [Table Editor](https://supabase.com/dashboard/project/_/editor) to create a table and insert some data. Alternatively, run the following snippet in your project's [SQL Editor](https://supabase.com/dashboard/project/_/sql/new) to create an `instruments` table with three sample rows:
 
@@ -89,7 +89,7 @@ The pages above are guessed at runtime from the Supabase OpenAPI schema. To star
 
 ![Guessed admin code logged in the browser console](./assets/guessed-admin.png)
 
-Copy that code and use it to replace the content of `src/App.tsx`. The app looks the same, but the CRUD pages are now yours to edit: you can add custom actions, styles, and components to better fit your needs.
+Copy that code and use it to replace the content of `src/App.tsx`. Don't forget to replace `YOUR_SUPABASE_URL` and `YOUR_SUPABASE_API_KEY` with your actual Supabase URL and API key. The app looks the same, but the CRUD pages are now yours to edit: you can add custom actions, styles, and components to better fit your needs.
 
 ## Installation
 
@@ -124,9 +124,7 @@ export const App = () => (
 );
 ```
 
-To start customizing the app, open the browser console, and copy the guessed admin code. You can then paste it into your own app and start customizing it.
-
-The generated code will look like this:
+The guessed admin code logged in the browser console (see [Customize The App](#5-customize-the-app)) will look like this:
 
 ```jsx
 import { Admin, Resource, CustomRoutes } from 'react-admin';
