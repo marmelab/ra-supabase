@@ -62,8 +62,7 @@ export const supabaseDataProvider = ({
                   );
               })());
     const httpClient =
-        httpClientParam ??
-        supabaseHttpClient({ apiKey, supabaseClient });
+        httpClientParam ?? supabaseHttpClient({ apiKey, supabaseClient });
 
     const config: IDataProviderConfig = {
         apiUrl: `${instanceUrl}/rest/v1`,
