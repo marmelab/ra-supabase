@@ -7,7 +7,7 @@ import {
     CustomRoutes,
 } from 'react-admin';
 import type { AdminProps, AdminUIProps } from 'react-admin';
-import { Route, BrowserRouter } from 'react-router-dom';
+import { Route, BrowserRouter, useInRouterContext } from 'react-router-dom';
 
 import { supabaseDataProvider, supabaseAuthProvider } from 'ra-supabase-core';
 import {
@@ -62,9 +62,11 @@ export const AdminGuesser = (
         instanceUrl && apiKey && defaultSupabaseClient
             ? supabaseAuthProvider(defaultSupabaseClient, {})
             : undefined;
+    // Reuse the app router if any, e.g. to serve the admin under a basename
+    const Router = useInRouterContext() ? React.Fragment : BrowserRouter;
 
     return (
-        <BrowserRouter>
+        <Router>
             <AdminContext
                 authProvider={authProvider ?? defaultAuthProvider}
                 basename={basename}
@@ -79,7 +81,7 @@ export const AdminGuesser = (
             >
                 <AdminUIGuesser {...rest} />
             </AdminContext>
-        </BrowserRouter>
+        </Router>
     );
 };
 
