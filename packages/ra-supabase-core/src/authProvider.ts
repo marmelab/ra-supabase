@@ -30,24 +30,17 @@ export const supabaseAuthProvider = (
                     if (error) {
                         throw error;
                     }
-                    const { currentLevel, nextLevel } = data;
-                    if (currentLevel === 'aal1') {
-                        if (nextLevel === 'aal1') {
-                            // User has not yet enrolled in MFA
-                            return {
-                                redirectTo: redirectTo
-                                    ? `${redirectTo}/mfa-enroll`
-                                    : '/mfa-enroll',
-                            };
-                        }
-                        if (nextLevel === 'aal2') {
-                            // User has an MFA factor enrolled but has not verified it.
-                            return {
-                                redirectTo: redirectTo
-                                    ? `${redirectTo}/mfa-challenge`
-                                    : '/mfa-challenge',
-                            };
-                        }
+                    if (data.currentLevel === 'aal1') {
+                        // Users with a verified factor must verify it, others must enroll one
+                        const mfaPath =
+                            data.nextLevel === 'aal2'
+                                ? '/mfa-challenge'
+                                : '/mfa-enroll';
+                        return {
+                            redirectTo: redirectTo
+                                ? `${redirectTo}${mfaPath}`
+                                : mfaPath,
+                        };
                     }
                 }
 
