@@ -134,6 +134,24 @@ describe('MFA Authentication', () => {
         cy.url().should('not.include', '/mfa-');
     });
 
+    it('should send an enrolled user that skips the challenge back to login', () => {
+        // Enroll the user in MFA server-side
+        cy.task('enrollUserInMFA', {
+            email: TEST_EMAIL,
+            password: TEST_PASSWORD,
+        });
+
+        visitMfaDemo();
+        login();
+        cy.url().should('include', '/mfa-challenge');
+
+        // Load the app directly with the aal1 session
+        cy.visit('/contacts?mode=mfa');
+
+        cy.url({ timeout: 10000 }).should('include', '/login');
+        cy.findByText('Sign in').should('exist');
+    });
+
     it('should reject an enrolled user that fails the challenge', () => {
         // Enroll the user in MFA server-side
         cy.task('enrollUserInMFA', {

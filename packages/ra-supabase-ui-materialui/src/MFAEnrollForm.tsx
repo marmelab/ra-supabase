@@ -19,7 +19,7 @@ export const MFAEnrollForm = () => {
     const redirect = useRedirect();
     const notify = useNotify();
     const logout = useLogout();
-    const [, { mutateAsync: unenroll }] = useMFAUnenroll();
+    const [unenroll] = useMFAUnenroll();
     const [mutate, mutation] = useMFAEnroll({
         onSuccess: data => {
             setFactorId(data.id);
@@ -29,11 +29,14 @@ export const MFAEnrollForm = () => {
     });
     const { isPending, error } = mutation;
 
-    const handleCancel = async () => {
-        if (factorId) {
-            await unenroll({ factorId });
+    const handleCancel = () => {
+        if (!factorId) {
+            logout();
+            return;
         }
-        logout();
+        // Log out even if unenroll fails (useMFAUnenroll notifies the error),
+        // as Cancel is the only way out of this page
+        unenroll({ factorId }, { onSettled: () => logout() });
     };
 
     return (
@@ -121,7 +124,15 @@ export const MFAEnrollForm = () => {
                     <Button
                         variant="contained"
                         type="submit"
-                        onClick={() => redirect('/mfa-challenge')}
+                        onClick={() =>
+                            redirect(
+                                '/mfa-challenge',
+                                undefined,
+                                undefined,
+                                undefined,
+                                { factorId }
+                            )
+                        }
                     >
                         {translate('ra-supabase.action.next', {
                             _: 'Next',

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { CoreAdminContext, TestMemoryRouter } from 'ra-core';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { Location } from 'react-router';
 import { MFAEnrollForm } from './MFAEnrollForm';
 
 const mockEnrollResult = {
@@ -31,9 +32,12 @@ const defaultAuthProvider = {
     }),
 };
 
-const renderForm = (authProvider = defaultAuthProvider) =>
+const renderForm = (
+    authProvider = defaultAuthProvider,
+    locationCallback?: (location: Location) => void
+) =>
     render(
-        <TestMemoryRouter>
+        <TestMemoryRouter locationCallback={locationCallback}>
             <CoreAdminContext authProvider={authProvider}>
                 <MFAEnrollForm />
             </CoreAdminContext>
@@ -110,6 +114,25 @@ describe('MFAEnrollForm', () => {
         ).toBeDefined();
     });
 
+    it('should pass the enrolled factorId to the challenge page on Next', async () => {
+        let location: Location | undefined;
+        renderForm(defaultAuthProvider, l => {
+            location = l;
+        });
+        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+
+        await userEvent.click(
+            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+        );
+        await screen.findByAltText('TOTP QR Code');
+        await userEvent.click(screen.getByText('ra-supabase.action.next'));
+
+        await waitFor(() => {
+            expect(location?.pathname).toBe('/mfa-challenge');
+        });
+        expect(location?.state).toMatchObject({ factorId: 'factor-456' });
+    });
+
     it('should call logout when Cancel is clicked before enroll', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
@@ -140,6 +163,28 @@ describe('MFAEnrollForm', () => {
                 factorId: 'factor-456',
             });
         });
+        await waitFor(() => {
+            expect(authProvider.logout).toHaveBeenCalled();
+        });
+    });
+
+    it('should still logout when unenroll fails on Cancel', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaUnenroll: jest
+                .fn()
+                .mockRejectedValue(new Error('Network error')),
+        };
+        renderForm(authProvider);
+        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+
+        await userEvent.click(
+            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+        );
+        await screen.findByAltText('TOTP QR Code');
+
+        await userEvent.click(screen.getByText('ra.action.cancel'));
+
         await waitFor(() => {
             expect(authProvider.logout).toHaveBeenCalled();
         });

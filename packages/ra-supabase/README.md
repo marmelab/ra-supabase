@@ -657,6 +657,21 @@ When `enforceMFA` is `true`, the auth provider will:
 
 - Redirect unenrolled users to `/mfa-enroll` after login so they can set up TOTP.
 - Redirect enrolled users to `/mfa-challenge` after login so they can verify their identity.
+- Log out users who try to access the app without completing MFA, and send them back to the login page.
+
+#### Enforcing MFA on the Server
+
+`enforceMFA` only protects the admin UI: a user who knows the password still gets a valid (`aal1`) session and can query the Supabase API directly. To protect your data, add a restrictive Row Level Security policy requiring the `aal2` assurance level on your tables:
+
+```sql
+create policy "Enforce MFA for all users."
+  on table_name
+  as restrictive
+  to authenticated
+  using ((select auth.jwt()->>'aal') = 'aal2');
+```
+
+See the [Supabase MFA documentation](https://supabase.com/docs/guides/auth/auth-mfa#enforce-rules-for-mfa-logins) for other enforcement strategies.
 
 #### Adding MFA Routes
 

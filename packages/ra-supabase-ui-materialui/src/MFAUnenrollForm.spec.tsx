@@ -4,6 +4,13 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MFAUnenrollForm } from './MFAUnenrollForm';
 
+const verifiedFactor = {
+    id: 'factor-789',
+    factor_type: 'totp',
+    friendly_name: 'Test App',
+    status: 'verified',
+};
+
 const defaultAuthProvider = {
     login: jest.fn(),
     logout: jest.fn().mockResolvedValue(undefined),
@@ -14,15 +21,8 @@ const defaultAuthProvider = {
     mfaUnenroll: jest.fn().mockResolvedValue({ id: 'factor-789' }),
     mfaChallengeAndVerify: jest.fn(),
     mfaListFactors: jest.fn().mockResolvedValue({
-        all: [
-            {
-                id: 'factor-789',
-                factor_type: 'totp',
-                friendly_name: 'Test App',
-                status: 'verified',
-            },
-        ],
-        totp: [],
+        all: [verifiedFactor],
+        totp: [verifiedFactor],
         phone: [],
     }),
 };
@@ -58,6 +58,35 @@ describe('MFAUnenrollForm', () => {
 
     it('should call mfaUnenroll when Unenroll is clicked', async () => {
         const authProvider = { ...defaultAuthProvider };
+        renderForm(authProvider);
+        await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
+
+        await userEvent.click(screen.getByText('ra-supabase.action.unenroll'));
+
+        await waitFor(() => {
+            expect(authProvider.mfaUnenroll).toHaveBeenCalledWith({
+                factorId: 'factor-789',
+            });
+        });
+    });
+
+    it('should ignore unverified factors', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaListFactors: jest.fn().mockResolvedValue({
+                all: [
+                    {
+                        id: 'stale-factor',
+                        factor_type: 'totp',
+                        friendly_name: 'Test App',
+                        status: 'unverified',
+                    },
+                    verifiedFactor,
+                ],
+                totp: [verifiedFactor],
+                phone: [],
+            }),
+        };
         renderForm(authProvider);
         await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
 

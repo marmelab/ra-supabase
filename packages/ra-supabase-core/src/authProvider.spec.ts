@@ -171,7 +171,9 @@ describe('authProvider MFA', () => {
     });
 
     describe('checkAuth with enforceMFA', () => {
-        it('should redirect to /mfa-enroll when session exists but aal1 -> aal1', async () => {
+        // react-admin logs users out when checkAuth rejects, so it must not
+        // redirect to the MFA pages, which require a session
+        it('should reject to the login page when session exists but aal1 -> aal1', async () => {
             const client = createMockSupabaseClient();
             client.auth.mfa.getAuthenticatorAssuranceLevel.mockResolvedValue({
                 data: { currentLevel: 'aal1', nextLevel: 'aal1' },
@@ -182,13 +184,10 @@ describe('authProvider MFA', () => {
                 enforceMFA: true,
             });
 
-            await expect(authProvider.checkAuth({})).rejects.toEqual({
-                redirectTo: '/mfa-enroll',
-                message: false,
-            });
+            await expect(authProvider.checkAuth({})).rejects.toBeUndefined();
         });
 
-        it('should redirect to /mfa-challenge when session exists but aal1 -> aal2', async () => {
+        it('should reject to the login page when session exists but aal1 -> aal2', async () => {
             const client = createMockSupabaseClient();
             client.auth.mfa.getAuthenticatorAssuranceLevel.mockResolvedValue({
                 data: { currentLevel: 'aal1', nextLevel: 'aal2' },
@@ -199,10 +198,7 @@ describe('authProvider MFA', () => {
                 enforceMFA: true,
             });
 
-            await expect(authProvider.checkAuth({})).rejects.toEqual({
-                redirectTo: '/mfa-challenge',
-                message: false,
-            });
+            await expect(authProvider.checkAuth({})).rejects.toBeUndefined();
         });
 
         it('should allow access when user is at aal2', async () => {
@@ -275,7 +271,7 @@ describe('authProvider MFA', () => {
             expect(result).toEqual(mockEnrollResult);
         });
 
-        it('should unenroll existing factor with same friendlyName before enrolling', async () => {
+        it('should unenroll unverified factor with same friendlyName before enrolling', async () => {
             const client = createMockSupabaseClient();
             client.auth.mfa.listFactors.mockResolvedValue({
                 data: {
@@ -333,6 +329,65 @@ describe('authProvider MFA', () => {
             await authProvider.mfaEnroll({ factorType: 'totp' });
 
             expect(client.auth.mfa.unenroll).not.toHaveBeenCalled();
+        });
+
+        it('should not unenroll a verified factor with the same friendlyName', async () => {
+            const verifiedFactor = {
+                id: 'verified-factor',
+                friendly_name: 'My App',
+                factor_type: 'totp',
+                status: 'verified',
+            };
+            const client = createMockSupabaseClient();
+            client.auth.mfa.listFactors.mockResolvedValue({
+                data: {
+                    all: [verifiedFactor],
+                    totp: [verifiedFactor],
+                    phone: [],
+                },
+                error: null,
+            });
+
+            const authProvider = supabaseAuthProvider(client, {
+                mfaAppFriendlyName: 'My App',
+            });
+
+            await authProvider.mfaEnroll({ factorType: 'totp' });
+
+            expect(client.auth.mfa.unenroll).not.toHaveBeenCalled();
+        });
+
+        it('should throw without enrolling when unenrolling the stale factor fails', async () => {
+            const unenrollError = new Error('AAL2 required');
+            const client = createMockSupabaseClient();
+            client.auth.mfa.listFactors.mockResolvedValue({
+                data: {
+                    all: [
+                        {
+                            id: 'old-factor',
+                            friendly_name: 'My App',
+                            factor_type: 'totp',
+                            status: 'unverified',
+                        },
+                    ],
+                    totp: [],
+                    phone: [],
+                },
+                error: null,
+            });
+            client.auth.mfa.unenroll.mockResolvedValue({
+                data: null,
+                error: unenrollError,
+            });
+
+            const authProvider = supabaseAuthProvider(client, {
+                mfaAppFriendlyName: 'My App',
+            });
+
+            await expect(
+                authProvider.mfaEnroll({ factorType: 'totp' })
+            ).rejects.toBe(unenrollError);
+            expect(client.auth.mfa.enroll).not.toHaveBeenCalled();
         });
 
         it('should skip listFactors check when no friendlyName configured', async () => {

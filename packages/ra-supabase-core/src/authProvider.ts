@@ -187,26 +187,12 @@ export const supabaseAuthProvider = (
                 if (aalError) {
                     throw aalError;
                 }
-                const { currentLevel, nextLevel } = aalData;
-                if (currentLevel === 'aal1') {
-                    if (nextLevel === 'aal1') {
-                        // eslint-disable-next-line no-throw-literal
-                        throw {
-                            redirectTo: redirectTo
-                                ? `${redirectTo}/mfa-enroll`
-                                : '/mfa-enroll',
-                            message: false,
-                        };
-                    }
-                    if (nextLevel === 'aal2') {
-                        // eslint-disable-next-line no-throw-literal
-                        throw {
-                            redirectTo: redirectTo
-                                ? `${redirectTo}/mfa-challenge`
-                                : '/mfa-challenge',
-                            message: false,
-                        };
-                    }
+                // The user has not completed MFA enrollment or challenge.
+                // react-admin logs users out when checkAuth fails, so redirecting to
+                // the MFA pages would land them there without a session.
+                // Send them to the login page instead: login() redirects to the right MFA page.
+                if (aalData.currentLevel === 'aal1') {
+                    return Promise.reject();
                 }
             }
 
@@ -244,18 +230,27 @@ export const supabaseAuthProvider = (
                 );
             }
 
-            // If a friendly name is configured, unenroll any existing
-            // factor with the same name to avoid a name conflict error (422).
+            // If a friendly name is configured, unenroll any unverified factor
+            // with the same name, left over by an abandoned enrollment,
+            // to avoid a name conflict error (422). Verified factors are kept.
             if (mfaAppFriendlyName) {
-                const { data: factors } = await client.auth.mfa.listFactors();
-                if (factors) {
-                    const existingFactor = factors.all.find(
-                        f => f.friendly_name === mfaAppFriendlyName
-                    );
-                    if (existingFactor) {
+                const { data: factors, error: listError } =
+                    await client.auth.mfa.listFactors();
+                if (listError) {
+                    throw listError;
+                }
+                const staleFactor = factors.all.find(
+                    f =>
+                        f.status === 'unverified' &&
+                        f.friendly_name === mfaAppFriendlyName
+                );
+                if (staleFactor) {
+                    const { error: unenrollError } =
                         await client.auth.mfa.unenroll({
-                            factorId: existingFactor.id,
+                            factorId: staleFactor.id,
                         });
+                    if (unenrollError) {
+                        throw unenrollError;
                     }
                 }
             }

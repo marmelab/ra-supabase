@@ -2,7 +2,15 @@ import * as React from 'react';
 import { CoreAdminContext, TestMemoryRouter } from 'ra-core';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { InitialEntry } from 'react-router';
 import { MFAChallengeForm } from './MFAChallengeForm';
+
+const verifiedFactor = {
+    id: 'factor-123',
+    factor_type: 'totp',
+    friendly_name: 'Test App',
+    status: 'verified',
+};
 
 const mockEnrollResult = {
     id: 'factor-123',
@@ -31,22 +39,18 @@ const defaultAuthProvider = {
         user: { id: 'user-1' },
     }),
     mfaListFactors: jest.fn().mockResolvedValue({
-        all: [
-            {
-                id: 'factor-123',
-                factor_type: 'totp',
-                friendly_name: 'Test App',
-                status: 'verified',
-            },
-        ],
-        totp: [],
+        all: [verifiedFactor],
+        totp: [verifiedFactor],
         phone: [],
     }),
 };
 
-const renderForm = (authProvider = defaultAuthProvider) =>
+const renderForm = (
+    authProvider = defaultAuthProvider,
+    initialEntries?: InitialEntry[]
+) =>
     render(
-        <TestMemoryRouter>
+        <TestMemoryRouter initialEntries={initialEntries}>
             <CoreAdminContext authProvider={authProvider}>
                 <MFAChallengeForm />
             </CoreAdminContext>
@@ -91,6 +95,55 @@ describe('MFAChallengeForm', () => {
         await waitFor(() => {
             expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
                 factorId: 'factor-123',
+                code: '123456',
+            });
+        });
+    });
+
+    it('should ignore unverified factors', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaListFactors: jest.fn().mockResolvedValue({
+                all: [
+                    {
+                        id: 'stale-factor',
+                        factor_type: 'totp',
+                        friendly_name: 'Test App',
+                        status: 'unverified',
+                    },
+                    verifiedFactor,
+                ],
+                totp: [verifiedFactor],
+                phone: [],
+            }),
+        };
+        renderForm(authProvider);
+        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
+
+        await userEvent.type(screen.getByRole('textbox'), '123456');
+        await userEvent.click(screen.getByText('ra-supabase.action.verify'));
+
+        await waitFor(() => {
+            expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
+                factorId: 'factor-123',
+                code: '123456',
+            });
+        });
+    });
+
+    it('should verify the factor passed by the enroll form', async () => {
+        const authProvider = { ...defaultAuthProvider };
+        renderForm(authProvider, [
+            { pathname: '/mfa-challenge', state: { factorId: 'new-factor' } },
+        ]);
+        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
+
+        await userEvent.type(screen.getByRole('textbox'), '123456');
+        await userEvent.click(screen.getByText('ra-supabase.action.verify'));
+
+        await waitFor(() => {
+            expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
+                factorId: 'new-factor',
                 code: '123456',
             });
         });

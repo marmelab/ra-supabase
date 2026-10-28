@@ -18,9 +18,11 @@ import {
 import { useMFAChallengeAndVerify, useMFAListFactors } from 'ra-supabase-core';
 import { TextInput } from 'ra-ui-materialui';
 import * as React from 'react';
+import { useLocation } from 'react-router';
 
 export const MFAChallengeForm = () => {
     const translate = useTranslate();
+    const location = useLocation();
     const redirect = useRedirect();
     const notify = useNotify();
     const logout = useLogout();
@@ -33,17 +35,17 @@ export const MFAChallengeForm = () => {
     const { isPending, error } = mutation;
 
     const submit = async (values: FormData) => {
-        const totpFactor = factors?.all?.filter(
-            f => f.factor_type === 'totp'
-        )[0]; // TODO handle multiple factors
-        if (!totpFactor) {
+        // Verify the factor just enrolled when coming from MFAEnrollForm,
+        // otherwise the user's verified TOTP factor.
+        const factorId: string | undefined =
+            location.state?.factorId ?? factors?.totp?.[0]?.id; // TODO handle multiple factors
+        if (!factorId) {
             notify('ra-supabase.mfa.totp.no-factor-error', {
                 type: 'error',
                 messageArgs: { _: 'No TOTP factors found!' },
             });
             return;
         }
-        const factorId = totpFactor.id;
         mutate({
             code: values.code,
             factorId,
