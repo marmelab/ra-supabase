@@ -18,7 +18,7 @@ const login = (
 // is loaded, through a logout that also resets the form.
 const visitMfaDemo = () => {
     cy.intercept({ method: 'GET', pathname: '/rest/v1/' }).as('apiSchema');
-    cy.visit('/login?mode=mfa');
+    cy.visit('/mfa/login');
     cy.wait('@apiSchema');
 };
 
@@ -118,6 +118,10 @@ describe('MFA Authentication', () => {
             // Should be in the app
             assertOnApp();
 
+            // Should stay in the app after a reload
+            cy.reload();
+            assertOnApp();
+
             // Logout
             logout();
         });
@@ -153,7 +157,7 @@ describe('MFA Authentication', () => {
         cy.url().should('include', '/mfa-challenge');
 
         // Load the app directly with the aal1 session
-        cy.visit('/contacts?mode=mfa');
+        cy.visit('/mfa/contacts');
 
         cy.url({ timeout: 10000 }).should('include', '/login');
         cy.findByText('Sign in').should('exist');

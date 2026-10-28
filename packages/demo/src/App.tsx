@@ -13,6 +13,7 @@ import {
     Container,
     Stack,
 } from '@mui/material';
+import { BrowserRouter } from 'react-router-dom';
 
 const instanceUrl = import.meta.env.VITE_SUPABASE_URL;
 const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -33,18 +34,16 @@ const mfaAuthProvider = supabaseAuthProvider(supabaseClient, {
 
 type DemoMode = 'standard' | 'mfa';
 
+// The mode is the first path segment (e.g. /mfa/contacts), kept during
+// navigation by using it as the router basename
 const getMode = (): DemoMode | null => {
-    const params = new URLSearchParams(window.location.search);
-    const mode = params.get('mode');
+    const mode = window.location.pathname.split('/')[1];
     if (mode === 'standard' || mode === 'mfa') return mode;
     return null;
 };
 
 const setMode = (mode: DemoMode) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('mode', mode);
-    url.pathname = '/login';
-    window.location.href = url.toString();
+    window.location.href = `/${mode}/login`;
 };
 
 const MFALoginPage = () => (
@@ -144,24 +143,28 @@ const mode = getMode();
 const App = () => {
     if (mode === 'standard') {
         return (
-            <AdminGuesser
-                instanceUrl={instanceUrl}
-                apiKey={apiKey}
-                dataProvider={dataProvider}
-                authProvider={standardAuthProvider}
-            />
+            <BrowserRouter basename="/standard">
+                <AdminGuesser
+                    instanceUrl={instanceUrl}
+                    apiKey={apiKey}
+                    dataProvider={dataProvider}
+                    authProvider={standardAuthProvider}
+                />
+            </BrowserRouter>
         );
     }
 
     if (mode === 'mfa') {
         return (
-            <AdminGuesser
-                instanceUrl={instanceUrl}
-                apiKey={apiKey}
-                dataProvider={dataProvider}
-                authProvider={mfaAuthProvider}
-                loginPage={<MFALoginPage />}
-            />
+            <BrowserRouter basename="/mfa">
+                <AdminGuesser
+                    instanceUrl={instanceUrl}
+                    apiKey={apiKey}
+                    dataProvider={dataProvider}
+                    authProvider={mfaAuthProvider}
+                    loginPage={<MFALoginPage />}
+                />
+            </BrowserRouter>
         );
     }
 
