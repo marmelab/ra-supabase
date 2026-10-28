@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { CoreAdminContext, TestMemoryRouter } from 'ra-core';
+import { Notification } from 'ra-ui-materialui';
+import { QueryClient } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MFAUnenrollForm } from './MFAUnenrollForm';
@@ -30,11 +32,29 @@ const defaultAuthProvider = {
 const renderForm = (authProvider = defaultAuthProvider) =>
     render(
         <TestMemoryRouter>
-            <CoreAdminContext authProvider={authProvider}>
+            <CoreAdminContext
+                authProvider={authProvider}
+                queryClient={
+                    new QueryClient({
+                        defaultOptions: { queries: { retry: false } },
+                    })
+                }
+            >
                 <MFAUnenrollForm />
+                <Notification />
             </CoreAdminContext>
         </TestMemoryRouter>
     );
+
+const getUnenrollButton = () =>
+    screen.getByRole('button', { name: 'ra-supabase.action.unenroll' });
+
+const clickUnenrollWhenEnabled = async () => {
+    await waitFor(() => {
+        expect(getUnenrollButton().hasAttribute('disabled')).toBe(false);
+    });
+    await userEvent.click(getUnenrollButton());
+};
 
 describe('MFAUnenrollForm', () => {
     afterEach(() => {
@@ -59,9 +79,8 @@ describe('MFAUnenrollForm', () => {
     it('should call mfaUnenroll when Unenroll is clicked', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
 
-        await userEvent.click(screen.getByText('ra-supabase.action.unenroll'));
+        await clickUnenrollWhenEnabled();
 
         await waitFor(() => {
             expect(authProvider.mfaUnenroll).toHaveBeenCalledWith({
@@ -88,9 +107,8 @@ describe('MFAUnenrollForm', () => {
             }),
         };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
 
-        await userEvent.click(screen.getByText('ra-supabase.action.unenroll'));
+        await clickUnenrollWhenEnabled();
 
         await waitFor(() => {
             expect(authProvider.mfaUnenroll).toHaveBeenCalledWith({
@@ -99,7 +117,17 @@ describe('MFAUnenrollForm', () => {
         });
     });
 
-    it('should not call mfaUnenroll when no TOTP factors exist', async () => {
+    it('should disable Unenroll while factors are loading', async () => {
+        renderForm({
+            ...defaultAuthProvider,
+            mfaListFactors: jest.fn(() => new Promise(() => {})),
+        });
+        await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
+
+        expect(getUnenrollButton().hasAttribute('disabled')).toBe(true);
+    });
+
+    it('should notify that no TOTP factor exists', async () => {
         const authProvider = {
             ...defaultAuthProvider,
             mfaListFactors: jest.fn().mockResolvedValue({
@@ -109,12 +137,28 @@ describe('MFAUnenrollForm', () => {
             }),
         };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
 
-        await userEvent.click(screen.getByText('ra-supabase.action.unenroll'));
+        await clickUnenrollWhenEnabled();
 
-        await waitFor(() => {
-            expect(authProvider.mfaUnenroll).not.toHaveBeenCalled();
-        });
+        await screen.findByText('ra-supabase.mfa.totp.no-factor-error');
+        expect(authProvider.mfaUnenroll).not.toHaveBeenCalled();
+    });
+
+    it('should notify the error when factors fail to load', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaListFactors: jest
+                .fn()
+                .mockRejectedValue(new Error('Auth session missing!')),
+        };
+        renderForm(authProvider);
+
+        await clickUnenrollWhenEnabled();
+
+        await screen.findByText('Auth session missing!');
+        expect(
+            screen.queryByText('ra-supabase.mfa.totp.no-factor-error')
+        ).toBeNull();
+        expect(authProvider.mfaUnenroll).not.toHaveBeenCalled();
     });
 });

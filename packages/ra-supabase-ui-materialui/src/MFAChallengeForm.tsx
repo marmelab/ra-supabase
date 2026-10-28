@@ -26,19 +26,28 @@ export const MFAChallengeForm = () => {
     const redirect = useRedirect();
     const notify = useNotify();
     const logout = useLogout();
-    const { data: factors } = useMFAListFactors();
+    // Verify the factor just enrolled when coming from MFAEnrollForm,
+    // otherwise the user's verified TOTP factor.
+    const enrolledFactorId: string | undefined = location.state?.factorId;
+    const {
+        data: factors,
+        isPending: isLoadingFactors,
+        error: factorsError,
+    } = useMFAListFactors();
     const [mutate, mutation] = useMFAChallengeAndVerify({
         onSuccess: () => {
             redirect('/');
         },
     });
-    const { isPending } = mutation;
+    const isLoading =
+        mutation.isPending || (!enrolledFactorId && isLoadingFactors);
 
     const submit = async (values: FormData) => {
-        // Verify the factor just enrolled when coming from MFAEnrollForm,
-        // otherwise the user's verified TOTP factor.
-        const factorId: string | undefined =
-            location.state?.factorId ?? factors?.totp?.[0]?.id; // TODO handle multiple factors
+        if (!enrolledFactorId && factorsError) {
+            notify(factorsError.message, { type: 'error' });
+            return;
+        }
+        const factorId = enrolledFactorId ?? factors?.totp?.[0]?.id; // TODO handle multiple factors
         if (!factorId) {
             notify('ra-supabase.mfa.totp.no-factor-error', {
                 type: 'error',
@@ -129,9 +138,9 @@ export const MFAChallengeForm = () => {
                     variant="contained"
                     type="submit"
                     className={SupabaseMFAChallengeFormClasses.submitButton}
-                    disabled={isPending}
+                    disabled={isLoading}
                 >
-                    {isPending ? <CircularProgress size={24} /> : null}
+                    {isLoading ? <CircularProgress size={24} /> : null}
                     {translate('ra-supabase.action.verify', {
                         _: 'Verify',
                     })}

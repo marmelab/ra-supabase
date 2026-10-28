@@ -14,7 +14,11 @@ export const MFAUnenrollForm = () => {
     const translate = useTranslate();
     const redirect = useRedirect();
     const notify = useNotify();
-    const { data: factors } = useMFAListFactors();
+    const {
+        data: factors,
+        isPending: isLoadingFactors,
+        error: factorsError,
+    } = useMFAListFactors();
     const [mutate, mutation] = useMFAUnenroll({
         onSuccess: data => {
             notify(
@@ -26,9 +30,13 @@ export const MFAUnenrollForm = () => {
             redirect('/');
         },
     });
-    const { isPending } = mutation;
+    const isLoading = mutation.isPending || isLoadingFactors;
 
     const submit = async () => {
+        if (factorsError) {
+            notify(factorsError.message, { type: 'error' });
+            return;
+        }
         const totpFactor = factors?.totp?.[0]; // TODO handle multiple factors
         if (!totpFactor) {
             notify('ra-supabase.mfa.totp.no-factor-error', {
@@ -93,9 +101,9 @@ export const MFAUnenrollForm = () => {
                     onClick={() => {
                         submit();
                     }}
-                    disabled={isPending}
+                    disabled={isLoading}
                 >
-                    {isPending ? <CircularProgress size={24} /> : null}
+                    {isLoading ? <CircularProgress size={24} /> : null}
                     {translate('ra-supabase.action.unenroll', {
                         _: 'Unenroll',
                     })}

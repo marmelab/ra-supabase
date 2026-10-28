@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { CoreAdminContext, TestMemoryRouter } from 'ra-core';
+import { Notification } from 'ra-ui-materialui';
+import { QueryClient } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { InitialEntry } from 'react-router';
@@ -51,11 +53,30 @@ const renderForm = (
 ) =>
     render(
         <TestMemoryRouter initialEntries={initialEntries}>
-            <CoreAdminContext authProvider={authProvider}>
+            <CoreAdminContext
+                authProvider={authProvider}
+                queryClient={
+                    new QueryClient({
+                        defaultOptions: { queries: { retry: false } },
+                    })
+                }
+            >
                 <MFAChallengeForm />
+                <Notification />
             </CoreAdminContext>
         </TestMemoryRouter>
     );
+
+const getVerifyButton = () =>
+    screen.getByRole('button', { name: 'ra-supabase.action.verify' });
+
+const submitCodeWhenEnabled = async (code: string) => {
+    await userEvent.type(await screen.findByRole('textbox'), code);
+    await waitFor(() => {
+        expect(getVerifyButton().hasAttribute('disabled')).toBe(false);
+    });
+    await userEvent.click(getVerifyButton());
+};
 
 describe('MFAChallengeForm', () => {
     afterEach(() => {
@@ -86,11 +107,8 @@ describe('MFAChallengeForm', () => {
     it('should call mfaChallengeAndVerify on submit with correct params', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
 
-        const input = screen.getByRole('textbox');
-        await userEvent.type(input, '123456');
-        await userEvent.click(screen.getByText('ra-supabase.action.verify'));
+        await submitCodeWhenEnabled('123456');
 
         await waitFor(() => {
             expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
@@ -118,10 +136,8 @@ describe('MFAChallengeForm', () => {
             }),
         };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
 
-        await userEvent.type(screen.getByRole('textbox'), '123456');
-        await userEvent.click(screen.getByText('ra-supabase.action.verify'));
+        await submitCodeWhenEnabled('123456');
 
         await waitFor(() => {
             expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
@@ -131,15 +147,16 @@ describe('MFAChallengeForm', () => {
         });
     });
 
-    it('should verify the factor passed by the enroll form', async () => {
-        const authProvider = { ...defaultAuthProvider };
+    it('should verify the factor passed by the enroll form without waiting for factors', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaListFactors: jest.fn(() => new Promise(() => {})),
+        };
         renderForm(authProvider, [
             { pathname: '/mfa-challenge', state: { factorId: 'new-factor' } },
         ]);
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
 
-        await userEvent.type(screen.getByRole('textbox'), '123456');
-        await userEvent.click(screen.getByText('ra-supabase.action.verify'));
+        await submitCodeWhenEnabled('123456');
 
         await waitFor(() => {
             expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
@@ -147,6 +164,16 @@ describe('MFAChallengeForm', () => {
                 code: '123456',
             });
         });
+    });
+
+    it('should disable Verify while factors are loading', async () => {
+        renderForm({
+            ...defaultAuthProvider,
+            mfaListFactors: jest.fn(() => new Promise(() => {})),
+        });
+        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
+
+        expect(getVerifyButton().hasAttribute('disabled')).toBe(true);
     });
 
     it('should call logout when Cancel is clicked', async () => {
@@ -161,7 +188,7 @@ describe('MFAChallengeForm', () => {
         });
     });
 
-    it('should not call mfaChallengeAndVerify when no TOTP factors exist', async () => {
+    it('should notify that no TOTP factor exists', async () => {
         const authProvider = {
             ...defaultAuthProvider,
             mfaListFactors: jest.fn().mockResolvedValue({
@@ -171,14 +198,28 @@ describe('MFAChallengeForm', () => {
             }),
         };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
 
-        const input = screen.getByRole('textbox');
-        await userEvent.type(input, '123456');
-        await userEvent.click(screen.getByText('ra-supabase.action.verify'));
+        await submitCodeWhenEnabled('123456');
 
-        await waitFor(() => {
-            expect(authProvider.mfaChallengeAndVerify).not.toHaveBeenCalled();
-        });
+        await screen.findByText('ra-supabase.mfa.totp.no-factor-error');
+        expect(authProvider.mfaChallengeAndVerify).not.toHaveBeenCalled();
+    });
+
+    it('should notify the error when factors fail to load', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaListFactors: jest
+                .fn()
+                .mockRejectedValue(new Error('Auth session missing!')),
+        };
+        renderForm(authProvider);
+
+        await submitCodeWhenEnabled('123456');
+
+        await screen.findByText('Auth session missing!');
+        expect(
+            screen.queryByText('ra-supabase.mfa.totp.no-factor-error')
+        ).toBeNull();
+        expect(authProvider.mfaChallengeAndVerify).not.toHaveBeenCalled();
     });
 });
