@@ -27,7 +27,7 @@ export const MFAEnrollForm = () => {
             setSecret(data.totp.secret);
         },
     });
-    const { isPending, error } = mutation;
+    const { isPending } = mutation;
 
     const handleCancel = () => {
         if (!factorId) {
@@ -57,15 +57,7 @@ export const MFAEnrollForm = () => {
                         })}
                     </Typography>
 
-                    {error ? (
-                        <Typography sx={{ color: 'error.main' }}>
-                            {typeof error === 'string'
-                                ? error
-                                : error && error.message
-                                ? error.message
-                                : 'An error occurred'}
-                        </Typography>
-                    ) : isPending ? (
+                    {isPending ? (
                         <CircularProgress />
                     ) : (
                         <>
@@ -82,7 +74,15 @@ export const MFAEnrollForm = () => {
                                 )}
                             </Typography>
 
-                            {qr ? <img src={qr} alt="TOTP QR Code" /> : null}
+                            {qr ? (
+                                <img
+                                    src={qr}
+                                    alt={translate(
+                                        'ra-supabase.mfa.totp.qr-code-alt',
+                                        { _: 'TOTP QR Code' }
+                                    )}
+                                />
+                            ) : null}
                             {secret ? (
                                 <Button
                                     onClick={() =>
@@ -138,7 +138,7 @@ export const MFAEnrollForm = () => {
                             _: 'Next',
                         })}
                     </Button>
-                ) : !isPending && !error ? (
+                ) : !isPending ? (
                     <Button variant="contained" onClick={() => mutate()}>
                         {translate('ra-supabase.mfa.totp.enroll-start', {
                             _: 'Set up',

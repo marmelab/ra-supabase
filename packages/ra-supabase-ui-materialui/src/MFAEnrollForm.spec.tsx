@@ -87,6 +87,28 @@ describe('MFAEnrollForm', () => {
         });
     });
 
+    it('should allow to retry "Set up" after an enroll error', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaEnroll: jest
+                .fn()
+                .mockRejectedValueOnce(new Error('Network error'))
+                .mockResolvedValueOnce(mockEnrollResult),
+        };
+        renderForm(authProvider);
+        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+
+        await userEvent.click(
+            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+        );
+        await userEvent.click(
+            await screen.findByText('ra-supabase.mfa.totp.enroll-start')
+        );
+
+        await screen.findByAltText('ra-supabase.mfa.totp.qr-code-alt');
+        expect(authProvider.mfaEnroll).toHaveBeenCalledTimes(2);
+    });
+
     it('should show QR code and Next button after successful enroll', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
@@ -100,7 +122,9 @@ describe('MFAEnrollForm', () => {
             expect(authProvider.mfaEnroll).toHaveBeenCalled();
         });
 
-        const qrImage = await screen.findByAltText('TOTP QR Code');
+        const qrImage = await screen.findByAltText(
+            'ra-supabase.mfa.totp.qr-code-alt'
+        );
         expect(qrImage).toBeDefined();
         expect(qrImage.getAttribute('src')).toBe(
             'data:image/svg+xml;base64,PHN2Zz4='
@@ -124,7 +148,7 @@ describe('MFAEnrollForm', () => {
         await userEvent.click(
             screen.getByText('ra-supabase.mfa.totp.enroll-start')
         );
-        await screen.findByAltText('TOTP QR Code');
+        await screen.findByAltText('ra-supabase.mfa.totp.qr-code-alt');
         await userEvent.click(screen.getByText('ra-supabase.action.next'));
 
         await waitFor(() => {
@@ -154,7 +178,7 @@ describe('MFAEnrollForm', () => {
         await userEvent.click(
             screen.getByText('ra-supabase.mfa.totp.enroll-start')
         );
-        await screen.findByAltText('TOTP QR Code');
+        await screen.findByAltText('ra-supabase.mfa.totp.qr-code-alt');
 
         await userEvent.click(screen.getByText('ra.action.cancel'));
 
@@ -181,7 +205,7 @@ describe('MFAEnrollForm', () => {
         await userEvent.click(
             screen.getByText('ra-supabase.mfa.totp.enroll-start')
         );
-        await screen.findByAltText('TOTP QR Code');
+        await screen.findByAltText('ra-supabase.mfa.totp.qr-code-alt');
 
         await userEvent.click(screen.getByText('ra.action.cancel'));
 

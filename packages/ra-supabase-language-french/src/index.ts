@@ -38,6 +38,7 @@ export const raSupabaseFrenchMessages = {
                     "Activer l'authentification multi-facteurs (TOTP)",
                 'enroll-instructions':
                     "Utilisez une application d'authentification (telle que Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, ...) pour scanner le QR code ci-dessous puis cliquez sur Suivant.",
+                'qr-code-alt': 'QR code TOTP',
                 'secret-copied': 'Clé secrète copiée dans le presse-papiers',
                 'copy-secret-key-to-clipboard':
                     'Copier la clé secrète dans le presse-papiers',

@@ -32,7 +32,7 @@ export const MFAChallengeForm = () => {
             redirect('/');
         },
     });
-    const { isPending, error } = mutation;
+    const { isPending } = mutation;
 
     const submit = async (values: FormData) => {
         // Verify the factor just enrolled when coming from MFAEnrollForm,
@@ -110,16 +110,6 @@ export const MFAChallengeForm = () => {
                             }}
                         />
                     </Box>
-
-                    {error ? (
-                        <Typography sx={{ color: 'error.main' }}>
-                            {typeof error === 'string'
-                                ? error
-                                : error && error.message
-                                ? error.message
-                                : 'An error occurred'}
-                        </Typography>
-                    ) : null}
                 </div>
             </CardContent>
             <CardActions sx={{ justifyContent: 'end' }}>

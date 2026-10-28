@@ -36,6 +36,7 @@ export const raSupabaseEnglishMessages = {
                 'enroll-header': 'Enable Multi-Factor Authentication (TOTP)',
                 'enroll-instructions':
                     'Use an Authenticator app (such as Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, ...) to scan the QR code below and click Next.',
+                'qr-code-alt': 'TOTP QR Code',
                 'secret-copied': 'Secret key copied to clipboard',
                 'copy-secret-key-to-clipboard': 'Copy secret key to clipboard',
                 'enroll-start': 'Set up',

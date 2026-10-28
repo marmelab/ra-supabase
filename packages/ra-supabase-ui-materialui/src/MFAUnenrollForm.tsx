@@ -26,7 +26,7 @@ export const MFAUnenrollForm = () => {
             redirect('/');
         },
     });
-    const { isPending, error } = mutation;
+    const { isPending } = mutation;
 
     const submit = async () => {
         const totpFactor = factors?.totp?.[0]; // TODO handle multiple factors
@@ -73,16 +73,6 @@ export const MFAUnenrollForm = () => {
                             }
                         )}
                     </Typography>
-
-                    {error ? (
-                        <Typography sx={{ color: 'error.main' }}>
-                            {typeof error === 'string'
-                                ? error
-                                : error && error.message
-                                ? error.message
-                                : 'An error occurred'}
-                        </Typography>
-                    ) : null}
                 </Stack>
             </CardContent>
             <CardActions sx={{ justifyContent: 'end' }}>
