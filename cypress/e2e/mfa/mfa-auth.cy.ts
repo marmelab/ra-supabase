@@ -6,14 +6,21 @@ const login = (
     password: string = TEST_PASSWORD
 ) => {
     cy.intercept('POST', '**/auth/v1/token*').as('signIn');
-    cy.wait(1000);
     cy.findByLabelText('Email *').type(email);
     cy.findByLabelText('Password *').type(password);
     cy.findByText('Sign in').click();
     cy.wait('@signIn');
 };
 
-const visitMfaDemo = () => cy.visit('/?mode=mfa');
+// The guesser re-renders the login form once the API schema is loaded, losing
+// what was already typed: wait for the schema before typing.
+// Visit the login page directly, as visiting / redirects to it after the schema
+// is loaded, through a logout that also resets the form.
+const visitMfaDemo = () => {
+    cy.intercept({ method: 'GET', pathname: '/rest/v1/' }).as('apiSchema');
+    cy.visit('/login?mode=mfa');
+    cy.wait('@apiSchema');
+};
 
 const getPaginationText = () =>
     cy.findByText(/\d+-\d+ of \d+/, { timeout: 10000 });
@@ -170,6 +177,9 @@ describe('MFA Authentication', () => {
         cy.findByText('Verify').click();
 
         // Should stay on challenge page with an error
+        cy.findByText('Invalid TOTP code entered', { timeout: 10000 }).should(
+            'exist'
+        );
         cy.url().should('include', '/mfa-challenge');
     });
 });
