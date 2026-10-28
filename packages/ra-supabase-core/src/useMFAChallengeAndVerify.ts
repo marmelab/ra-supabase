@@ -9,7 +9,6 @@ import {
     MFAChallengeAndVerifyResult,
     SupabaseAuthProvider,
 } from './authProvider';
-import { defaultMFAOnError } from './defaultMFAOnError';
 
 export const useMFAChallengeAndVerify = (
     options?: UseMFAChallengeAndVerifyOptions
@@ -40,7 +39,10 @@ export const useMFAChallengeAndVerify = (
         );
     }
 
-    const { onSuccess, onError = defaultMFAOnError(notify) } = options || {};
+    const {
+        onSuccess,
+        onError = error => notify(error.message, { type: 'error' }),
+    } = options || {};
 
     const mutation = useMutation<
         MFAChallengeAndVerifyResult,

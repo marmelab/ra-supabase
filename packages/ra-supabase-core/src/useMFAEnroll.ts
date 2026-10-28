@@ -5,7 +5,6 @@ import {
 } from '@tanstack/react-query';
 import { useAuthProvider, useNotify } from 'ra-core';
 import { MFAEnrollResult, SupabaseAuthProvider } from './authProvider';
-import { defaultMFAOnError } from './defaultMFAOnError';
 
 export const useMFAEnroll = (
     options?: UseMFAEnrollOptions
@@ -28,7 +27,10 @@ export const useMFAEnroll = (
         );
     }
 
-    const { onSuccess, onError = defaultMFAOnError(notify) } = options || {};
+    const {
+        onSuccess,
+        onError = error => notify(error.message, { type: 'error' }),
+    } = options || {};
 
     const mutation = useMutation<MFAEnrollResult, Error, void>({
         mutationFn: () => {

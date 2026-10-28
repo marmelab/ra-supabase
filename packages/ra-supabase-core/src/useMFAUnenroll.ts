@@ -9,7 +9,6 @@ import {
     MFAUnenrollParams,
     SupabaseAuthProvider,
 } from './authProvider';
-import { defaultMFAOnError } from './defaultMFAOnError';
 
 export const useMFAUnenroll = (
     options?: UseMFAUnenrollOptions
@@ -32,7 +31,10 @@ export const useMFAUnenroll = (
         );
     }
 
-    const { onSuccess, onError = defaultMFAOnError(notify) } = options || {};
+    const {
+        onSuccess,
+        onError = error => notify(error.message, { type: 'error' }),
+    } = options || {};
 
     const mutation = useMutation<MFAUnenrollResult, Error, MFAUnenrollParams>({
         mutationFn: params => {
