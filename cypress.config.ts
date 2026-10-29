@@ -1,12 +1,26 @@
+import path from 'path';
 import { defineConfig } from 'cypress';
 import { generateSync } from 'otplib';
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = 'http://localhost:54321';
-const SUPABASE_ANON_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
-const SUPABASE_SERVICE_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU';
+// Created from .env.local-example by `make install` and in CI
+const ENV_FILE = path.join(__dirname, 'packages/demo/.env');
+// ponytail: @types/node 18 lacks loadEnvFile (Node >= 20.12), drop the cast once @types/node is upgraded
+(process as unknown as { loadEnvFile(path: string): void }).loadEnvFile(
+    ENV_FILE
+);
+
+const getEnv = (name: string) => {
+    const value = process.env[name];
+    if (!value) {
+        throw new Error(`${name} is missing from ${ENV_FILE}`);
+    }
+    return value;
+};
+
+const SUPABASE_URL = getEnv('VITE_SUPABASE_URL');
+const SUPABASE_ANON_KEY = getEnv('VITE_SUPABASE_ANON_KEY');
+const SUPABASE_SERVICE_KEY = getEnv('SUPABASE_SERVICE_KEY');
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
