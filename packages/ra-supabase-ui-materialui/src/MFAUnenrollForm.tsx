@@ -22,7 +22,7 @@ export const MFAUnenrollForm = () => {
     const [mutate, mutation] = useMFAUnenroll({
         onSuccess: data => {
             notify(
-                translate('ra-supabase.mfa.totp.unenroll-success', {
+                translate('ra-supabase.mfa.totp.unenroll_success', {
                     _: 'Successfully unenrolled from TOTP MFA',
                 }),
                 { type: 'success' }
@@ -39,7 +39,7 @@ export const MFAUnenrollForm = () => {
         }
         const totpFactor = factors?.totp?.[0]; // TODO handle multiple factors
         if (!totpFactor) {
-            notify('ra-supabase.mfa.totp.no-factor-error', {
+            notify('ra-supabase.mfa.totp.no_factor_error', {
                 type: 'error',
                 messageArgs: { _: 'No TOTP factors found!' },
             });
@@ -64,7 +64,7 @@ export const MFAUnenrollForm = () => {
                             textAlign: 'center',
                         }}
                     >
-                        {translate('ra-supabase.mfa.totp.unenroll-header', {
+                        {translate('ra-supabase.mfa.totp.unenroll_header', {
                             _: 'Unenroll from Multi-Factor Authentication (TOTP)',
                         })}
                     </Typography>
@@ -75,7 +75,7 @@ export const MFAUnenrollForm = () => {
                         }}
                     >
                         {translate(
-                            'ra-supabase.mfa.totp.unenroll-instructions',
+                            'ra-supabase.mfa.totp.unenroll_instructions',
                             {
                                 _: 'Click the button below to unenroll from TOTP MFA. Be warned that you may lose access to some or all features of this application if you do not have another MFA method set up. You can always enroll again later.',
                             }

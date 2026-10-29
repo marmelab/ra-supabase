@@ -49,7 +49,7 @@ export const MFAChallengeForm = () => {
         }
         const factorId = enrolledFactorId ?? factors?.totp?.[0]?.id; // TODO handle multiple factors
         if (!factorId) {
-            notify('ra-supabase.mfa.totp.no-factor-error', {
+            notify('ra-supabase.mfa.totp.no_factor_error', {
                 type: 'error',
                 messageArgs: { _: 'No TOTP factors found!' },
             });
@@ -74,7 +74,7 @@ export const MFAChallengeForm = () => {
                             textAlign: 'center',
                         }}
                     >
-                        {translate('ra-supabase.mfa.totp.challenge-header', {
+                        {translate('ra-supabase.mfa.totp.challenge_header', {
                             _: 'Enter your TOTP code',
                         })}
                     </Typography>
@@ -85,7 +85,7 @@ export const MFAChallengeForm = () => {
                         }}
                     >
                         {translate(
-                            'ra-supabase.mfa.totp.challenge-instructions',
+                            'ra-supabase.mfa.totp.challenge_instructions',
                             {
                                 _: 'Enter the TOTP code from your Authenticator app to verify your identity.',
                             }

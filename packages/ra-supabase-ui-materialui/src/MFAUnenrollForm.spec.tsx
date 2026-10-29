@@ -63,15 +63,15 @@ describe('MFAUnenrollForm', () => {
 
     it('should render the unenroll header and instructions', async () => {
         renderForm();
-        await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.unenroll_header');
         expect(
-            screen.getByText('ra-supabase.mfa.totp.unenroll-instructions')
+            screen.getByText('ra-supabase.mfa.totp.unenroll_instructions')
         ).toBeDefined();
     });
 
     it('should render Unenroll and Cancel buttons', async () => {
         renderForm();
-        await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.unenroll_header');
         expect(screen.getByText('ra-supabase.action.unenroll')).toBeDefined();
         expect(screen.getByText('ra.action.cancel')).toBeDefined();
     });
@@ -122,7 +122,7 @@ describe('MFAUnenrollForm', () => {
             ...defaultAuthProvider,
             mfaListFactors: jest.fn(() => new Promise(() => {})),
         });
-        await screen.findByText('ra-supabase.mfa.totp.unenroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.unenroll_header');
 
         expect(getUnenrollButton().hasAttribute('disabled')).toBe(true);
     });
@@ -140,7 +140,7 @@ describe('MFAUnenrollForm', () => {
 
         await clickUnenrollWhenEnabled();
 
-        await screen.findByText('ra-supabase.mfa.totp.no-factor-error');
+        await screen.findByText('ra-supabase.mfa.totp.no_factor_error');
         expect(authProvider.mfaUnenroll).not.toHaveBeenCalled();
     });
 
@@ -157,7 +157,7 @@ describe('MFAUnenrollForm', () => {
 
         await screen.findByText('Auth session missing!');
         expect(
-            screen.queryByText('ra-supabase.mfa.totp.no-factor-error')
+            screen.queryByText('ra-supabase.mfa.totp.no_factor_error')
         ).toBeNull();
         expect(authProvider.mfaUnenroll).not.toHaveBeenCalled();
     });

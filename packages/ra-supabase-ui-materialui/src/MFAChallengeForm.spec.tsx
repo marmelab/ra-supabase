@@ -85,21 +85,21 @@ describe('MFAChallengeForm', () => {
 
     it('should render the challenge header and instructions', async () => {
         renderForm();
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
         expect(
-            screen.getByText('ra-supabase.mfa.totp.challenge-instructions')
+            screen.getByText('ra-supabase.mfa.totp.challenge_instructions')
         ).toBeDefined();
     });
 
     it('should render the code input', async () => {
         renderForm();
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
         expect(screen.getByRole('textbox')).toBeDefined();
     });
 
     it('should render Verify and Cancel buttons', async () => {
         renderForm();
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
         expect(screen.getByText('ra-supabase.action.verify')).toBeDefined();
         expect(screen.getByText('ra.action.cancel')).toBeDefined();
     });
@@ -171,7 +171,7 @@ describe('MFAChallengeForm', () => {
             ...defaultAuthProvider,
             mfaListFactors: jest.fn(() => new Promise(() => {})),
         });
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
 
         expect(getVerifyButton().hasAttribute('disabled')).toBe(true);
     });
@@ -179,7 +179,7 @@ describe('MFAChallengeForm', () => {
     it('should call logout when Cancel is clicked', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.challenge-header');
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
 
         await userEvent.click(screen.getByText('ra.action.cancel'));
 
@@ -201,7 +201,7 @@ describe('MFAChallengeForm', () => {
 
         await submitCodeWhenEnabled('123456');
 
-        await screen.findByText('ra-supabase.mfa.totp.no-factor-error');
+        await screen.findByText('ra-supabase.mfa.totp.no_factor_error');
         expect(authProvider.mfaChallengeAndVerify).not.toHaveBeenCalled();
     });
 
@@ -218,7 +218,7 @@ describe('MFAChallengeForm', () => {
 
         await screen.findByText('Auth session missing!');
         expect(
-            screen.queryByText('ra-supabase.mfa.totp.no-factor-error')
+            screen.queryByText('ra-supabase.mfa.totp.no_factor_error')
         ).toBeNull();
         expect(authProvider.mfaChallengeAndVerify).not.toHaveBeenCalled();
     });

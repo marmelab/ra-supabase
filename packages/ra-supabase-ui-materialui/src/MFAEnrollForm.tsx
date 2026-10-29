@@ -52,7 +52,7 @@ export const MFAEnrollForm = () => {
                             textAlign: 'center',
                         }}
                     >
-                        {translate('ra-supabase.mfa.totp.enroll-header', {
+                        {translate('ra-supabase.mfa.totp.enroll_header', {
                             _: 'Enable Multi-Factor Authentication (TOTP)',
                         })}
                     </Typography>
@@ -67,7 +67,7 @@ export const MFAEnrollForm = () => {
                                 }}
                             >
                                 {translate(
-                                    'ra-supabase.mfa.totp.enroll-instructions',
+                                    'ra-supabase.mfa.totp.enroll_instructions',
                                     {
                                         _: 'Use an Authenticator app (such as Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, ...) to scan the QR code below and click Next.',
                                     }
@@ -78,7 +78,7 @@ export const MFAEnrollForm = () => {
                                 <img
                                     src={qr}
                                     alt={translate(
-                                        'ra-supabase.mfa.totp.qr-code-alt',
+                                        'ra-supabase.mfa.totp.qr_code_alt',
                                         { _: 'TOTP QR Code' }
                                     )}
                                 />
@@ -90,7 +90,7 @@ export const MFAEnrollForm = () => {
                                             .writeText(secret)
                                             .then(() =>
                                                 notify(
-                                                    'ra-supabase.mfa.totp.secret-copied',
+                                                    'ra-supabase.mfa.totp.secret_copied',
                                                     {
                                                         type: 'info',
                                                         messageArgs: {
@@ -103,7 +103,7 @@ export const MFAEnrollForm = () => {
                                     variant="text"
                                 >
                                     {translate(
-                                        'ra-supabase.mfa.totp.copy-secret-key-to-clipboard',
+                                        'ra-supabase.mfa.totp.copy_secret_key_to_clipboard',
                                         {
                                             _: 'Copy secret key to clipboard',
                                         }
@@ -140,7 +140,7 @@ export const MFAEnrollForm = () => {
                     </Button>
                 ) : !isPending ? (
                     <Button variant="contained" onClick={() => mutate()}>
-                        {translate('ra-supabase.mfa.totp.enroll-start', {
+                        {translate('ra-supabase.mfa.totp.enroll_start', {
                             _: 'Set up',
                         })}
                     </Button>

@@ -51,33 +51,33 @@ describe('MFAEnrollForm', () => {
 
     it('should render the enroll header and instructions', async () => {
         renderForm();
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
         expect(
-            screen.getByText('ra-supabase.mfa.totp.enroll-instructions')
+            screen.getByText('ra-supabase.mfa.totp.enroll_instructions')
         ).toBeDefined();
     });
 
     it('should render "Set up" button initially', async () => {
         renderForm();
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
         expect(
-            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
         ).toBeDefined();
     });
 
     it('should render Cancel button', async () => {
         renderForm();
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
         expect(screen.getByText('ra.action.cancel')).toBeDefined();
     });
 
     it('should call mfaEnroll when "Set up" is clicked', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
 
         await userEvent.click(
-            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
         );
 
         await waitFor(() => {
@@ -96,26 +96,26 @@ describe('MFAEnrollForm', () => {
                 .mockResolvedValueOnce(mockEnrollResult),
         };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
 
         await userEvent.click(
-            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
         );
         await userEvent.click(
-            await screen.findByText('ra-supabase.mfa.totp.enroll-start')
+            await screen.findByText('ra-supabase.mfa.totp.enroll_start')
         );
 
-        await screen.findByAltText('ra-supabase.mfa.totp.qr-code-alt');
+        await screen.findByAltText('ra-supabase.mfa.totp.qr_code_alt');
         expect(authProvider.mfaEnroll).toHaveBeenCalledTimes(2);
     });
 
     it('should show QR code and Next button after successful enroll', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
 
         await userEvent.click(
-            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
         );
 
         await waitFor(() => {
@@ -123,7 +123,7 @@ describe('MFAEnrollForm', () => {
         });
 
         const qrImage = await screen.findByAltText(
-            'ra-supabase.mfa.totp.qr-code-alt'
+            'ra-supabase.mfa.totp.qr_code_alt'
         );
         expect(qrImage).toBeDefined();
         expect(qrImage.getAttribute('src')).toBe(
@@ -133,7 +133,7 @@ describe('MFAEnrollForm', () => {
         expect(screen.getByText('ra-supabase.action.next')).toBeDefined();
         expect(
             screen.getByText(
-                'ra-supabase.mfa.totp.copy-secret-key-to-clipboard'
+                'ra-supabase.mfa.totp.copy_secret_key_to_clipboard'
             )
         ).toBeDefined();
     });
@@ -143,12 +143,12 @@ describe('MFAEnrollForm', () => {
         renderForm(defaultAuthProvider, l => {
             location = l;
         });
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
 
         await userEvent.click(
-            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
         );
-        await screen.findByAltText('ra-supabase.mfa.totp.qr-code-alt');
+        await screen.findByAltText('ra-supabase.mfa.totp.qr_code_alt');
         await userEvent.click(screen.getByText('ra-supabase.action.next'));
 
         await waitFor(() => {
@@ -160,7 +160,7 @@ describe('MFAEnrollForm', () => {
     it('should call logout when Cancel is clicked before enroll', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
 
         await userEvent.click(screen.getByText('ra.action.cancel'));
 
@@ -173,12 +173,12 @@ describe('MFAEnrollForm', () => {
     it('should unenroll and logout when Cancel is clicked after enroll', async () => {
         const authProvider = { ...defaultAuthProvider };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
 
         await userEvent.click(
-            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
         );
-        await screen.findByAltText('ra-supabase.mfa.totp.qr-code-alt');
+        await screen.findByAltText('ra-supabase.mfa.totp.qr_code_alt');
 
         await userEvent.click(screen.getByText('ra.action.cancel'));
 
@@ -200,12 +200,12 @@ describe('MFAEnrollForm', () => {
                 .mockRejectedValue(new Error('Network error')),
         };
         renderForm(authProvider);
-        await screen.findByText('ra-supabase.mfa.totp.enroll-header');
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
 
         await userEvent.click(
-            screen.getByText('ra-supabase.mfa.totp.enroll-start')
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
         );
-        await screen.findByAltText('ra-supabase.mfa.totp.qr-code-alt');
+        await screen.findByAltText('ra-supabase.mfa.totp.qr_code_alt');
 
         await userEvent.click(screen.getByText('ra.action.cancel'));
 

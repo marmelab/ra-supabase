@@ -29,25 +29,25 @@ export const raSupabaseFrenchMessages = {
         },
         mfa: {
             totp: {
-                'challenge-header': 'Entrez votre code TOTP',
-                'challenge-instructions':
+                challenge_header: 'Entrez votre code TOTP',
+                challenge_instructions:
                     "Entrez le code TOTP de votre application d'authentification pour vérifier votre identité.",
                 code: 'Code',
-                'no-factor-error': 'Aucun facteur TOTP trouvé !',
-                'enroll-header':
+                no_factor_error: 'Aucun facteur TOTP trouvé !',
+                enroll_header:
                     "Activer l'authentification multi-facteurs (TOTP)",
-                'enroll-instructions':
+                enroll_instructions:
                     "Utilisez une application d'authentification (telle que Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, ...) pour scanner le QR code ci-dessous puis cliquez sur Suivant.",
-                'qr-code-alt': 'QR code TOTP',
-                'secret-copied': 'Clé secrète copiée dans le presse-papiers',
-                'copy-secret-key-to-clipboard':
+                qr_code_alt: 'QR code TOTP',
+                secret_copied: 'Clé secrète copiée dans le presse-papiers',
+                copy_secret_key_to_clipboard:
                     'Copier la clé secrète dans le presse-papiers',
-                'enroll-start': 'Configurer',
-                'unenroll-header':
+                enroll_start: 'Configurer',
+                unenroll_header:
                     "Désactiver l'authentification multi-facteurs (TOTP)",
-                'unenroll-instructions':
+                unenroll_instructions:
                     "Cliquez sur le bouton ci-dessous pour désactiver l'authentification TOTP. Attention, vous pourriez perdre l'accès à certaines ou toutes les fonctionnalités de cette application si vous n'avez pas configuré une autre méthode d'authentification multi-facteurs. Vous pourrez toujours vous réinscrire ultérieurement.",
-                'unenroll-success':
+                unenroll_success:
                     "Désinscription de l'authentification TOTP réussie",
             },
         },
