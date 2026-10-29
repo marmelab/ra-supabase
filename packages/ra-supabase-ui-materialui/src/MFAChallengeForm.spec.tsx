@@ -4,7 +4,7 @@ import { Notification } from 'ra-ui-materialui';
 import { QueryClient } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import type { InitialEntry } from 'react-router';
+import type { InitialEntry, Location } from 'react-router';
 import { MFAChallengeForm } from './MFAChallengeForm';
 
 const verifiedFactor = {
@@ -65,10 +65,14 @@ const defaultAuthProvider = {
 
 const renderForm = (
     authProvider = defaultAuthProvider,
-    initialEntries?: InitialEntry[]
+    initialEntries?: InitialEntry[],
+    locationCallback?: (location: Location) => void
 ) =>
     render(
-        <TestMemoryRouter initialEntries={initialEntries}>
+        <TestMemoryRouter
+            initialEntries={initialEntries}
+            locationCallback={locationCallback}
+        >
             <CoreAdminContext
                 authProvider={authProvider}
                 queryClient={
@@ -92,6 +96,16 @@ const submitCodeWhenEnabled = async (code: string) => {
         expect(getVerifyButton().hasAttribute('disabled')).toBe(false);
     });
     await userEvent.click(getVerifyButton());
+};
+
+const getCancelButton = () =>
+    screen.getByRole('button', { name: 'ra.action.cancel' });
+
+const clickCancelWhenEnabled = async () => {
+    await waitFor(() => {
+        expect(getCancelButton().hasAttribute('disabled')).toBe(false);
+    });
+    await userEvent.click(getCancelButton());
 };
 
 describe('MFAChallengeForm', () => {
@@ -248,6 +262,50 @@ describe('MFAChallengeForm', () => {
         await waitFor(() => {
             expect(authProvider.logout).toHaveBeenCalled();
         });
+    });
+
+    it('should call logout without unenrolling when Cancel is clicked after enrolling a first factor', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaListFactors: jest.fn().mockResolvedValue({
+                all: [],
+                totp: [],
+                phone: [],
+            }),
+        };
+        renderForm(authProvider, [
+            { pathname: '/mfa-challenge', state: { factorId: 'new-factor' } },
+        ]);
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
+
+        await clickCancelWhenEnabled();
+
+        await waitFor(() => {
+            expect(authProvider.logout).toHaveBeenCalled();
+        });
+        expect(authProvider.mfaUnenroll).not.toHaveBeenCalled();
+    });
+
+    it('should unenroll the new factor and go back to the app when Cancel is clicked by a user adding a factor', async () => {
+        let location: Location | undefined;
+        renderForm(
+            defaultAuthProvider,
+            [{ pathname: '/mfa-challenge', state: { factorId: 'new-factor' } }],
+            l => {
+                location = l;
+            }
+        );
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
+
+        await clickCancelWhenEnabled();
+
+        await waitFor(() => {
+            expect(location?.pathname).toBe('/');
+        });
+        expect(defaultAuthProvider.mfaUnenroll).toHaveBeenCalledWith({
+            factorId: 'new-factor',
+        });
+        expect(defaultAuthProvider.logout).not.toHaveBeenCalled();
     });
 
     it('should notify that no TOTP factor exists', async () => {

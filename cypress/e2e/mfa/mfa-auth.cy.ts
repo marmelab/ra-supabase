@@ -160,6 +160,16 @@ describe('MFA Authentication', () => {
             verify(secret1 as string);
         });
 
+        // Cancelling the addition of an authenticator goes back to the app
+        openUserMenuItem('Add an authenticator');
+        cy.url().should('include', '/mfa-enroll');
+        cy.findByText('Set up').click();
+        cy.findByAltText('TOTP QR Code', { timeout: 10000 }).should(
+            'be.visible'
+        );
+        cy.findByText('Cancel').click();
+        assertOnApp();
+
         // Add a second authenticator from the user menu
         openUserMenuItem('Add an authenticator');
         cy.url().should('include', '/mfa-enroll');

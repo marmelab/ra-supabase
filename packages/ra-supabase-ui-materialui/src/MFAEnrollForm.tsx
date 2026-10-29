@@ -7,7 +7,11 @@ import {
     Typography,
 } from '@mui/material';
 import { useLogout, useNotify, useRedirect, useTranslate } from 'ra-core';
-import { useMFAEnroll, useMFAUnenroll } from 'ra-supabase-core';
+import {
+    useMFAEnroll,
+    useMFAListFactors,
+    useMFAUnenroll,
+} from 'ra-supabase-core';
 import * as React from 'react';
 import { useState } from 'react';
 
@@ -28,15 +32,21 @@ export const MFAEnrollForm = () => {
         },
     });
     const { isPending } = mutation;
+    const { data: factors, isPending: isLoadingFactors } = useMFAListFactors();
 
     const handleCancel = () => {
+        // Users with a verified factor are adding another one from the app:
+        // send them back to it instead of logging them out
+        const leave = factors?.totp?.length
+            ? () => redirect('/')
+            : () => logout();
         if (!factorId) {
-            logout();
+            leave();
             return;
         }
-        // Log out even if unenroll fails (useMFAUnenroll notifies the error),
+        // Leave even if unenroll fails (useMFAUnenroll notifies the error),
         // as Cancel is the only way out of this page
-        unenroll({ factorId }, { onSettled: () => logout() });
+        unenroll({ factorId }, { onSettled: leave });
     };
 
     return (
@@ -115,7 +125,12 @@ export const MFAEnrollForm = () => {
                 </Stack>
             </CardContent>
             <CardActions sx={{ justifyContent: 'end' }}>
-                <Button variant="outlined" type="button" onClick={handleCancel}>
+                <Button
+                    variant="outlined"
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={isLoadingFactors}
+                >
                     {translate('ra.action.cancel', {
                         _: 'Cancel',
                     })}
