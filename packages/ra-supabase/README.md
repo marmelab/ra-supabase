@@ -648,7 +648,8 @@ import { supabaseAuthProvider } from 'ra-supabase';
 
 const authProvider = supabaseAuthProvider(supabaseClient, {
     enforceMFA: true,
-    // Optional: a friendly name shown in the user's authenticator app
+    // Optional: a name for the user's TOTP factors, numbered past the first one
+    // (My Admin App, My Admin App 2...). Shown when users pick one of their factors.
     mfaAppFriendlyName: 'My Admin App',
 });
 ```
@@ -732,9 +733,9 @@ export const MyAdmin = () => (
 
 `ra-supabase` provides three MFA pages, each with a default form that can be overridden via `children`:
 
-- **`<MFAEnrollPage>`** (`/mfa-enroll`) — Displays a QR code for the user to scan with their authenticator app (Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, etc.). Also provides a button to copy the secret key to the clipboard.
-- **`<MFAChallengePage>`** (`/mfa-challenge`) — Prompts the user to enter the 6-digit TOTP code from their authenticator app.
-- **`<MFAUnenrollPage>`** (`/mfa-unenroll`) — Allows the user to unenroll from TOTP MFA. You can link to this page from a settings or profile page.
+- **`<MFAEnrollPage>`** (`/mfa-enroll`) — Displays a QR code for the user to scan with their authenticator app (Google Authenticator, Microsoft Authenticator, Bitwarden Authenticator, etc.). Also provides a button to copy the secret key to the clipboard. Link to this page from a settings or profile page to let users add another authenticator: cancelling then brings them back to the app instead of logging them out.
+- **`<MFAChallengePage>`** (`/mfa-challenge`) — Prompts the user to enter the 6-digit TOTP code from their authenticator app. Users with several factors first pick the one to verify.
+- **`<MFAUnenrollPage>`** (`/mfa-unenroll`) — Allows the user to unenroll from TOTP MFA. Users with several factors pick the one to remove. You can link to this page from a settings or profile page.
 
 #### MFA Hooks
 
@@ -746,6 +747,8 @@ For building custom MFA flows, `ra-supabase-core` exposes the following hooks:
 - **`useMFAListFactors(options?)`** — Lists all MFA factors for the current user.
 
 Each mutation hook returns a `[mutate, mutation]` tuple (like react-admin's mutation hooks), and accepts `onSuccess` and `onError` callbacks.
+
+`ra-supabase-ui-materialui` also exports `<MFAFactorInput factors={...} />`, used by the default challenge and unenroll forms. It lets users pick one of the given factors (stored in the `factorId` form field), and renders nothing when there is only one.
 
 ### OAuth Authentication
 

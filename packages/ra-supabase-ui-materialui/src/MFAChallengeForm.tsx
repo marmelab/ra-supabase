@@ -15,10 +15,15 @@ import {
     useRedirect,
     useTranslate,
 } from 'ra-core';
-import { useMFAChallengeAndVerify, useMFAListFactors } from 'ra-supabase-core';
+import {
+    useMFAChallengeAndVerify,
+    useMFAListFactors,
+    useMFAUnenroll,
+} from 'ra-supabase-core';
 import { TextInput } from 'ra-ui-materialui';
 import * as React from 'react';
 import { useLocation } from 'react-router';
+import { MFAFactorInput } from './MFAFactorInput';
 
 export const MFAChallengeForm = () => {
     const translate = useTranslate();
@@ -39,15 +44,30 @@ export const MFAChallengeForm = () => {
             redirect('/');
         },
     });
+    const [unenroll] = useMFAUnenroll();
     const isLoading =
         mutation.isPending || (!enrolledFactorId && isLoadingFactors);
+
+    const handleCancel = () => {
+        if (!enrolledFactorId || !factors?.totp?.length) {
+            logout();
+            return;
+        }
+        // Users with a verified factor are adding another one from the app:
+        // drop the new factor and send them back to the app instead of logging them out
+        unenroll(
+            { factorId: enrolledFactorId },
+            { onSettled: () => redirect('/') }
+        );
+    };
 
     const submit = async (values: FormData) => {
         if (!enrolledFactorId && factorsError) {
             notify(factorsError.message, { type: 'error' });
             return;
         }
-        const factorId = enrolledFactorId ?? factors?.totp?.[0]?.id; // TODO handle multiple factors
+        const factorId =
+            enrolledFactorId ?? values.factorId ?? factors?.totp?.[0]?.id;
         if (!factorId) {
             notify('ra-supabase.mfa.totp.no_factor_error', {
                 type: 'error',
@@ -92,6 +112,10 @@ export const MFAChallengeForm = () => {
                         )}
                     </Typography>
 
+                    {enrolledFactorId ? null : (
+                        <MFAFactorInput factors={factors?.totp ?? []} />
+                    )}
+
                     <Box
                         className={SupabaseMFAChallengeFormClasses.input}
                         sx={{ display: 'flex', justifyContent: 'center' }}
@@ -126,9 +150,8 @@ export const MFAChallengeForm = () => {
                     variant="outlined"
                     type="button"
                     className={SupabaseMFAChallengeFormClasses.cancelButton}
-                    onClick={() => {
-                        logout();
-                    }}
+                    onClick={handleCancel}
+                    disabled={!!enrolledFactorId && isLoadingFactors}
                 >
                     {translate('ra.action.cancel', {
                         _: 'Cancel',
@@ -152,6 +175,7 @@ export const MFAChallengeForm = () => {
 
 interface FormData {
     code: string;
+    factorId?: string;
 }
 
 const PREFIX = 'RaSupabaseMFAChallengeForm';

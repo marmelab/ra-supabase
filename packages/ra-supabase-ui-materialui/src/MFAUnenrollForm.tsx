@@ -6,9 +6,10 @@ import {
     Stack,
     Typography,
 } from '@mui/material';
-import { useNotify, useRedirect, useTranslate } from 'ra-core';
+import { Form, useNotify, useRedirect, useTranslate } from 'ra-core';
 import { useMFAListFactors, useMFAUnenroll } from 'ra-supabase-core';
 import * as React from 'react';
+import { MFAFactorInput } from './MFAFactorInput';
 
 export const MFAUnenrollForm = () => {
     const translate = useTranslate();
@@ -32,27 +33,26 @@ export const MFAUnenrollForm = () => {
     });
     const isLoading = mutation.isPending || isLoadingFactors;
 
-    const submit = async () => {
+    const submit = async (values: FormData) => {
         if (factorsError) {
             notify(factorsError.message, { type: 'error' });
             return;
         }
-        const totpFactor = factors?.totp?.[0]; // TODO handle multiple factors
-        if (!totpFactor) {
+        const factorId = values.factorId ?? factors?.totp?.[0]?.id;
+        if (!factorId) {
             notify('ra-supabase.mfa.totp.no_factor_error', {
                 type: 'error',
                 messageArgs: { _: 'No TOTP factors found!' },
             });
             return;
         }
-        const factorId = totpFactor.id;
         mutate({
             factorId,
         });
     };
 
     return (
-        <>
+        <Form onSubmit={submit}>
             <CardContent
                 sx={theme => ({ maxWidth: theme.breakpoints.values.sm })}
             >
@@ -81,6 +81,8 @@ export const MFAUnenrollForm = () => {
                             }
                         )}
                     </Typography>
+
+                    <MFAFactorInput factors={factors?.totp ?? []} />
                 </Stack>
             </CardContent>
             <CardActions sx={{ justifyContent: 'end' }}>
@@ -95,20 +97,17 @@ export const MFAUnenrollForm = () => {
                         _: 'Cancel',
                     })}
                 </Button>
-                <Button
-                    variant="contained"
-                    type="button"
-                    onClick={() => {
-                        submit();
-                    }}
-                    disabled={isLoading}
-                >
+                <Button variant="contained" type="submit" disabled={isLoading}>
                     {isLoading ? <CircularProgress size={24} /> : null}
                     {translate('ra-supabase.action.unenroll', {
                         _: 'Unenroll',
                     })}
                 </Button>
             </CardActions>
-        </>
+        </Form>
     );
 };
+
+interface FormData {
+    factorId?: string;
+}

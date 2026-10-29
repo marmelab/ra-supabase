@@ -32,17 +32,47 @@ const defaultAuthProvider = {
     }),
 };
 
+const verifiedFactor = {
+    id: 'factor-123',
+    factor_type: 'totp',
+    friendly_name: 'Test App',
+    status: 'verified',
+};
+
+// Users with a verified factor are adding another one from the app
+const withVerifiedFactor = {
+    ...defaultAuthProvider,
+    mfaListFactors: jest.fn().mockResolvedValue({
+        all: [verifiedFactor],
+        totp: [verifiedFactor],
+        phone: [],
+    }),
+};
+
 const renderForm = (
     authProvider = defaultAuthProvider,
     locationCallback?: (location: Location) => void
 ) =>
     render(
-        <TestMemoryRouter locationCallback={locationCallback}>
+        <TestMemoryRouter
+            initialEntries={['/mfa-enroll']}
+            locationCallback={locationCallback}
+        >
             <CoreAdminContext authProvider={authProvider}>
                 <MFAEnrollForm />
             </CoreAdminContext>
         </TestMemoryRouter>
     );
+
+const getCancelButton = () =>
+    screen.getByRole('button', { name: 'ra.action.cancel' });
+
+const clickCancelWhenEnabled = async () => {
+    await waitFor(() => {
+        expect(getCancelButton().hasAttribute('disabled')).toBe(false);
+    });
+    await userEvent.click(getCancelButton());
+};
 
 describe('MFAEnrollForm', () => {
     afterEach(() => {
@@ -162,12 +192,50 @@ describe('MFAEnrollForm', () => {
         renderForm(authProvider);
         await screen.findByText('ra-supabase.mfa.totp.enroll_header');
 
-        await userEvent.click(screen.getByText('ra.action.cancel'));
+        await clickCancelWhenEnabled();
 
         await waitFor(() => {
             expect(authProvider.logout).toHaveBeenCalled();
         });
         expect(authProvider.mfaUnenroll).not.toHaveBeenCalled();
+    });
+
+    it('should go back to the app when Cancel is clicked before enroll by a user with a verified factor', async () => {
+        let location: Location | undefined;
+        renderForm(withVerifiedFactor, l => {
+            location = l;
+        });
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
+
+        await clickCancelWhenEnabled();
+
+        await waitFor(() => {
+            expect(location?.pathname).toBe('/');
+        });
+        expect(withVerifiedFactor.logout).not.toHaveBeenCalled();
+        expect(withVerifiedFactor.mfaUnenroll).not.toHaveBeenCalled();
+    });
+
+    it('should unenroll and go back to the app when Cancel is clicked after enroll by a user with a verified factor', async () => {
+        let location: Location | undefined;
+        renderForm(withVerifiedFactor, l => {
+            location = l;
+        });
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
+
+        await userEvent.click(
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
+        );
+        await screen.findByAltText('ra-supabase.mfa.totp.qr_code_alt');
+        await clickCancelWhenEnabled();
+
+        await waitFor(() => {
+            expect(location?.pathname).toBe('/');
+        });
+        expect(withVerifiedFactor.mfaUnenroll).toHaveBeenCalledWith({
+            factorId: 'factor-456',
+        });
+        expect(withVerifiedFactor.logout).not.toHaveBeenCalled();
     });
 
     it('should unenroll and logout when Cancel is clicked after enroll', async () => {

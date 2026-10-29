@@ -13,6 +13,13 @@ const verifiedFactor = {
     status: 'verified',
 };
 
+const unnamedVerifiedFactor = {
+    id: 'factor-456',
+    factor_type: 'totp',
+    status: 'verified',
+    created_at: '2026-01-02T03:04:05Z',
+};
+
 const defaultAuthProvider = {
     login: jest.fn(),
     logout: jest.fn().mockResolvedValue(undefined),
@@ -115,6 +122,42 @@ describe('MFAUnenrollForm', () => {
                 factorId: 'factor-789',
             });
         });
+    });
+
+    it('should unenroll the factor selected among several', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaListFactors: jest.fn().mockResolvedValue({
+                all: [verifiedFactor, unnamedVerifiedFactor],
+                totp: [verifiedFactor, unnamedVerifiedFactor],
+                phone: [],
+            }),
+        };
+        renderForm(authProvider);
+
+        // Factors without a friendly name are labelled by their creation date
+        await userEvent.click(
+            await screen.findByLabelText(
+                new Date(unnamedVerifiedFactor.created_at).toLocaleString()
+            )
+        );
+        await clickUnenrollWhenEnabled();
+
+        await waitFor(() => {
+            expect(authProvider.mfaUnenroll).toHaveBeenCalledWith({
+                factorId: 'factor-456',
+            });
+        });
+    });
+
+    it('should not ask to pick a factor when there is only one', async () => {
+        renderForm();
+        await screen.findByText('ra-supabase.mfa.totp.unenroll_header');
+        await waitFor(() => {
+            expect(getUnenrollButton().hasAttribute('disabled')).toBe(false);
+        });
+
+        expect(screen.queryByRole('radio')).toBeNull();
     });
 
     it('should disable Unenroll while factors are loading', async () => {
