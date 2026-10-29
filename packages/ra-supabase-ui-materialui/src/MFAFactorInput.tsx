@@ -1,5 +1,5 @@
 import type { Factor } from '@supabase/supabase-js';
-import { required, useTranslate } from 'ra-core';
+import { useTranslate } from 'ra-core';
 import { RadioButtonGroupInput } from 'ra-ui-materialui';
 import * as React from 'react';
 
@@ -27,7 +27,6 @@ export const MFAFactorInput = ({ factors }: MFAFactorInputProps) => {
             }
             translateChoice={false}
             defaultValue={factors[0].id}
-            validate={required()}
             row={false}
         />
     );

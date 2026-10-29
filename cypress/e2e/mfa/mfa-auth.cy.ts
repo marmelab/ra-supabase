@@ -188,7 +188,8 @@ describe('MFA Authentication', () => {
         login();
         cy.url().should('include', '/mfa-challenge');
         cy.get('input[type="radio"]').should('have.length', 2);
-        cy.findByLabelText('CRM Demo').should('be.checked');
+        // A factor is preselected (which one depends on the server order)
+        cy.get('input[type="radio"]:checked').should('have.length', 1);
         cy.then(() => {
             cy.findByLabelText('CRM Demo 2')
                 .should('have.value', factorId2)

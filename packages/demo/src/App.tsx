@@ -84,7 +84,7 @@ const MFALoginPage = () => (
 );
 
 // Forward the ref and props so that Material UI can manage the keyboard navigation
-const MenuItemLink = forwardRef<
+const UserMenuItemLink = forwardRef<
     HTMLAnchorElement,
     { to: string; icon: ReactNode; label: string }
 >(({ to, icon, label, ...props }, ref) => {
@@ -107,12 +107,12 @@ const MFAAppBar = () => (
     <AppBar
         userMenu={
             <UserMenu>
-                <MenuItemLink
+                <UserMenuItemLink
                     to="/mfa-enroll"
                     icon={<PhonelinkLockIcon fontSize="small" />}
                     label="Add an authenticator"
                 />
-                <MenuItemLink
+                <UserMenuItemLink
                     to="/mfa-unenroll"
                     icon={<PhonelinkEraseIcon fontSize="small" />}
                     label="Remove an authenticator"
