@@ -19,6 +19,7 @@ import { useMFAChallengeAndVerify, useMFAListFactors } from 'ra-supabase-core';
 import { TextInput } from 'ra-ui-materialui';
 import * as React from 'react';
 import { useLocation } from 'react-router';
+import { MFAFactorInput } from './MFAFactorInput';
 
 export const MFAChallengeForm = () => {
     const translate = useTranslate();
@@ -47,7 +48,8 @@ export const MFAChallengeForm = () => {
             notify(factorsError.message, { type: 'error' });
             return;
         }
-        const factorId = enrolledFactorId ?? factors?.totp?.[0]?.id; // TODO handle multiple factors
+        const factorId =
+            enrolledFactorId ?? values.factorId ?? factors?.totp?.[0]?.id;
         if (!factorId) {
             notify('ra-supabase.mfa.totp.no_factor_error', {
                 type: 'error',
@@ -91,6 +93,10 @@ export const MFAChallengeForm = () => {
                             }
                         )}
                     </Typography>
+
+                    {enrolledFactorId ? null : (
+                        <MFAFactorInput factors={factors?.totp ?? []} />
+                    )}
 
                     <Box
                         className={SupabaseMFAChallengeFormClasses.input}
@@ -152,6 +158,7 @@ export const MFAChallengeForm = () => {
 
 interface FormData {
     code: string;
+    factorId?: string;
 }
 
 const PREFIX = 'RaSupabaseMFAChallengeForm';

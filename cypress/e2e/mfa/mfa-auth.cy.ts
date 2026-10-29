@@ -30,9 +30,13 @@ const assertOnApp = () => {
     getPaginationText();
 };
 
-const logout = () => {
+const openUserMenuItem = (label: string) => {
     cy.findByLabelText('Profile').scrollIntoView().click({ force: true });
-    cy.findByText('Logout').click({ force: true });
+    cy.findByText(label).click({ force: true });
+};
+
+const logout = () => {
+    openUserMenuItem('Logout');
     cy.url({ timeout: 10000 }).should('include', '/login');
     cy.findByText('Sign in').should('exist');
 };
@@ -125,6 +129,78 @@ describe('MFA Authentication', () => {
             // Logout
             logout();
         });
+    });
+
+    it('should allow an enrolled user to add a second authenticator, pick it at login, and remove the first', () => {
+        let secret2: string;
+        let factorId2: string;
+        cy.intercept('POST', '**/auth/v1/factors', req => {
+            req.continue(res => {
+                secret2 = res.body?.totp?.secret;
+                factorId2 = res.body?.id;
+            });
+        });
+        const verify = (secret: string) =>
+            cy.task('generateTOTP', secret).then(code => {
+                cy.get('input[name="code"]').type(code as string);
+                cy.findByText('Verify').click();
+                assertOnApp();
+            });
+
+        // Enroll the user in MFA server-side
+        cy.task('enrollUserInMFA', {
+            email: TEST_EMAIL,
+            password: TEST_PASSWORD,
+        }).then(secret1 => {
+            visitMfaDemo();
+            login();
+            cy.url().should('include', '/mfa-challenge');
+            // A single authenticator needs no picking
+            cy.get('input[type="radio"]').should('not.exist');
+            verify(secret1 as string);
+        });
+
+        // Add a second authenticator from the user menu
+        openUserMenuItem('Add an authenticator');
+        cy.url().should('include', '/mfa-enroll');
+        cy.findByText('Set up').click();
+        cy.findByAltText('TOTP QR Code', { timeout: 10000 }).should(
+            'be.visible'
+        );
+        cy.findByText('Next').click();
+        cy.url().should('include', '/mfa-challenge');
+        // The challenge verifies the authenticator just added
+        cy.get('input[type="radio"]').should('not.exist');
+        cy.then(() => verify(secret2));
+
+        // Log back in and pick the second authenticator, numbered after the first
+        logout();
+        login();
+        cy.url().should('include', '/mfa-challenge');
+        cy.get('input[type="radio"]').should('have.length', 2);
+        cy.findByLabelText('CRM Demo').should('be.checked');
+        cy.then(() => {
+            cy.findByLabelText('CRM Demo 2')
+                .should('have.value', factorId2)
+                .click();
+            verify(secret2);
+        });
+
+        // Remove the first authenticator
+        openUserMenuItem('Remove an authenticator');
+        cy.url().should('include', '/mfa-unenroll');
+        cy.get('input[type="radio"]').should('have.length', 2);
+        cy.findByLabelText('CRM Demo').click();
+        cy.findByText('Unenroll').click();
+        cy.findByText('Successfully unenrolled from TOTP MFA', {
+            timeout: 10000,
+        });
+
+        // Only the second authenticator is left
+        openUserMenuItem('Remove an authenticator');
+        cy.url().should('include', '/mfa-unenroll');
+        cy.findByText('Unenroll').should('not.be.disabled');
+        cy.get('input[type="radio"]').should('not.exist');
     });
 
     it('should reject an enrolled user that fails login/password without showing a challenge', () => {

@@ -14,6 +14,22 @@ const verifiedFactor = {
     status: 'verified',
 };
 
+const otherVerifiedFactor = {
+    id: 'factor-456',
+    factor_type: 'totp',
+    friendly_name: 'Other App',
+    status: 'verified',
+};
+
+const twoFactorsAuthProvider = () => ({
+    ...defaultAuthProvider,
+    mfaListFactors: jest.fn().mockResolvedValue({
+        all: [verifiedFactor, otherVerifiedFactor],
+        totp: [verifiedFactor, otherVerifiedFactor],
+        phone: [],
+    }),
+});
+
 const mockEnrollResult = {
     id: 'factor-123',
     type: 'totp' as const,
@@ -164,6 +180,52 @@ describe('MFAChallengeForm', () => {
                 code: '123456',
             });
         });
+    });
+
+    it('should verify the factor selected among several', async () => {
+        const authProvider = twoFactorsAuthProvider();
+        renderForm(authProvider);
+
+        await userEvent.click(await screen.findByLabelText('Other App'));
+        await submitCodeWhenEnabled('123456');
+
+        await waitFor(() => {
+            expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
+                factorId: 'factor-456',
+                code: '123456',
+            });
+        });
+    });
+
+    it('should not ask to pick a factor when there is only one', async () => {
+        renderForm();
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
+        await waitFor(() => {
+            expect(getVerifyButton().hasAttribute('disabled')).toBe(false);
+        });
+
+        expect(screen.queryByRole('radio')).toBeNull();
+    });
+
+    it('should not ask to pick a factor when coming from the enroll form', async () => {
+        const authProvider = {
+            ...twoFactorsAuthProvider(),
+            // Stay on the form: a successful verify redirects and drops the location state
+            mfaChallengeAndVerify: jest.fn(() => new Promise(() => {})),
+        };
+        renderForm(authProvider, [
+            { pathname: '/mfa-challenge', state: { factorId: 'new-factor' } },
+        ]);
+
+        await submitCodeWhenEnabled('123456');
+
+        await waitFor(() => {
+            expect(authProvider.mfaChallengeAndVerify).toHaveBeenCalledWith({
+                factorId: 'new-factor',
+                code: '123456',
+            });
+        });
+        expect(screen.queryByRole('radio')).toBeNull();
     });
 
     it('should disable Verify while factors are loading', async () => {

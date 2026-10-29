@@ -1,7 +1,16 @@
+import { forwardRef, ReactNode } from 'react';
 import { AdminGuesser } from 'ra-supabase';
 import { createClient } from '@supabase/supabase-js';
 import { supabaseDataProvider, supabaseAuthProvider } from 'ra-supabase-core';
 import { LoginPage, LoginForm } from 'ra-supabase-ui-materialui';
+import {
+    AppBar,
+    Layout,
+    LayoutProps,
+    Logout,
+    UserMenu,
+    useUserMenu,
+} from 'react-admin';
 import {
     Typography,
     Box,
@@ -11,9 +20,14 @@ import {
     CardContent,
     CardActions,
     Container,
+    ListItemIcon,
+    ListItemText,
+    MenuItem,
     Stack,
 } from '@mui/material';
-import { BrowserRouter } from 'react-router-dom';
+import PhonelinkLockIcon from '@mui/icons-material/PhonelinkLock';
+import PhonelinkEraseIcon from '@mui/icons-material/PhonelinkErase';
+import { BrowserRouter, Link } from 'react-router-dom';
 
 const instanceUrl = import.meta.env.VITE_SUPABASE_URL;
 const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -52,7 +66,8 @@ const MFALoginPage = () => (
             <Typography variant="body2">
                 This demo enforces Multi-Factor Authentication (TOTP). After
                 login, you will be asked to enroll or verify your authenticator
-                app.
+                app. Once logged in, add or remove authenticators from the user
+                menu.
             </Typography>
         </Alert>
         <LoginForm disableForgotPassword />
@@ -66,6 +81,50 @@ const MFALoginPage = () => (
             </Typography>
         </Box>
     </LoginPage>
+);
+
+// Forward the ref and props so that Material UI can manage the keyboard navigation
+const MenuItemLink = forwardRef<
+    HTMLAnchorElement,
+    { to: string; icon: ReactNode; label: string }
+>(({ to, icon, label, ...props }, ref) => {
+    const onClose = useUserMenu()?.onClose;
+    return (
+        <MenuItem
+            component={Link}
+            to={to}
+            onClick={onClose}
+            ref={ref}
+            {...props}
+        >
+            <ListItemIcon>{icon}</ListItemIcon>
+            <ListItemText>{label}</ListItemText>
+        </MenuItem>
+    );
+});
+
+const MFAAppBar = () => (
+    <AppBar
+        userMenu={
+            <UserMenu>
+                <MenuItemLink
+                    to="/mfa-enroll"
+                    icon={<PhonelinkLockIcon fontSize="small" />}
+                    label="Add an authenticator"
+                />
+                <MenuItemLink
+                    to="/mfa-unenroll"
+                    icon={<PhonelinkEraseIcon fontSize="small" />}
+                    label="Remove an authenticator"
+                />
+                <Logout />
+            </UserMenu>
+        }
+    />
+);
+
+const MFALayout = ({ children }: LayoutProps) => (
+    <Layout appBar={MFAAppBar}>{children}</Layout>
 );
 
 const HomePage = () => (
@@ -163,6 +222,7 @@ const App = () => {
                     dataProvider={dataProvider}
                     authProvider={mfaAuthProvider}
                     loginPage={<MFALoginPage />}
+                    layout={MFALayout}
                 />
             </BrowserRouter>
         );
