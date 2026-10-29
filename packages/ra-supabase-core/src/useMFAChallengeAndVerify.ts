@@ -35,7 +35,7 @@ export const useMFAChallengeAndVerify = (
 
     if (authProvider.mfaChallengeAndVerify == null) {
         throw new Error(
-            'The mfaChallengeAndVerify() method is missing from the AuthProvider although it is required. You may consider adding it'
+            'useMFAChallengeAndVerify requires authProvider.mfaChallengeAndVerify(). Use supabaseAuthProvider() from ra-supabase-core, or implement mfaChallengeAndVerify in your authProvider.'
         );
     }
 

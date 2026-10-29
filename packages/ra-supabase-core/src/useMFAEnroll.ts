@@ -23,7 +23,7 @@ export const useMFAEnroll = (
 
     if (authProvider.mfaEnroll == null) {
         throw new Error(
-            'The mfaEnroll() method is missing from the AuthProvider although it is required. You may consider adding it'
+            'useMFAEnroll requires authProvider.mfaEnroll(). Use supabaseAuthProvider() from ra-supabase-core, or implement mfaEnroll in your authProvider.'
         );
     }
 

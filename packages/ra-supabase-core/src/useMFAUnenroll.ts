@@ -27,7 +27,7 @@ export const useMFAUnenroll = (
 
     if (authProvider.mfaUnenroll == null) {
         throw new Error(
-            'The mfaUnenroll() method is missing from the AuthProvider although it is required. You may consider adding it'
+            'useMFAUnenroll requires authProvider.mfaUnenroll(). Use supabaseAuthProvider() from ra-supabase-core, or implement mfaUnenroll in your authProvider.'
         );
     }
 

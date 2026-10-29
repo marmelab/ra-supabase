@@ -13,7 +13,7 @@ export const useMFAListFactors = (options?: UseMFAListFactorsOptions) => {
 
     if (authProvider.mfaListFactors == null) {
         throw new Error(
-            'The mfaListFactors() method is missing from the AuthProvider although it is required. You may consider adding it'
+            'useMFAListFactors requires authProvider.mfaListFactors(). Use supabaseAuthProvider() from ra-supabase-core, or implement mfaListFactors in your authProvider.'
         );
     }
 

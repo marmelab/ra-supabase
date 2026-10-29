@@ -50,7 +50,7 @@ export const useResetPassword = (
 
     if (authProvider.resetPassword == null) {
         throw new Error(
-            'The setPassword() method is missing from the AuthProvider although it is required. You may consider adding it'
+            'useResetPassword requires authProvider.resetPassword(). Use supabaseAuthProvider() from ra-supabase-core, or implement resetPassword in your authProvider.'
         );
     }
 
