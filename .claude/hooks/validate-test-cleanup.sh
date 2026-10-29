@@ -33,11 +33,16 @@ MUTATION_PATTERNS=(
   'globalThis\.[a-zA-Z_]*\s*='
 )
 
+GREP_ARGS=()
 for pattern in "${MUTATION_PATTERNS[@]}"; do
-  if grep -q "$pattern" "$FILE_PATH" 2>/dev/null; then
-    echo "Test mutates a global ($pattern) but has no afterEach/afterAll to restore it."
-    exit 2
-  fi
+  GREP_ARGS+=(-e "$pattern")
 done
+
+MATCHES=$(grep -n "${GREP_ARGS[@]}" "$FILE_PATH" 2>/dev/null)
+if [ -n "$MATCHES" ]; then
+  echo "Test mutates globals but has no afterEach/afterAll to restore them:" >&2
+  echo "$MATCHES" >&2
+  exit 2
+fi
 
 exit 0
