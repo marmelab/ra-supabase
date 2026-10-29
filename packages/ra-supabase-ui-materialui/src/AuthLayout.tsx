@@ -9,7 +9,6 @@ import React, {
 import { Card, Avatar, styled } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import { TitleComponent } from 'ra-core';
-import { Notification } from 'ra-ui-materialui';
 
 /**
  * A standalone login page, to serve as authentication gate to the admin
@@ -35,7 +34,9 @@ export const AuthLayout: React.FunctionComponent<LoginProps> = props => {
         classes: classesOverride,
         className,
         children,
-        notification = Notification,
+        // No notification by default: react-admin's AdminUI already renders one,
+        // rendering another would display each notification twice
+        notification,
         backgroundImage,
         ...rest
     } = props;

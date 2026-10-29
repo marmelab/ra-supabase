@@ -5,3 +5,7 @@ export * from './useRedirectIfAuthenticated';
 export * from './useResetPassword';
 export * from './useSetPassword';
 export * from './useSupabaseAccessToken';
+export * from './useMFAEnroll';
+export * from './useMFAUnenroll';
+export * from './useMFAChallengeAndVerify';
+export * from './useMFAListFactors';

@@ -36,6 +36,7 @@
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
         "lerna": "^6.6.2",
+        "otplib": "^13.4.0",
         "prettier": "~2.8.8",
         "raf": "^3.4.1",
         "supabase": "^2.12.1",

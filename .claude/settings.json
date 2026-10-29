@@ -1,0 +1,19 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/validate-test-cleanup.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/lint-fix.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

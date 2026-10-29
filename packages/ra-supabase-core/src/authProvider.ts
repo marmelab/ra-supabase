@@ -1,10 +1,16 @@
-import { Provider, SupabaseClient, User } from '@supabase/supabase-js';
+import { Factor, Provider, SupabaseClient, User } from '@supabase/supabase-js';
 import { AuthProvider, UserIdentity } from 'ra-core';
 import { getSearchString } from './getSearchString';
 
 export const supabaseAuthProvider = (
     client: SupabaseClient,
-    { getIdentity, getPermissions, redirectTo }: SupabaseAuthProviderOptions
+    {
+        getIdentity,
+        getPermissions,
+        redirectTo,
+        enforceMFA,
+        mfaAppFriendlyName,
+    }: SupabaseAuthProviderOptions
 ): SupabaseAuthProvider => {
     const authProvider: SupabaseAuthProvider = {
         async login(params) {
@@ -16,6 +22,26 @@ export const supabaseAuthProvider = (
 
                 if (error) {
                     throw error;
+                }
+
+                if (enforceMFA) {
+                    const { data, error } =
+                        await client.auth.mfa.getAuthenticatorAssuranceLevel();
+                    if (error) {
+                        throw error;
+                    }
+                    if (data.currentLevel === 'aal1') {
+                        // Users with a verified factor must verify it, others must enroll one
+                        const mfaPath =
+                            data.nextLevel === 'aal2'
+                                ? '/mfa-challenge'
+                                : '/mfa-enroll';
+                        return {
+                            redirectTo: redirectTo
+                                ? `${redirectTo}${mfaPath}`
+                                : mfaPath,
+                        };
+                    }
                 }
 
                 return;
@@ -111,17 +137,11 @@ export const supabaseAuthProvider = (
             }
         },
         async checkAuth() {
-            // Users are on the set-password page, nothing to do
             if (
-                window.location.pathname === '/set-password' ||
-                window.location.hash.includes('#/set-password')
-            ) {
-                return;
-            }
-            // Users are on the forgot-password page, nothing to do
-            if (
-                window.location.pathname === '/forgot-password' ||
-                window.location.hash.includes('#/forgot-password')
+                isOnRoute('/set-password') ||
+                isOnRoute('/forgot-password') ||
+                isOnRoute('/mfa-enroll') ||
+                isOnRoute('/mfa-challenge')
             ) {
                 return;
             }
@@ -154,6 +174,21 @@ export const supabaseAuthProvider = (
                 return Promise.reject();
             }
 
+            if (enforceMFA) {
+                const { data: aalData, error: aalError } =
+                    await client.auth.mfa.getAuthenticatorAssuranceLevel();
+                if (aalError) {
+                    throw aalError;
+                }
+                // The user has not completed MFA enrollment or challenge.
+                // react-admin logs users out when checkAuth fails, so redirecting to
+                // the MFA pages would land them there without a session.
+                // Send them to the login page instead: login() redirects to the right MFA page.
+                if (aalData.currentLevel === 'aal1') {
+                    return Promise.reject();
+                }
+            }
+
             return Promise.resolve();
         },
         async getPermissions() {
@@ -163,10 +198,10 @@ export const supabaseAuthProvider = (
             // No permissions when users are on the set-password page
             // or on the forgot-password page.
             if (
-                window.location.pathname === '/set-password' ||
-                window.location.hash.includes('#/set-password') ||
-                window.location.pathname === '/forgot-password' ||
-                window.location.hash.includes('#/forgot-password')
+                isOnRoute('/set-password') ||
+                isOnRoute('/forgot-password') ||
+                isOnRoute('/mfa-enroll') ||
+                isOnRoute('/mfa-challenge')
             ) {
                 return;
             }
@@ -178,6 +213,80 @@ export const supabaseAuthProvider = (
 
             const permissions = await getPermissions(data.user);
             return permissions;
+        },
+        async mfaEnroll({
+            factorType,
+        }: MFAEnrollParams): Promise<MFAEnrollResult> {
+            if (factorType === 'phone') {
+                throw new Error(
+                    'Phone MFA is not supported yet. Please use TOTP instead.'
+                );
+            }
+
+            // If a friendly name is configured, unenroll any unverified factor
+            // with the same name, left over by an abandoned enrollment,
+            // to avoid a name conflict error (422). Verified factors are kept.
+            if (mfaAppFriendlyName) {
+                const { data: factors, error: listError } =
+                    await client.auth.mfa.listFactors();
+                if (listError) {
+                    throw listError;
+                }
+                const staleFactor = factors.all.find(
+                    f =>
+                        f.status === 'unverified' &&
+                        f.friendly_name === mfaAppFriendlyName
+                );
+                if (staleFactor) {
+                    const { error: unenrollError } =
+                        await client.auth.mfa.unenroll({
+                            factorId: staleFactor.id,
+                        });
+                    if (unenrollError) {
+                        throw unenrollError;
+                    }
+                }
+            }
+
+            const { data, error } = await client.auth.mfa.enroll({
+                factorType,
+                friendlyName: mfaAppFriendlyName,
+            });
+            if (error) {
+                throw error;
+            }
+            return data;
+        },
+        async mfaUnenroll({
+            factorId,
+        }: MFAUnenrollParams): Promise<MFAUnenrollResult> {
+            const { data, error } = await client.auth.mfa.unenroll({
+                factorId,
+            });
+            if (error) {
+                throw error;
+            }
+            return data;
+        },
+        async mfaChallengeAndVerify({
+            factorId,
+            code,
+        }: MFAChallengeAndVerifyParams): Promise<MFAChallengeAndVerifyResult> {
+            const { data, error } = await client.auth.mfa.challengeAndVerify({
+                factorId,
+                code,
+            });
+            if (error) {
+                throw error;
+            }
+            return data;
+        },
+        async mfaListFactors(): Promise<MFAListFactorsResult> {
+            const { data, error } = await client.auth.mfa.listFactors();
+            if (error) {
+                throw error;
+            }
+            return data;
         },
     };
 
@@ -202,6 +311,8 @@ export type SupabaseAuthProviderOptions = {
     getIdentity?: GetIdentity;
     getPermissions?: GetPermissions;
     redirectTo?: string;
+    enforceMFA?: boolean;
+    mfaAppFriendlyName?: string;
 };
 
 type LoginWithEmailPasswordParams = {
@@ -239,6 +350,53 @@ export type ResetPasswordParams = {
     redirectTo?: string;
     captchaToken?: string;
 };
+
+export type MFAEnrollParams = {
+    factorType: 'totp' | 'phone';
+};
+
+export type MFAEnrollResult = {
+    id: string;
+    type: 'totp';
+    totp: {
+        qr_code: string;
+        secret: string;
+        uri: string;
+    };
+    friendly_name?: string;
+};
+
+export type MFAUnenrollParams = {
+    factorId: string;
+};
+
+export type MFAUnenrollResult = {
+    id: string;
+};
+
+export type MFAChallengeAndVerifyParams = {
+    factorId: string;
+    code: string;
+};
+
+export type MFAChallengeAndVerifyResult = {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    refresh_token: string;
+    user: User;
+};
+
+export type MFAListFactorsResult = {
+    all: Factor[];
+    totp: Factor[];
+    phone: Factor[];
+};
+
+const isOnRoute = (route: string) =>
+    window.location.pathname === route ||
+    window.location.hash === `#${route}` ||
+    window.location.hash.startsWith(`#${route}?`);
 
 const getUrlParams = () => {
     const searchStr = getSearchString();
