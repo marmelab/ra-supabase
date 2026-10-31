@@ -25,6 +25,8 @@ jobs:
               run: yarn install --immutable
             - name: Build
               run: make build
+            - name: Exports smoke test
+              run: make test-exports
             - name: Lint
               run: make lint
             - name: Unit Tests
