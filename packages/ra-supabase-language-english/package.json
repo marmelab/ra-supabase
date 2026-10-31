@@ -17,8 +17,8 @@
     "scripts": {
         "build": "yarn run build-cjs && yarn run build-esm",
         "build-cjs": "rimraf ./lib && tsc",
-        "build-esm": "rimraf ./esm && tsc --outDir esm --module es2015",
-        "watch": "tsc --outDir esm --module es2015 --watch",
+        "build-esm": "rimraf ./esm && tsc --outDir esm --module es2020",
+        "watch": "tsc --outDir esm --module es2020 --watch",
         "lint": "eslint --fix ./src"
     },
     "devDependencies": {
