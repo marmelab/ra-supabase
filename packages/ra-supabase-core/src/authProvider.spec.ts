@@ -331,7 +331,7 @@ describe('authProvider MFA', () => {
             expect(client.auth.mfa.unenroll).not.toHaveBeenCalled();
         });
 
-        it('should not unenroll a verified factor with the same friendlyName', async () => {
+        it('should keep a verified factor with the same friendlyName and number the new one', async () => {
             const verifiedFactor = {
                 id: 'verified-factor',
                 friendly_name: 'My App',
@@ -355,6 +355,86 @@ describe('authProvider MFA', () => {
             await authProvider.mfaEnroll({ factorType: 'totp' });
 
             expect(client.auth.mfa.unenroll).not.toHaveBeenCalled();
+            expect(client.auth.mfa.enroll).toHaveBeenCalledWith({
+                factorType: 'totp',
+                friendlyName: 'My App 2',
+            });
+        });
+
+        it.each([
+            [['My App', 'My App 2'], 'My App 3'],
+            [['My App', 'My App 3'], 'My App 2'],
+        ])(
+            'should number the friendlyName when verified factors are named %j',
+            async (verifiedNames, expectedName) => {
+                const verifiedFactors = verifiedNames.map(name => ({
+                    id: name,
+                    friendly_name: name,
+                    factor_type: 'totp',
+                    status: 'verified',
+                }));
+                const client = createMockSupabaseClient();
+                client.auth.mfa.listFactors.mockResolvedValue({
+                    data: {
+                        all: verifiedFactors,
+                        totp: verifiedFactors,
+                        phone: [],
+                    },
+                    error: null,
+                });
+
+                const authProvider = supabaseAuthProvider(client, {
+                    mfaAppFriendlyName: 'My App',
+                });
+
+                await authProvider.mfaEnroll({ factorType: 'totp' });
+
+                expect(client.auth.mfa.enroll).toHaveBeenCalledWith({
+                    factorType: 'totp',
+                    friendlyName: expectedName,
+                });
+            }
+        );
+
+        it('should unenroll an unverified factor with the numbered friendlyName before enrolling', async () => {
+            const verifiedFactor = {
+                id: 'verified-factor',
+                friendly_name: 'My App',
+                factor_type: 'totp',
+                status: 'verified',
+            };
+            const client = createMockSupabaseClient();
+            client.auth.mfa.listFactors.mockResolvedValue({
+                data: {
+                    all: [
+                        verifiedFactor,
+                        {
+                            id: 'old-factor',
+                            friendly_name: 'My App 2',
+                            factor_type: 'totp',
+                            status: 'unverified',
+                        },
+                    ],
+                    totp: [verifiedFactor],
+                    phone: [],
+                },
+                error: null,
+            });
+
+            const authProvider = supabaseAuthProvider(client, {
+                mfaAppFriendlyName: 'My App',
+            });
+
+            await authProvider.mfaEnroll({ factorType: 'totp' });
+
+            expect(client.auth.mfa.unenroll).toHaveBeenCalledTimes(1);
+            expect(client.auth.mfa.unenroll).toHaveBeenCalledWith({
+                factorId: 'old-factor',
+            });
+            expect(client.auth.mfa.enroll).toHaveBeenCalledWith({
+                factorType: 'totp',
+                friendlyName: 'My App 2',
+            });
         });
 
         it('should throw without enrolling when unenrolling the stale factor fails', async () => {

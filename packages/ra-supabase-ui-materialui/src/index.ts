@@ -14,3 +14,4 @@ export * from './MFAUnenrollForm';
 export * from './MFAUnenrollPage';
 export * from './MFAChallengeForm';
 export * from './MFAChallengePage';
+export * from './MFAFactorInput';

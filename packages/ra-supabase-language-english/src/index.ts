@@ -32,6 +32,7 @@ export const raSupabaseEnglishMessages = {
                 challenge_instructions:
                     'Enter the TOTP code from your Authenticator app to verify your identity.',
                 code: 'Code',
+                factor: 'Authenticator',
                 no_factor_error: 'No TOTP factors found!',
                 enroll_header: 'Enable Multi-Factor Authentication (TOTP)',
                 enroll_instructions:

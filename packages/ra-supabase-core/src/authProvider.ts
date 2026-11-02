@@ -223,19 +223,27 @@ export const supabaseAuthProvider = (
                 );
             }
 
-            // If a friendly name is configured, unenroll any unverified factor
-            // with the same name, left over by an abandoned enrollment,
-            // to avoid a name conflict error (422). Verified factors are kept.
+            // Friendly names must be unique per user (or Supabase returns a 422):
+            // number the factors past the first one (My App, My App 2, My App 3...),
+            // and unenroll any unverified factor with the chosen name,
+            // left over by an abandoned enrollment. Verified factors are kept.
+            let friendlyName = mfaAppFriendlyName;
             if (mfaAppFriendlyName) {
                 const { data: factors, error: listError } =
                     await client.auth.mfa.listFactors();
                 if (listError) {
                     throw listError;
                 }
+                const verifiedNames = factors.all
+                    .filter(f => f.status === 'verified')
+                    .map(f => f.friendly_name);
+                for (let n = 2; verifiedNames.includes(friendlyName); n++) {
+                    friendlyName = `${mfaAppFriendlyName} ${n}`;
+                }
                 const staleFactor = factors.all.find(
                     f =>
                         f.status === 'unverified' &&
-                        f.friendly_name === mfaAppFriendlyName
+                        f.friendly_name === friendlyName
                 );
                 if (staleFactor) {
                     const { error: unenrollError } =
@@ -250,7 +258,7 @@ export const supabaseAuthProvider = (
 
             const { data, error } = await client.auth.mfa.enroll({
                 factorType,
-                friendlyName: mfaAppFriendlyName,
+                friendlyName,
             });
             if (error) {
                 throw error;
