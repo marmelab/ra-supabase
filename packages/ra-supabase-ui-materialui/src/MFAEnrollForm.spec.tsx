@@ -281,4 +281,23 @@ describe('MFAEnrollForm', () => {
             expect(authProvider.logout).toHaveBeenCalled();
         });
     });
+
+    it('should disable Cancel while the new factor is being unenrolled', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaUnenroll: jest.fn(() => new Promise(() => {})),
+        };
+        renderForm(authProvider);
+        await screen.findByText('ra-supabase.mfa.totp.enroll_header');
+
+        await userEvent.click(
+            screen.getByText('ra-supabase.mfa.totp.enroll_start')
+        );
+        await screen.findByAltText('ra-supabase.mfa.totp.qr_code_alt');
+        await clickCancelWhenEnabled();
+
+        await waitFor(() => {
+            expect(getCancelButton().hasAttribute('disabled')).toBe(true);
+        });
+    });
 });

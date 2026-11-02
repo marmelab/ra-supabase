@@ -23,7 +23,7 @@ export const MFAEnrollForm = () => {
     const redirect = useRedirect();
     const notify = useNotify();
     const logout = useLogout();
-    const [unenroll] = useMFAUnenroll();
+    const [unenroll, { isPending: isUnenrolling }] = useMFAUnenroll();
     const [mutate, mutation] = useMFAEnroll({
         onSuccess: data => {
             setFactorId(data.id);
@@ -129,7 +129,7 @@ export const MFAEnrollForm = () => {
                     variant="outlined"
                     type="button"
                     onClick={handleCancel}
-                    disabled={isLoadingFactors}
+                    disabled={isLoadingFactors || isUnenrolling}
                 >
                     {translate('ra.action.cancel', {
                         _: 'Cancel',

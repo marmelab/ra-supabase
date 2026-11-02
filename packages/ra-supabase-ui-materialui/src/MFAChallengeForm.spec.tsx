@@ -308,6 +308,23 @@ describe('MFAChallengeForm', () => {
         expect(defaultAuthProvider.logout).not.toHaveBeenCalled();
     });
 
+    it('should disable Cancel while the new factor is being unenrolled', async () => {
+        const authProvider = {
+            ...defaultAuthProvider,
+            mfaUnenroll: jest.fn(() => new Promise(() => {})),
+        };
+        renderForm(authProvider, [
+            { pathname: '/mfa-challenge', state: { factorId: 'new-factor' } },
+        ]);
+        await screen.findByText('ra-supabase.mfa.totp.challenge_header');
+
+        await clickCancelWhenEnabled();
+
+        await waitFor(() => {
+            expect(getCancelButton().hasAttribute('disabled')).toBe(true);
+        });
+    });
+
     it('should notify that no TOTP factor exists', async () => {
         const authProvider = {
             ...defaultAuthProvider,

@@ -44,7 +44,7 @@ export const MFAChallengeForm = () => {
             redirect('/');
         },
     });
-    const [unenroll] = useMFAUnenroll();
+    const [unenroll, { isPending: isUnenrolling }] = useMFAUnenroll();
     const isLoading =
         mutation.isPending || (!enrolledFactorId && isLoadingFactors);
 
@@ -151,7 +151,10 @@ export const MFAChallengeForm = () => {
                     type="button"
                     className={SupabaseMFAChallengeFormClasses.cancelButton}
                     onClick={handleCancel}
-                    disabled={!!enrolledFactorId && isLoadingFactors}
+                    disabled={
+                        isUnenrolling ||
+                        (!!enrolledFactorId && isLoadingFactors)
+                    }
                 >
                     {translate('ra.action.cancel', {
                         _: 'Cancel',
