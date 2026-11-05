@@ -1,3 +1,4 @@
+import type {} from '@mui/material/themeCssVarsAugmentation';
 export * from './AuthLayout';
 export * from './guessers';
 export * from './LoginForm';

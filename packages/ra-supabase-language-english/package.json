@@ -6,23 +6,36 @@
     "license": "MIT",
     "files": [
         "*.md",
-        "lib",
-        "esm",
+        "dist",
         "src"
     ],
-    "main": "lib/index",
-    "module": "esm/index.js",
-    "types": "esm/index.d.ts",
+    "type": "module",
+    "zshy": {
+        "exports": "./src/index.ts",
+        "noEdit": true
+    },
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.cts",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "require": {
+                "types": "./dist/index.d.cts",
+                "default": "./dist/index.cjs"
+            }
+        }
+    },
     "sideEffects": false,
     "scripts": {
-        "build": "yarn run build-cjs && yarn run build-esm",
-        "build-cjs": "rimraf ./lib && tsc",
-        "build-esm": "rimraf ./esm && tsc --outDir esm --module es2015",
-        "watch": "tsc --outDir esm --module es2015 --watch",
+        "build": "zshy",
         "lint": "eslint --fix ./src"
     },
     "devDependencies": {
-        "rimraf": "^6.0.1",
-        "typescript": "^5.7.3"
+        "typescript": "^5.7.3",
+        "zshy": "^0.8.0"
     }
 }

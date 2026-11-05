@@ -55,11 +55,15 @@ prettier: ## prettify the source code using prettier
 	@echo "Running prettier..."
 	@yarn prettier
 
-test: build test-unit lint ## launch all tests
+test: build test-unit test-exports lint ## launch all tests
 
 test-unit: ## launch unit tests
 	@echo "Running unit tests...";
 	@yarn test-unit;
+
+test-exports: ## check that the built packages load in Node, as ES modules and as CommonJS
+	@echo "Running exports smoke test...";
+	@node ./test-exports.mjs
 
 test-unit-watch: ## launch unit tests and watch for changes
 	@echo "Running unit tests..."; 

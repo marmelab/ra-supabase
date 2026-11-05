@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+- Publish modern ESM and CommonJS package exports ([#104](https://github.com/marmelab/ra-supabase/pull/104)) ([pysnooLab](https://github.com/pysnooLab))
+
+### Breaking Changes
+
+All packages (`ra-supabase`, `ra-supabase-core`, `ra-supabase-ui-materialui`, `ra-supabase-language-english`, `ra-supabase-language-french`) now publish their ES modules and CommonJS builds in `dist/`, behind an [`exports`](https://nodejs.org/api/packages.html#package-entry-points) map. Only each package root can be imported, so these undocumented paths no longer resolve (`<package>` being any of them):
+
+- the old build folders: `<package>/lib/*` and `<package>/esm/*`
+- the sources: `<package>/src/*`, even though they are still published
+- the manifest: `<package>/package.json`
+
+If your framework renders on the server and lets Node.js load `ra-supabase` or `ra-supabase-ui-materialui` (e.g. TanStack Start or React Router in framework mode), use Material UI v7 or later: Node.js can't import earlier versions as ES modules.
+
 ## 3.5.2
 
 - Fix `<ListGuesser>` output incorrect imports for `<DataTable.Col>` ([#97](https://github.com/marmelab/ra-supabase/pull/97)) ([djhi](https://github.com/djhi))

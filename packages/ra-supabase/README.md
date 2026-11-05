@@ -101,6 +101,8 @@ yarn add ra-supabase
 npm install ra-supabase
 ```
 
+**Tip**: If your framework renders on the server and lets Node.js load `ra-supabase` (e.g. TanStack Start or React Router in framework mode), use Material UI v7 or later: Node.js can't import earlier versions as ES modules.
+
 `ra-supabase` leverages the Supabase authentication. If you don't need to support [the invitations workflow](#invitation-handling) **and** you only enabled [third party OAuth authentication](#oauth-authentication), you're done with the installation.
 
 If you do want to support [the invitations workflow](#invitation-handling) or use the default email/password authentication, you must do one of the following:

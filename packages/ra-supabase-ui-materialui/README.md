@@ -10,6 +10,8 @@ yarn add ra-supabase-ui-materialui
 npm install ra-supabase-ui-materialui
 ```
 
+**Tip**: If your framework renders on the server and lets Node.js load `ra-supabase-ui-materialui` (e.g. TanStack Start or React Router in framework mode), use Material UI v7 or later: Node.js can't import earlier versions as ES modules.
+
 ## Usage
 
 ```jsx
