@@ -1,6 +1,6 @@
 {
     "name": "ra-supabase",
-    "version": "3.5.2",
+    "version": "4.0.0",
     "repository": "git@github.com:marmelab/ra-supabase.git",
     "author": "Gildas Garcia <1122076+djhi@users.noreply.github.com>",
     "license": "MIT",
@@ -31,9 +31,9 @@
     },
     "sideEffects": false,
     "dependencies": {
-        "ra-supabase-core": "^3.5.2",
-        "ra-supabase-language-english": "^3.5.0",
-        "ra-supabase-ui-materialui": "^3.5.2"
+        "ra-supabase-core": "^4.0.0",
+        "ra-supabase-language-english": "^4.0.0",
+        "ra-supabase-ui-materialui": "^4.0.0"
     },
     "devDependencies": {
         "typescript": "^5.7.3",
