@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## v4.0.0
 
 - Publish modern ESM and CommonJS package exports ([#104](https://github.com/marmelab/ra-supabase/pull/104)) ([pysnooLab](https://github.com/pysnooLab))
+- Add support publishable key by @oddmutou in https://github.com/marmelab/ra-supabase/pull/100
+- Update filter input for title in README by @LeyoNeuroAI in https://github.com/marmelab/ra-supabase/pull/98
 
 ### Breaking Changes
 
